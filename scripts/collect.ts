@@ -1,16 +1,15 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
-import { parse, parseDocument, YAMLMap, YAMLSeq } from 'yaml'
-import { buildQuestGraph, findCycle, parseQuestData, questId, type Edge, type Quest } from '../src/domain/index.ts'
+import { parse } from 'yaml'
 import { createWikiClient } from '../src/wiki/client.ts'
 import { extractEdgeCandidates, type EdgeCandidate } from '../src/wiki/edges.ts'
+import { mergeCollected, type RegionedDraft } from '../src/wiki/merge.ts'
 import { parseQuestPage, type QuestDraft } from '../src/wiki/quest-page.ts'
 import { resolveRegion, UNMAPPED_REGION, type RegionMap } from '../src/wiki/regions.ts'
 
-// Coleta da TibiaWiki para data/quests.yaml. Só ACRESCENTA: quests e arestas
-// já presentes nunca são alteradas nem removidas (curadoria à mão vence);
-// campos opcionais ausentes em quests antigas (reward, location, region)
-// são preenchidos. Arestas novas entram com reviewed: false.
+// Coleta da TibiaWiki para data/quests.yaml. Toda a lógica de mescla (só
+// acrescentar, ciclos, rejeitadas, fila) está em src/wiki/merge.ts, testada;
+// aqui é só I/O e relatório.
 
 const root = fileURLToPath(new URL('..', import.meta.url))
 const questsFile = `${root}data/quests.yaml`
@@ -27,16 +26,24 @@ const regions = loadRegions()
 const excluded = new Set(loadExcluded())
 const allTitles = (await client.listEmbedding('Template:Infobox Quest')).filter((title) => !title.includes('/'))
 const mainPages = await client.fetchWikitext(allTitles)
-const drafts: QuestDraft[] = []
+const drafts: RegionedDraft[] = []
 const skipped: string[] = []
+const warnings: string[] = []
+const unmappedLocations = new Set<string>()
 for (const title of allTitles) {
   const wikitext = mainPages.get(title)
   const draft = wikitext === null || wikitext === undefined || excluded.has(title) ? null : parseQuestPage(title, wikitext)
-  if (draft === null) skipped.push(title)
-  else drafts.push(draft)
+  if (draft === null) {
+    skipped.push(title)
+    continue
+  }
+  const region = resolveRegion(draft.location, regions)
+  if (region === UNMAPPED_REGION && draft.location !== undefined) unmappedLocations.add(draft.location)
+  for (const warning of draft.warnings) warnings.push(`${draft.title}: ${warning}`)
+  drafts.push({ ...draft, region })
 }
-const slugCollisions = findCollisions(drafts)
-if (slugCollisions.length > 0) fail(`ids em colisão: ${slugCollisions.join(', ')}`)
+const collisions = findCollisions(drafts)
+if (collisions.length > 0) fail(`ids em colisão: ${collisions.join(', ')}`)
 console.log(`${drafts.length} quests reais (${skipped.length} páginas ignoradas)`)
 
 // ---- 2. arestas ----
@@ -51,90 +58,15 @@ for (const draft of drafts) {
 }
 console.log(`${candidates.length} arestas candidatas`)
 
-// ---- 3. mescla no YAML ----
-const document = parseDocument(readFileSync(questsFile, 'utf8'))
-const questsSeq = seqAt(document, 'quests')
-const edgesSeq = seqAt(document, 'edges')
-const existing = parseQuestData(document.toJS())
-if (!existing.ok) fail(`data/quests.yaml atual inválido:\n${existing.errors.join('\n')}`)
-const existingQuests = new Map(existing.graph.quests)
-const idByTitle = new Map(drafts.map((draft) => [draft.title, draft.id] as const))
-for (const quest of existingQuests.values()) idByTitle.set(quest.title, quest.id)
-
-const added = { quests: 0, fields: 0, edges: 0 }
-const queue: EdgeCandidate[] = []
-const discarded: { candidate: EdgeCandidate; reason: string }[] = []
-const warnings: string[] = []
-const unmappedLocations = new Set<string>()
-
-for (const draft of drafts) {
-  const region = resolveRegion(draft.location, regions)
-  if (region === UNMAPPED_REGION && draft.location !== undefined) unmappedLocations.add(draft.location)
-  for (const warning of draft.warnings) warnings.push(`${draft.title}: ${warning}`)
-  const current = existingQuests.get(questId(draft.id))
-  if (current === undefined) {
-    questsSeq.add(document.createNode(questRecord(draft, region)))
-    existingQuests.set(questId(draft.id), toQuest(draft, region))
-    added.quests += 1
-    continue
-  }
-  // Quest curada à mão: só completa o que falta.
-  const node = questsSeq.items.find((item) => item instanceof YAMLMap && item.get('id') === draft.id)
-  if (!(node instanceof YAMLMap)) continue
-  for (const [field, value] of [
-    ['reward', draft.reward],
-    ['location', draft.location],
-    ['region', region],
-  ] as const) {
-    if (value !== undefined && !node.has(field)) {
-      node.set(field, value)
-      added.fields += 1
-    }
-  }
-}
-
-const rejected = loadRejected()
-const acceptedEdges: Edge[] = [...existing.graph.edges]
-const existingPairs = new Set(acceptedEdges.map((edge) => `${edge.from}→${edge.to}`))
-const allQuests: Quest[] = [...existingQuests.values()]
-// Não ambíguas primeiro: quando o mesmo par aparece duas vezes, a frase
-// mais explícita é a que fica.
-const ordered = [...candidates].sort((a, b) => Number(a.ambiguous) - Number(b.ambiguous))
-for (const candidate of ordered) {
-  const from = idByTitle.get(candidate.fromTitle)
-  const to = idByTitle.get(candidate.toTitle)
-  if (from === undefined || to === undefined) continue
-  const pair = `${from}→${to}`
-  if (existingPairs.has(pair)) continue
-  if (rejected.has(pair)) {
-    discarded.push({ candidate, reason: `rejeitada em rejected-edges.yaml: ${rejected.get(pair)}` })
-    continue
-  }
-  const edge: Edge = {
-    from: questId(from),
-    to: questId(to),
-    kind: candidate.kind,
-    evidence: candidate.evidence,
-    source: candidate.source,
-    reviewed: false,
-  }
-  const cycle = findCycle(buildQuestGraph(allQuests, [...acceptedEdges, edge]))
-  if (cycle) {
-    discarded.push({ candidate, reason: `fecharia ciclo: ${cycle.join(' → ')}` })
-    continue
-  }
-  acceptedEdges.push(edge)
-  existingPairs.add(pair)
-  edgesSeq.add(document.createNode(edge))
-  added.edges += 1
-  if (candidate.ambiguous) queue.push(candidate)
-}
-
-const result = parseQuestData(document.toJS())
-if (!result.ok) fail(`resultado inválido, nada gravado:\n${result.errors.join('\n')}`)
-writeFileSync(questsFile, document.toString({ lineWidth: 0 }), 'utf8')
-console.log(`+${added.quests} quests, +${added.fields} campos, +${added.edges} arestas (${queue.length} na fila) → data/quests.yaml`)
-console.log(`${result.graph.quests.size} quests, ${result.graph.edges.length} arestas no total`)
+// ---- 3. mescla ----
+const merged = mergeCollected({ yamlText: readFileSync(questsFile, 'utf8'), drafts, candidates, rejected: loadRejected() })
+if (!merged.ok) fail(merged.errors.join('\n'))
+writeFileSync(questsFile, merged.yamlText, 'utf8')
+const { quests, fields, edges } = merged.added
+console.log(`+${quests} quests, +${fields} campos, +${edges} arestas → data/quests.yaml`)
+console.log(
+  `${merged.unreviewed.length} arestas não revisadas no total, ${merged.unreviewed.filter((u) => u.flagged).length} marcadas "revisar"`,
+)
 
 // ---- 4. documento de revisão ----
 mkdirSync(reviewDir, { recursive: true })
@@ -143,31 +75,6 @@ writeFileSync(reviewFile, reviewMarkdown(), 'utf8')
 console.log(`fila de revisão → ${reviewFile}`)
 
 // ---- helpers ----
-
-function toQuest(draft: QuestDraft, region: string): Quest {
-  return {
-    id: questId(draft.id),
-    title: draft.title,
-    ...(draft.level !== undefined ? { level: draft.level } : {}),
-    premium: draft.premium,
-    wiki: draft.wiki,
-    ...(draft.reward !== undefined ? { reward: draft.reward } : {}),
-    ...(draft.location !== undefined ? { location: draft.location } : {}),
-    region,
-  }
-}
-
-function questRecord(draft: QuestDraft, region: string): Record<string, unknown> {
-  return { ...toQuest(draft, region) }
-}
-
-function seqAt(doc: ReturnType<typeof parseDocument>, key: string): YAMLSeq {
-  const node = doc.get(key)
-  if (node instanceof YAMLSeq) return node
-  const created = new YAMLSeq()
-  doc.set(key, created)
-  return created
-}
 
 function findCollisions(list: readonly QuestDraft[]): string[] {
   const seen = new Map<string, string>()
@@ -190,7 +97,7 @@ async function resolveAliases(): Promise<Map<string, string>> {
       if (/Quest$/i.test(target) && !knownTitles.has(target)) targets.add(target)
     }
   }
-  const resolved = await client.resolveRedirects([...targets])
+  const resolved = await client.resolveRedirects([...targets].sort())
   const aliases = new Map<string, string>()
   for (const [from, to] of resolved) if (knownTitles.has(to)) aliases.set(from, to)
   console.log(`${aliases.size} redirects de quests resolvidos`)
@@ -237,23 +144,35 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 }
 
 function reviewMarkdown(): string {
-  const line = (candidate: EdgeCandidate, extra = '') =>
-    `- **${candidate.fromTitle} → ${candidate.toTitle}** (${candidate.kind}${extra}): "${candidate.evidence}" — [fonte](${candidate.source})`
+  const titleOf = new Map(drafts.map((draft) => [draft.id, draft.title] as const))
+  const name = (id: string) => titleOf.get(id) ?? id
+  const flagged = merged.unreviewed.filter((u) => u.flagged)
+  const plain = merged.unreviewed.filter((u) => !u.flagged)
+  const line = ({ edge }: (typeof merged.unreviewed)[number]) =>
+    `- **${name(edge.from)} → ${name(edge.to)}** (${edge.kind}): "${edge.evidence}" — [fonte](${edge.source})`
   return [
     `# Fila de revisão de arestas (${today})`,
     '',
-    'Gerado por `npm run collect`. Toda aresta abaixo já está em `data/quests.yaml`',
-    'com `reviewed: false` e frase literal da wiki. Para aprovar: remova o',
-    '`reviewed: false` (ou troque o `kind`). Para rejeitar: apague a aresta e',
-    'registre o par em `data/rejected-edges.yaml`, senão a próxima coleta a traz de volta.',
+    'Gerado por `npm run collect` a partir de tudo que está em `data/quests.yaml` com',
+    '`reviewed: false`, então sobrevive a coletas futuras. Para aprovar: remova o',
+    '`reviewed: false` (e o comentário `revisar`, se houver) ou troque o `kind`. Para',
+    'rejeitar: apague a aresta e registre o par em `data/rejected-edges.yaml`, senão a',
+    'próxima coleta a traz de volta.',
     '',
-    `## Ambíguas (${queue.length}): o tipo é leitura automática, confira`,
+    `## Marcadas "revisar" (${flagged.length}): tipo ou direção lidos automaticamente`,
     '',
-    ...queue.map((candidate) => line(candidate, `, ${candidate.where}`)),
+    ...flagged.map(line),
     '',
-    `## Descartadas (${discarded.length})`,
+    `## Demais não revisadas (${plain.length}): frase inequívoca da seção de requisitos`,
     '',
-    ...discarded.map(({ candidate, reason }) => `${line(candidate)} — _${reason}_`),
+    ...plain.map(line),
+    '',
+    `## Descartadas nesta coleta (${merged.discarded.length})`,
+    '',
+    ...merged.discarded.map(
+      ({ candidate, reason }) =>
+        `- **${candidate.fromTitle} → ${candidate.toTitle}** (${candidate.kind}): "${candidate.evidence}" — [fonte](${candidate.source}) — _${reason}_`,
+    ),
     '',
     `## Lugares sem região (${unmappedLocations.size}): acrescente em \`data/regions.yaml\``,
     '',

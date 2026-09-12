@@ -4,3 +4,6 @@ rejected:
   - from: the-secret-library
     to: the-dream-courts
     reason: "A Broken Compass pode ser comprada de Andrew Lyze; a quest não é exigida."
+  - from: dark-trails
+    to: rathleton
+    reason: "A frase da wiki fala do outfit Glooth Engineer, não da Rathleton Quest; a dependência real é Rathleton (rank Commoner) → Dark Trails."

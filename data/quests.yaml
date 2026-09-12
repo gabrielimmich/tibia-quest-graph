@@ -9,7 +9,10 @@
 # Comentários "fase 2" registram pré-requisitos citados pela wiki que apontam
 # para quests fora das 15 do MVP; viram arestas quando essas quests entrarem.
 #
-# Coletado em 2026-09-12 da API MediaWiki (tibia.fandom.com), aprovado por Gabriel.
+# As 15 quests do MVP e suas 14 arestas foram aprovadas por Gabriel em 2026-09-12.
+# O resto entra por `npm run collect` (scripts/collect.ts): arestas com
+# `reviewed: false` ainda não foram conferidas; as com comentário `revisar`
+# tiveram tipo ou direção lidos automaticamente. Fila em docs/superpowers/review/.
 
 quests:
   - id: the-new-frontier
@@ -37,7 +40,7 @@ quests:
     premium: true
     wiki: https://tibia.fandom.com/wiki/Wrath_of_the_Emperor_Quest
     unlocks: "Acesso e teleportes para Razachai, Rebel Camp e Inner Sanctum; Wayfarer Outfit"
-    reward: Spiritual Charm, Black Jade Cobra, 100 Platinum Coins, 10 Crystal Coins, 10 Red Dragon Scales, 5 Gold Ingots, 10 Black Pearls, Blue Gem, Dragon Backpack, Jewelled Backpack. Choose between Elite Draken Helmet, Royal Draken Mail, Royal Scale Robe or Merudri Scale Mail. Access to
+    reward: Spiritual Charm, Black Jade Cobra, 100 Platinum Coins, 10 Crystal Coins, 10 Red Dragon Scales, 5 Gold Ingots, 10 Black Pearls, Blue Gem, Dragon Backpack, Jewelled Backpack. Choose between Elite Draken Helmet, Royal Draken Mail, Royal Scale Robe or Merudri Scale Mail…
     location: Primarily Zao including the Zao Rebel Camp
     region: Zao
     # fase 2: "The Ape City Quest (full quest not needed - mission 9 started)"
@@ -48,7 +51,7 @@ quests:
     premium: true
     wiki: https://tibia.fandom.com/wiki/In_Service_of_Yalahar_Quest
     unlocks: "Passagem para a área interna e os bairros de Yalahar; Yalaharian Outfit"
-    reward: Passage into the innermost area and through the gates to the city quarters; 5 Platinum Coins, choice between Yalahari Mask, Yalahari Armor, Yalahari Leg Piece and Yalahari Footwraps and base Yalaharian Outfits
+    reward: Passage into the innermost area and through the gates to the city quarters; 5 Platinum Coins, choice between Yalahari Mask, Yalahari Armor, Yalahari Leg Piece and Yalahari Footwraps and base Yalaharian Outfits.
     location: Edron
     region: Edron
     # fase 2: "Novice Rank or higher of the Tibian Explorer Society"
@@ -59,9 +62,9 @@ quests:
     premium: true
     wiki: https://tibia.fandom.com/wiki/The_Inquisition_Quest
     unlocks: "Demon Hunter Outfit, áreas profundas da Demon Forge e Blessing of the Inquisition"
-    reward: "Demon Hunter Outfit and addons , access to the deeper Demon Forge areas, ability to buy the Blessing of the Inquisition, 3 achievements (High Inquisitor, Master of the Nexus and Demonbane), and your choice of one of the following: Emerald Sword, Hellforged Axe, Obsidian Truncheon, Warsinger Bow"
-    location: Various
-    region: Outros
+    reward: "Demon Hunter Outfit and addons, access to the deeper Demon Forge areas, ability to buy the Blessing of the Inquisition, 3 achievements (High Inquisitor, Master of the Nexus and Demonbane), and your choice of one of the following: Emerald Sword, Hellforged Axe, Obsidian Truncheon, Warsinger Bow…"
+    location: Thais
+    region: Thais
 
   - id: the-pits-of-inferno
     title: The Pits of Inferno Quest
@@ -69,7 +72,7 @@ quests:
     premium: true
     wiki: https://tibia.fandom.com/wiki/The_Pits_of_Inferno_Quest
     unlocks: "Atalho do Hub, Soft Boots e a possibilidade de terminar The Inquisition Quest"
-    reward: Access to the Hub Shortcut, ability to finish The Inquisition Quest, 100 Platinum Coins, Soft Boots, Backpack of Holding (containing a Silver Rune Emblem (Ultimate Healing), Silver Rune Emblem (Sudden Death), Silver Rune Emblem (Explosion) and Silver Rune Emblem (Heavy Magic Missile))
+    reward: Access to the Hub Shortcut, ability to finish The Inquisition Quest, 100 Platinum Coins, Soft Boots, Backpack of Holding (containing a Silver Rune Emblem (Ultimate Healing), Silver Rune Emblem (Sudden Death), Silver Rune Emblem (Explosion) and Silver Rune Emblem (Heavy Magic Missile))…
     location: Pits of Inferno
     region: Outros
 
@@ -182,7 +185,7 @@ quests:
     premium: false
     wiki: https://tibia.fandom.com/wiki/Dragon_Corpse_Quest
     reward: Bag containing Copper Shield and Legion Helmet.
-    location: Deep in Rookgaard wilderness.
+    location: Deep in Rookgaard wilderness
     region: Rookgaard
   - id: the-desert-dungeon
     title: The Desert Dungeon Quest
@@ -190,7 +193,7 @@ quests:
     premium: false
     wiki: https://tibia.fandom.com/wiki/The_Desert_Dungeon_Quest
     reward: "Golden Bag with 25 Platinum Coins for each participating vocation and a Green Bag with: Protection Amulet, Ring Of Healing, Magic Light Wand and Ankh."
-    location: Deep below the Jakundaf Desert.
+    location: Deep below the Jakundaf Desert
     region: Kazordoon
   - id: the-annihilator
     title: The Annihilator Quest
@@ -198,7 +201,7 @@ quests:
     premium: true
     wiki: https://tibia.fandom.com/wiki/The_Annihilator_Quest
     reward: "Demon Outfits and one out of four available items: Magic Sword, Demon Armor, Stonecutter Axe, and a Present Box with an Annihilation Bear inside. Annihilator achievement."
-    location: Edron Hero Cave.
+    location: Edron Hero Cave
     region: Edron
   - id: life-ring
     title: Life Ring Quest
@@ -239,7 +242,7 @@ quests:
     premium: false
     wiki: https://tibia.fandom.com/wiki/Scale_Armor_Quest
     reward: Scale Armor
-    location: Near Thais
+    location: Thais
     region: Thais
   - id: battle-axe
     title: Battle Axe Quest
@@ -267,7 +270,7 @@ quests:
     premium: true
     wiki: https://tibia.fandom.com/wiki/The_Postman_Missions_Quest
     reward: Cheaper parcels (10 gp), letters (5 gp), boat fares (10 gp cheaper). 6k discount in The Thieves Guild Quest. Use of locked mailboxes, Post Officer's Hat, Post Horn and the achievement Archpostman.
-    location: Begins in Kevin's office at the Tibia Postal Service Headquarters
+    location: Kevin's office at the Tibia Postal Service Headquarters
     region: Outros
   - id: torch
     title: Torch Quest
@@ -288,7 +291,7 @@ quests:
     premium: false
     wiki: https://tibia.fandom.com/wiki/Bear_Room_Quest
     reward: Chain Armor, Brass Helmet, 12 Arrows and 40 gp
-    location: Rookgaard main cave.
+    location: Rookgaard main cave
     region: Rookgaard
   - id: thais-lighthouse
     title: Thais Lighthouse Quest
@@ -337,7 +340,7 @@ quests:
     premium: false
     wiki: https://tibia.fandom.com/wiki/Captain_Iglues_Treasure_Quest
     reward: Treasure of Captain Iglue (Book) and some Salmon.
-    location: Below the Rookgaard Poison Spider tower.
+    location: Below the Rookgaard Poison Spider tower
     region: Rookgaard
   - id: the-queen-of-the-banshees
     title: The Queen of the Banshees Quest
@@ -352,7 +355,7 @@ quests:
     premium: true
     wiki: https://tibia.fandom.com/wiki/Stealth_Ring_Quest
     reward: Stealth Ring and Protection Amulet.
-    location: Minotaur Pyramid north-east of Darashia.
+    location: Minotaur Pyramid north-east of Darashia
     region: Darashia
   - id: the-paradox-tower
     title: The Paradox Tower Quest
@@ -360,7 +363,7 @@ quests:
     premium: true
     wiki: https://tibia.fandom.com/wiki/The_Paradox_Tower_Quest
     reward: "Up to two of the following: 10k gp, Wand of Cosmic Energy, 32 Talons and Phoenix Egg. You will also get the achievement Mathemagician."
-    location: Paradox Tower near Kazordoon.
+    location: Paradox Tower near Kazordoon
     region: Kazordoon
   - id: orc-shaman
     title: Orc Shaman Quest
@@ -397,7 +400,7 @@ quests:
     premium: false
     wiki: https://tibia.fandom.com/wiki/Noble_Armor_Quest
     reward: Noble Armor and Crown Helmet
-    location: Deep in a hidden cave below Mt. Sternum.
+    location: Deep in a hidden cave below Mt. Sternum
     region: Thais
   - id: draconia
     title: Draconia Quest
@@ -488,7 +491,7 @@ quests:
     premium: false
     wiki: https://tibia.fandom.com/wiki/Crystal_Wand_Quest
     reward: Crystal Wand, Silver Rune Emblem (SD), Twinkiller Rune (Book)
-    location: Demona Warlock area.
+    location: Demona Warlock area
     region: Carlin
   - id: dragon-tower
     title: Dragon Tower Quest
@@ -502,7 +505,7 @@ quests:
     premium: false
     wiki: https://tibia.fandom.com/wiki/The_White_Raven_Monastery_Quest
     reward: Blessed Ankh, Family Brooch, access to the Isle of the Kings
-    location: Near Carlin
+    location: Carlin
     region: Carlin
   - id: geomancer
     title: Geomancer Quest
@@ -575,7 +578,7 @@ quests:
     title: Ornamented Shield Quest
     premium: false
     wiki: https://tibia.fandom.com/wiki/Ornamented_Shield_Quest
-    reward: Brown Bag containing Key 3702, Might Ring, Dragon Necklace, Spike Sword, Devious Dragons (Book), Ornamented Shield, Steel Helmet, Inkwell.
+    reward: Brown Bag containing Key 3702, Might Ring, Dragon Necklace, Spike Sword, Devious Dragons (Book), Ornamented Shield, Steel Helmet, Inkwell. Red Bag containing Time Ring, 5 Platinum Coins, Garlic Necklace, Spellbook, Lyre.
     location: Plains of Havoc Dragon Lair
     region: Venore
   - id: panpipe
@@ -604,7 +607,7 @@ quests:
     premium: false
     wiki: https://tibia.fandom.com/wiki/Skull_of_Ratha_Quest
     reward: White Pearl, 2 Black Pearls, Skull of Ratha, Wolf Tooth Chain, Dwarven Ring, 100 gp, Crystal Necklace.
-    location: Venore Amazon Camp.
+    location: Venore Amazon Camp
     region: Venore
   - id: barbarian-axe
     title: Barbarian Axe Quest
@@ -716,7 +719,7 @@ quests:
     premium: true
     wiki: https://tibia.fandom.com/wiki/Adorned_UH_Rune_Quest
     reward: Silver Rune Emblem (Ultimate Healing).
-    location: Edron Hero Cave.
+    location: Edron Hero Cave
     region: Edron
   - id: vampire-shield
     title: Vampire Shield Quest
@@ -758,8 +761,8 @@ quests:
     title: The Explorer Society Quest
     premium: true
     wiki: https://tibia.fandom.com/wiki/The_Explorer_Society_Quest
-    reward: Ice Pick, Spectral Stone, 6 Orichalcum Pearls, 1 Crown Backpack, 5250 gp, the ability to buy Atlases, Orichalcum Pearls and Crown Backpacks. You can use the teleporters between Port Hope and Northport, and between Liberty Bay and Svargrond which works having an Orichalcum Pearl
-    location: Begins in Port Hope
+    reward: Ice Pick, Spectral Stone, 6 Orichalcum Pearls, 1 Crown Backpack, 5250 gp, the ability to buy Atlases, Orichalcum Pearls and Crown Backpacks. You can use the teleporters between Port Hope and Northport, and between Liberty Bay and Svargrond which works having an Orichalcum Pearl…
+    location: Port Hope
     region: Port Hope
   - id: hydra-egg
     title: Hydra Egg Quest
@@ -788,7 +791,7 @@ quests:
     premium: false
     wiki: https://tibia.fandom.com/wiki/Voodoo_Doll_Quest
     reward: Voodoo Doll (King), Magic Light Wand.
-    location: Green Claw Swamp.
+    location: Green Claw Swamp
     region: Venore
   - id: six-rubies
     title: Six Rubies Quest
@@ -802,8 +805,8 @@ quests:
     premium: true
     wiki: https://tibia.fandom.com/wiki/The_Ape_City_Quest
     reward: Possibility of being healed by Hairycles, ability to buy Bananas, Monkey Statue (No Hearing), Monkey Statue (No Seeing) and Monkey Statue (No Speaking), Shaman Outfits and permission to go to Forbidden Lands and Deeper Banuta.
-    location: Various
-    region: Outros
+    location: Tiquanda
+    region: Port Hope
   - id: isle-of-the-mists
     title: Isle of the Mists Quest
     premium: false
@@ -864,7 +867,7 @@ quests:
     title: Shaman Outfits Quest
     premium: true
     wiki: https://tibia.fandom.com/wiki/Shaman_Outfits_Quest
-    reward: Shaman Outfits and addons , achievement Way of the Shaman.
+    reward: Shaman Outfits and addons, achievement Way of the Shaman.
     location: Hairycles
     region: Port Hope
   - id: citizen-outfits
@@ -921,7 +924,7 @@ quests:
     level: 20
     premium: true
     wiki: https://tibia.fandom.com/wiki/The_Shattered_Isles_Quest
-    reward: Ability to travel to Goroma from Liberty Bay, access to Meriana, access to Laguna Islands, access to Nargor, access to Morgaroth's lair, access to Ramoa, access to Talahu, access to Malada, access to Ferumbras Citadel where Ferumbras spawns. Model Ship and Pirate Outfits.
+    reward: Ability to travel to Goroma from Liberty Bay, access to Meriana, access to Laguna Islands, access to Nargor, access to Morgaroth's lair, access to Ramoa, access to Talahu, access to Malada, access to Ferumbras Citadel where Ferumbras spawns. Model Ship and Pirate Outfits…
     location: Liberty Bay
     region: Liberty Bay
   - id: treasure-island
@@ -956,7 +959,7 @@ quests:
     title: Dreamer's Challenge Quest
     premium: true
     wiki: https://tibia.fandom.com/wiki/Dreamer%27s_Challenge_Quest
-    reward: Achievements Lucid Dreamer, Nightmare Knight/Bone Brother, Lord Protector/Dread Lord, Nightmare Walker/Skull and Bones, Brown Bread, Wine, Certificate, Ability to teleport to many locations throughout Tibia
+    reward: Achievements Lucid Dreamer, Nightmare Knight/Bone Brother, Lord Protector/Dread Lord, Nightmare Walker/Skull and Bones, Brown Bread, Wine, Certificate, Ability to teleport to many locations throughout Tibia…
     location: Abandoned Monastery
     region: Outros
   - id: wedding-ring
@@ -985,7 +988,7 @@ quests:
     premium: true
     wiki: https://tibia.fandom.com/wiki/Mastermind_Potion_Quest
     reward: 2 Mastermind Potions, 78 gp and 123 gp, 1 Green Perch, 2 Rainbow Trout
-    location: Formorgar Mines.
+    location: Formorgar Mines
     region: Svargrond
   - id: norseman-outfits
     title: Norseman Outfits Quest
@@ -1062,8 +1065,8 @@ quests:
     premium: true
     wiki: https://tibia.fandom.com/wiki/What_a_Foolish_Quest
     reward: "A Jester Staff, a Jester Hat and Jester Outfits and addons, achievements: Allow Cookies?, Perfect Fool and Fool at Heart."
-    location: In
-    region: Outros
+    location: Thais
+    region: Thais
   - id: secret-service
     title: Secret Service Quest
     level: 50
@@ -1186,7 +1189,7 @@ quests:
     premium: true
     wiki: https://tibia.fandom.com/wiki/Waterfall_Quest
     reward: Pirate Backpack, Pirate Hat, Dwarven Ring
-    location: Near Forbidden Lands in Tiquanda
+    location: Forbidden Lands in Tiquanda
     region: Port Hope
   - id: ring
     title: Ring Quest
@@ -1237,7 +1240,7 @@ quests:
     premium: false
     wiki: https://tibia.fandom.com/wiki/The_Beginning_Quest
     reward: 150 Exp, Shovel, Rope, Torch, Club, Fish and a Coat. If you choose to skip the quest, you will instead receive a Torch, Club, Jacket and an Apple.
-    location: Tutorial Island.
+    location: Tutorial Island
     region: Rookgaard
   - id: the-hunt-for-the-sea-serpent
     title: The Hunt for the Sea Serpent Quest
@@ -1252,7 +1255,7 @@ quests:
     level: 80
     premium: true
     wiki: https://tibia.fandom.com/wiki/Elemental_Spheres_Quest
-    reward: "Sorcerers: Dragon Robe"
+    reward: "Sorcerers: Dragon Robe; Druids: Greenwood Coat; Knights: Windborn Colossus Armor; Paladins: The Ironworker; Monks: Spirit Bind; All: Lord of the Elements Achievement"
     location: Edron
     region: Edron
   - id: machinery-of-war
@@ -1268,7 +1271,7 @@ quests:
     premium: true
     wiki: https://tibia.fandom.com/wiki/Troll_Sabotage_Quest
     reward: Elvenhair Rope or 200gp and Jerom's Family Necklace.
-    location: Edron.
+    location: Edron
     region: Edron
   - id: the-demon-oak
     title: The Demon Oak Quest
@@ -1334,7 +1337,7 @@ quests:
     premium: false
     wiki: https://tibia.fandom.com/wiki/The_Scatterbrained_Sorcerer_Quest
     reward: 5350 gp and 10650 experience.
-    location: Around Thais - Eclesius' house
+    location: Thais - Eclesius' house
     region: Thais
   - id: hot-cuisine
     title: Hot Cuisine Quest
@@ -1358,14 +1361,14 @@ quests:
     premium: true
     wiki: https://tibia.fandom.com/wiki/Shadows_of_Yalahar_Quest
     reward: Golem Wrench, access to Modified Gnarlhound, Golem Disassembler, 5 Platinum Coins, ability to trade with Telas, 25,000 experience, achievement Golem in the Gears.
-    location: Various
-    region: Outros
+    location: Edron
+    region: Edron
   - id: pilgrimage-of-ashes
     title: Pilgrimage of Ashes Quest
     premium: true
     wiki: https://tibia.fandom.com/wiki/Pilgrimage_of_Ashes_Quest
     reward: all blessings with 1000 gold discount (once only), 20 platinum coins.
-    location: various locations in tibia
+    location: any city guide
     region: Outros
   - id: braindeath
     title: Braindeath Quest
@@ -1401,14 +1404,14 @@ quests:
     premium: true
     wiki: https://tibia.fandom.com/wiki/An_Uneasy_Alliance_Quest
     reward: 2x Tome of Knowledge, experience and gold coins
-    location: Zao.
+    location: Zao
     region: Zao
   - id: warmaster-outfits
     title: Warmaster Outfits Quest
     level: 80
     premium: true
     wiki: https://tibia.fandom.com/wiki/Warmaster_Outfits_Quest
-    reward: Warmaster Outfits and addons , achievement Master of War.
+    reward: Warmaster Outfits and addons, achievement Master of War.
     location: Farmine/Zao
     region: Zao
   - id: tomes-of-knowledge
@@ -1501,7 +1504,7 @@ quests:
     title: The Rookie Guard Quest
     premium: false
     wiki: https://tibia.fandom.com/wiki/The_Rookie_Guard_Quest
-    reward: Sabre, Sword, Brass Helmet, Studded Armor, Leather Legs, Leather Boots, Studded Shield, Brass Shield, Garlic Necklace, Silver Amulet, Star Ring, Antidote Potion, Fleshy Bone, Tarantula Trap, Rolling Pin (Rookgaard), Small Ruby, 350 Gold Coins, Pick. Along the way
+    reward: Sabre, Sword, Brass Helmet, Studded Armor, Leather Legs, Leather Boots, Studded Shield, Brass Shield, Garlic Necklace, Silver Amulet, Star Ring, Antidote Potion, Fleshy Bone, Tarantula Trap, Rolling Pin (Rookgaard), Small Ruby, 350 Gold Coins, Pick…
     location: Rookgaard
     region: Rookgaard
   - id: elementalist-outfits
@@ -1532,7 +1535,7 @@ quests:
     premium: false
     wiki: https://tibia.fandom.com/wiki/Minotaur_Leather_Quest
     reward: Minotaur Leather
-    location: South of Thais.
+    location: South of Thais
     region: Thais
   - id: iron-ore
     title: Iron Ore Quest
@@ -1559,7 +1562,7 @@ quests:
     title: Liquid Black Quest
     premium: true
     wiki: https://tibia.fandom.com/wiki/Liquid_Black_Quest
-    reward: "Access to deeper parts of Fiehonja including Manta Rays and Deepling Guardians, a few random items such as: True Heart of the Sea, 10 Platinum Coins, Necklace of the Deep, Deepling Backpack, Heavy Trident, Deepling Staff and others, achievements Gem Cutter, Navigational Error"
+    reward: "Access to deeper parts of Fiehonja including Manta Rays and Deepling Guardians, a few random items such as: True Heart of the Sea, 10 Platinum Coins, Necklace of the Deep, Deepling Backpack, Heavy Trident, Deepling Staff and others, achievements Gem Cutter, Navigational Error…"
     location: Gray Beach
     region: Outros
   - id: war-against-the-hive
@@ -1611,7 +1614,7 @@ quests:
     premium: true
     wiki: https://tibia.fandom.com/wiki/Realm_of_Dreams_Quest
     reward: "Beach Backpack containing: Music Box, Blue Rose, Dracoyle Statue, Black Pearl, Red Dragon Scale, Stuffed Dragon, Piggy Bank and Surprise Bag (Blue)."
-    location: Northern Ankrahmun Dragon Lair.
+    location: Northern Ankrahmun Dragon Lair
     region: Ankrahmun
   - id: venore-daily-tasks
     title: Venore Daily Tasks Quest
@@ -1648,7 +1651,7 @@ quests:
     premium: false
     wiki: https://tibia.fandom.com/wiki/Hunting_for_Tokens_Quest
     reward: Trade unique items.
-    location: All over the Tibian lands.
+    location: All over the Tibian lands
     region: Outros
   - id: the-repenters
     title: The Repenters Quest
@@ -1677,8 +1680,8 @@ quests:
     level: 80
     premium: true
     wiki: https://tibia.fandom.com/wiki/Cave_Explorer_Outfits_Quest
-    reward: "Cave Explorer Outfits and addons:"
-    location: The Spike.
+    reward: "Cave Explorer Outfits and addons: and the Cave Completionist achievement."
+    location: The Spike
     region: Kazordoon
   - id: roshamuul
     title: Roshamuul Quest
@@ -1692,13 +1695,13 @@ quests:
     premium: false
     wiki: https://tibia.fandom.com/wiki/Tutorial
     reward: Backpack, Rope, Torch, 3 Gold Coins.
-    location: Beneath Dawnport.
+    location: Beneath Dawnport
     region: Dawnport
   - id: dream-warden-outfits
     title: Dream Warden Outfits Quest
     premium: true
     wiki: https://tibia.fandom.com/wiki/Dream_Warden_Outfits_Quest
-    reward: "Dream Warden Outfits and addons:"
+    reward: "Dream Warden Outfits and addons: and the Dream Warden achievement."
     location: Roshamuul
     region: Roshamuul e Feyrist
   - id: child-of-destiny
@@ -1758,6 +1761,14 @@ quests:
     reward: 350 Gold Coins.
     location: Dawnport
     region: Dawnport
+  - id: sanctuary-of-the-lizard-god
+    title: Sanctuary of the Lizard God Quest
+    level: 2
+    premium: false
+    wiki: https://tibia.fandom.com/wiki/Sanctuary_of_the_Lizard_God_Quest
+    reward: Legion Helmet
+    location: Dawnport wilderness
+    region: Dawnport
   - id: yalaharian-outfits
     title: Yalaharian Outfits Quest
     level: 80
@@ -1771,35 +1782,35 @@ quests:
     premium: true
     wiki: https://tibia.fandom.com/wiki/Lion%27s_Rock_Quest
     reward: "Achievement Lion's Den Explorer. Random item out of the following: The Lion's Heart, Gold Ingot, Yellow Gem, Red Gem, Giant Shimmering Pearl (Brown), Emerald Bangle."
-    location: Lion's Rock near Darashia.
+    location: Lion's Rock near Darashia
     region: Darashia
   - id: the-cursed-crystal
     title: The Cursed Crystal Quest
     premium: true
     wiki: https://tibia.fandom.com/wiki/The_Cursed_Crystal_Quest
     reward: Crystal Shard and an Eye Patch, a Peg Leg, a Hook or a Pirate Backpack, achievement Wail of the Banshee
-    location: Crystal Gardens near Nargor.
+    location: Crystal Gardens near Nargor
     region: Liberty Bay
   - id: twenty-miles-beneath-the-sea
     title: Twenty Miles Beneath the Sea Quest
     premium: true
     wiki: https://tibia.fandom.com/wiki/Twenty_Miles_Beneath_the_Sea_Quest
     reward: Access to the Seacrest Grounds, Blue Crystal Shard, Green Crystal Shard, Violet Crystal Shard and achievements Mind the Step! and Snake Charmer.
-    location: Seacrest Grounds beneath Oramond.
+    location: Seacrest Grounds beneath Oramond
     region: Oramond
   - id: hero-of-rathleton
     title: Hero of Rathleton Quest
     premium: true
     wiki: https://tibia.fandom.com/wiki/Hero_of_Rathleton_Quest
     reward: Bag containing a Glooth Glider Blueprint, 4 Glooth Bags, 5 Platinum Coins, a Walnut. Ability to access Jaccus Maxxen's Dungeon and all areas of it; ability to kill bosses within. Ability to kill Raging Fires for 50 charm points.
-    location: Jaccus Maxxen's Dungeon in Oramond.
+    location: Jaccus Maxxen's Dungeon in Oramond
     region: Oramond
   - id: cartography-101
     title: Cartography 101 Quest
     premium: true
     wiki: https://tibia.fandom.com/wiki/Cartography_101_Quest
     reward: Achievement Cartography 101.
-    location: Begin at Adventurers' Guild
+    location: Adventurers' Guild
     region: Outros
   - id: the-lost-brother
     title: The Lost Brother Quest
@@ -1812,21 +1823,21 @@ quests:
     title: The Great Dragon Hunt Quest
     premium: true
     wiki: https://tibia.fandom.com/wiki/The_Great_Dragon_Hunt_Quest
-    reward: "Red Dragon Scale once, and one of the following every time you complete the quest: 5 Platinum Coins, a Small Ruby + a Small Emerald + a Small Sapphire, a Life Ring, a Red Gem, 10 Strong Mana Potions or 8 Strong Health Potions. Upon completing the quest 10 times"
-    location: Kha'zeel Dragon Lairs.
+    reward: "Red Dragon Scale once, and one of the following every time you complete the quest: 5 Platinum Coins, a Small Ruby + a Small Emerald + a Small Sapphire, a Life Ring, a Red Gem, 10 Strong Mana Potions or 8 Strong Health Potions…"
+    location: Kha'zeel Dragon Lairs
     region: Outros
   - id: the-tainted-souls
     title: The Tainted Souls Quest
     premium: false
     wiki: https://tibia.fandom.com/wiki/The_Tainted_Souls_Quest
     reward: Chance to fight Ekatrix.
-    location: Tainted Caves in the Green Claw Swamp.
+    location: Tainted Caves in the Green Claw Swamp
     region: Venore
   - id: grimvale
     title: Grimvale Quest
     premium: true
     wiki: https://tibia.fandom.com/wiki/Grimvale_Quest
-    reward: "The Curse of the Full Moon: A chance to fight Feroxa;"
+    reward: "The Curse of the Full Moon: A chance to fight Feroxa;; The Curse Spreads: Foxtail Amulet and the Achievement Over the Moon;; An Ancient Feud: A Cask (Goblin Zombie), a Lit Torch (Sparkling), a Lion Mosaic (Mane), a Lion Mosaic (Head), the achievement Drama in Darama…"
     location: Grimvale
     region: Edron
   - id: asura-palace
@@ -1834,34 +1845,34 @@ quests:
     premium: true
     wiki: https://tibia.fandom.com/wiki/Asura_Palace_Quest
     reward: 3 Small Rubies, 3 Small Sapphires, loot of The Flaming Orchid, achievement Lost Palace Raider (if the further requirements are met).
-    location: Asura Palace.
+    location: Asura Palace
     region: Port Hope
   - id: nightmare-teddy
     title: Nightmare Teddy Quest
     premium: true
     wiki: https://tibia.fandom.com/wiki/Nightmare_Teddy_Quest
     reward: Nightmare Teddy.
-    location: Nightmare Isles.
+    location: Nightmare Isles
     region: Roshamuul e Feyrist
   - id: tinder-box
     title: Tinder Box Quest
     premium: true
     wiki: https://tibia.fandom.com/wiki/Tinder_Box_Quest
     reward: Tinder Box.
-    location: Chyllfroest.
+    location: Chyllfroest
     region: Svargrond
   - id: krailos
     title: Krailos Quest
     premium: true
     wiki: https://tibia.fandom.com/wiki/Krailos_Quest
     reward: Onyx Pendant, access to the Krailos depot, ability to trade with Krailos NPCs, Ogre Chef and The Call of the Wild achievements.
-    location: Krailos.
+    location: Krailos
     region: Krailos
   - id: rift-warrior-outfits
     title: Rift Warrior Outfits Quest
     premium: true
     wiki: https://tibia.fandom.com/wiki/Rift_Warrior_Outfits_Quest
-    reward: "Rift Warrior Outfits and addons:"
+    reward: "Rift Warrior Outfits and addons: and the Rift Warrior achievement."
     location: Dungeons of The Ruthless Seven Minions
     region: Outros
   - id: small-sapphire
@@ -1869,7 +1880,7 @@ quests:
     premium: true
     wiki: https://tibia.fandom.com/wiki/Small_Sapphire_Quest
     reward: Small Sapphire, 50 Gold Coins, Women Seduced (Book), Travel Expenses (Book).
-    location: Drefia.
+    location: Drefia
     region: Darashia
   - id: demona-ring
     title: Demona Ring Quest
@@ -1877,7 +1888,7 @@ quests:
     premium: false
     wiki: https://tibia.fandom.com/wiki/Demona_Ring_Quest
     reward: Energy Ring, Stealth Ring.
-    location: Demona.
+    location: Demona
     region: Carlin
   - id: heart-of-destruction
     title: Heart of Destruction Quest
@@ -1909,35 +1920,35 @@ quests:
     premium: true
     wiki: https://tibia.fandom.com/wiki/Dangerous_Depths_Quest
     reward: Ability to imbue items with Powerful Featherweight, Achievements His Days are Counted, Duked It Out, Buried the Baron, Death in the Depths and Scourge of Scarabs and more.
-    location: The Gnome Deep Hub.
+    location: The Gnome Deep Hub
     region: Gnomos
   - id: hidden-threats
     title: Hidden Threats Quest
     premium: false
     wiki: https://tibia.fandom.com/wiki/Hidden_Threats_Quest
     reward: 2 Gold Nuggets, 1 Small Ruby, 1 Small Emerald and 1 Small Amethyst.
-    location: Corym Mines.
+    location: Corym Mines
     region: Outros
   - id: makeshift-warrior-outfits
     title: Makeshift Warrior Outfits Quest
     premium: true
     wiki: https://tibia.fandom.com/wiki/Makeshift_Warrior_Outfits_Quest
-    reward: "Makeshift Warrior Outfits and addons:"
-    location: Gnome Deep Hub.
+    reward: "Makeshift Warrior Outfits and addons: and Cobbled and Patched Achievement."
+    location: Gnome Deep Hub
     region: Gnomos
   - id: battle-mage-outfits
     title: Battle Mage Outfits Quest
     premium: true
     wiki: https://tibia.fandom.com/wiki/Battle_Mage_Outfits_Quest
-    reward: "Battle Mage Outfits and addons:"
-    location: Several locations.
+    reward: "Battle Mage Outfits and addons: and the achievements Battle Mage and Exalted Battle Mage."
+    location: Several locations
     region: Outros
   - id: measuring-tibia
     title: Measuring Tibia Quest
     premium: true
     wiki: https://tibia.fandom.com/wiki/Measuring_Tibia_Quest
     reward: New information for the Cyclopedia Map, Discoverer Outfits and addons, 22 Achievements (total of 34 points), and the Dedicated Entrepreneur and Globetrotter titles.
-    location: All over Tibia.
+    location: All over Tibia
     region: Outros
   - id: dream-warrior-outfits
     title: Dream Warrior Outfits Quest
@@ -1950,7 +1961,7 @@ quests:
     title: Golden Outfits Quest
     premium: false
     wiki: https://tibia.fandom.com/wiki/Golden_Outfits_Quest
-    reward: Golden Outfits and addons as well as the respective The Golden Outfit Display. Additionally, your character name will be listed on Memorials. A list of all confirmed owners can be found .
+    reward: Golden Outfits and addons as well as the respective The Golden Outfit Display. Additionally, your character name will be listed on Memorials. A list of all confirmed owners can be found.
     location: King Tibianus
     region: Thais
   - id: grave-danger
@@ -1966,15 +1977,15 @@ quests:
     premium: true
     wiki: https://tibia.fandom.com/wiki/Kilmaresh_Quest
     reward: The four parts of The Regalia of Suon, Sun and Sea achievement, three parts of the Sun Mosaic, Citizen of Issavi Outfits and permission to use the shortcuts between Issavi and the southern parts of Kilmaresh.
-    location: All the island of Kilmaresh.
+    location: All the island of Kilmaresh
     region: Kilmaresh
   - id: hand-of-the-inquisition-outfits
     title: Hand of the Inquisition Outfits Quest
     level: 250
     premium: true
     wiki: https://tibia.fandom.com/wiki/Hand_of_the_Inquisition_Outfits_Quest
-    reward: Hand of the Inquisition Outfits and addons, achievement
-    location: All the locations of the Grave Danger Quest.
+    reward: Hand of the Inquisition Outfits and addons, achievement Inquisition's Arm
+    location: All the locations of the Grave Danger Quest
     region: Outros
   - id: poltergeist-outfits
     title: Poltergeist Outfits Quest
@@ -1982,7 +1993,7 @@ quests:
     premium: true
     wiki: https://tibia.fandom.com/wiki/Poltergeist_Outfits_Quest
     reward: Poltergeist Outfits and Addons, achievement Mainstreet Nightmare
-    location: Locations of the Feaster of Souls Quest.
+    location: Locations of the Feaster of Souls Quest
     region: Outros
   - id: the-order-of-the-lion
     title: The Order of the Lion Quest
@@ -1997,8 +2008,8 @@ quests:
     level: 250
     premium: true
     wiki: https://tibia.fandom.com/wiki/Revenant_Outfits_Quest
-    reward: Revenant Outfits and addons, achievement
-    location: All the locations of the Soul War Quest.
+    reward: Revenant Outfits and addons, achievement Unleash the Beast
+    location: All the locations of the Soul War Quest
     region: Outros
   - id: a-pirates-tail
     title: A Pirate's Tail Quest
@@ -2018,6 +2029,7 @@ quests:
     title: Adventures of Galthen Quest
     premium: true
     wiki: https://tibia.fandom.com/wiki/Adventures_of_Galthen_Quest
+    reward: "Galthen and the Lost Queen: Royal Bounacean Advisor Outfits, Violet Tulip, Woodcarver Achievement, Galthen's Satchel, Artefact Box; Galthen and the City of Gold: Ancient Aucar Outfits, The Key Intihuatac…"
     location: Bounac
     region: Thais
   - id: too-hot-to-handle
@@ -2033,7 +2045,7 @@ quests:
     level: 250
     premium: true
     wiki: https://tibia.fandom.com/wiki/Royal_Bounacean_Advisor_Outfits_Quest
-    reward: Royal Bounacean Advisor Outfits and addons, achievement
+    reward: Royal Bounacean Advisor Outfits and addons, achievement King's Council
     location: Bounac
     region: Thais
   - id: citizen-of-issavi-outfits
@@ -2041,7 +2053,7 @@ quests:
     level: 250
     premium: true
     wiki: https://tibia.fandom.com/wiki/Citizen_of_Issavi_Outfits_Quest
-    reward: Citizen of Issavi Outfits and addons, achievement
+    reward: Citizen of Issavi Outfits and addons, achievement Citizen of Issavi
     location: Kilmaresh
     region: Kilmaresh
   - id: magic-sword
@@ -2071,15 +2083,15 @@ quests:
     level: 20
     premium: true
     wiki: https://tibia.fandom.com/wiki/Formal_Dress_Outfits_Quest
-    reward: Formal Dress Outfits and addons, achievement
-    location: All the locations of the 25 Years of Tibia Quest.
+    reward: Formal Dress Outfits and addons, achievement Sharp Dressed
+    location: All the locations of the 25 Years of Tibia Quest
     region: Outros
   - id: falconer-outfits
     title: Falconer Outfits Quest
     premium: false
     wiki: https://tibia.fandom.com/wiki/Falconer_Outfits_Quest
     reward: Falconer Outfits and addons, and the achievement Falconer.
-    location: Several locations.
+    location: Several locations
     region: Outros
   - id: within-the-tides
     title: Within the Tides Quest
@@ -2093,7 +2105,7 @@ quests:
     level: 250
     premium: true
     wiki: https://tibia.fandom.com/wiki/Primal_Ordeal_Quest
-    reward: "For finishing the main questline:"
+    reward: "For finishing the main questline: The base Fire-Fighter Outfits For optionally achieving higher hazard levels: The Ripptor mount; One random item from the Primal Set"
     location: Gnomprona
     region: Gnomos
   - id: fire-fighter-outfits
@@ -2132,8 +2144,8 @@ quests:
     level: 250
     premium: true
     wiki: https://tibia.fandom.com/wiki/Decaying_Defender_Outfits_Quest
-    reward: Decaying Defender Outfits and addons, achievement
-    location: All the locations of the Rotten Blood Quest.
+    reward: Decaying Defender Outfits and addons, achievement Fully Decayed
+    location: All the locations of the Rotten Blood Quest
     region: Outros
   - id: dragon-slayer-outfits
     title: Dragon Slayer Outfits Quest
@@ -2153,15 +2165,15 @@ quests:
     title: Draccoon Herald Outfits Quest
     premium: true
     wiki: https://tibia.fandom.com/wiki/Draccoon_Herald_Outfits_Quest
-    reward: Draccoon Herald Outfits and addons
-    location: All the locations of the 20 Years a Cook Quest.
+    reward: Draccoon Herald Outfits and addons and the achievement The Rule of Raccool
+    location: All the locations of the 20 Years a Cook Quest
     region: Outros
   - id: podzilla
     title: Podzilla Quest
     level: 300
     premium: true
     wiki: https://tibia.fandom.com/wiki/Podzilla_Quest
-    reward: You will receive an Amber Crusher and the base Rootwalker Outfits.
+    reward: You will receive an Amber Crusher and the base Rootwalker Outfits.; Rootwalker Outfit - Male; Rootwalker Outfit - Female
     location: Edron
     region: Edron
   - id: rootwalker-outfits
@@ -2169,7 +2181,7 @@ quests:
     level: 300
     premium: true
     wiki: https://tibia.fandom.com/wiki/Rootwalker_Outfits_Quest
-    reward: Rootwalker Outfits and addons
+    reward: Rootwalker Outfits and addons and the achievement The Rootwalker
     location: Podzilla
     region: Oramond
   - id: ravenous-madness
@@ -2177,7 +2189,7 @@ quests:
     level: 8
     premium: false
     wiki: https://tibia.fandom.com/wiki/Ravenous_Madness_Quest
-    reward: Knight - Protection Amulet
+    reward: Knight - Protection Amulet Paladin - 25 x Poison Arrow and 25 x Burst Arrow Druid - 10 x Intense Healing Rune, 10 x Cure Poison Rune and 10 x Destroy Field Rune Sorcerer - 10 x Fire Field Rune, 10 x Energy Field Rune and 10 x Poison Field Rune Monk - Power Ring
     location: Rabid Wolf Cave
     region: Outros
   - id: no-rest-for-the-wicked
@@ -2200,13 +2212,14 @@ quests:
     title: Mystery of the Valley Quest
     premium: true
     wiki: https://tibia.fandom.com/wiki/Mystery_of_the_Valley_Quest
-    region: Outros
+    location: "First piece: Nibelor - Inukaya"
+    region: Svargrond
   - id: the-way-of-the-monk
     title: The Way of the Monk Quest
     level: 275
     premium: true
     wiki: https://tibia.fandom.com/wiki/The_Way_of_the_Monk_Quest
-    reward: 10 Promotion Points and the achievement Hope of the Merudri for all vocations. It will also reward 847.8k Experience Points in total, once all 10 Shrines have been touched. For Monks, it also rewards auto attack damage increase of 25% (or 50% when Serene)
+    reward: 10 Promotion Points and the achievement Hope of the Merudri for all vocations. It will also reward 847.8k Experience Points in total, once all 10 Shrines have been touched…
     location: Blue Valley
     region: Outros
   - id: bloody-tusks
@@ -2231,7 +2244,7 @@ quests:
     premium: true
     wiki: https://tibia.fandom.com/wiki/Illuminator_Outfit_Quest
     reward: Illuminator Outfits and addons,
-    location: All the locations of the Between the Lines Quest.
+    location: All the locations of the Between the Lines Quest
     region: Outros
   - id: illuminator-outfits
     title: Illuminator Outfits Quest
@@ -2246,6 +2259,7 @@ quests:
     level: 250
     premium: true
     wiki: https://tibia.fandom.com/wiki/The_Order_of_the_Stag_Quest
+    reward: Brass-Shod Chest (Order of the Stag); The Broken Sword of Eldoran Etzel; Bastard and King's Council Achievements; The second addon of the Royal Bounacean Advisor Outfits
     location: Bounac
     region: Thais
   - id: the-roost-of-the-graveborn
@@ -2269,7 +2283,7 @@ quests:
     premium: false
     wiki: https://tibia.fandom.com/wiki/Feral_Trappers_Quest
     reward: Feral Trapper Outfits and addons, and the achievement Feral Trapper.
-    location: Several locations.
+    location: Several locations
     region: Outros
   - id: shards-of-a-broken-moon
     title: Shards of a Broken Moon Quest
@@ -2283,7 +2297,7 @@ quests:
     level: 300
     premium: true
     wiki: https://tibia.fandom.com/wiki/Make_Believe_Quest
-    reward: "Rewards for the quest come through the fights against its bosses. It includes:"
+    reward: "Rewards for the quest come through the fights against its bosses. It includes: the best in slot equipment from Summer Update 2026, the Moonsilver Set; the Cloud In a Bottle…"
     location: Venore
     region: Venore
   - id: illuminated-warrior-outfits
@@ -2291,7 +2305,7 @@ quests:
     level: 1000
     premium: true
     wiki: https://tibia.fandom.com/wiki/Illuminated_Warrior_Outfits_Quest
-    reward: Illuminated Warrior Outfits and addons
+    reward: Illuminated Warrior Outfits and addons and the achievement.
     location: Thalassara
     region: Outros
   - id: newhaven-legion-helmet
@@ -2405,47 +2419,11 @@ edges:
     evidence: Must have completed the Access to Meriana Quest to gain access to Meriana Island
     source: https://tibia.fandom.com/wiki/Pirate_Outfits_Quest/Spoiler
     reviewed: false
-  - from: the-shattered-isles
-    to: shaman-outfits
-    kind: required
-    evidence: Talk to Chondur in Sabrehaven (you need to complete the Eleonore Quest to go there)
-    source: https://tibia.fandom.com/wiki/Shaman_Outfits_Quest/Spoiler
-    reviewed: false
   - from: barbarian-test
     to: barbarian-arena
     kind: required
     evidence: Completed The Barbarian Test Quest.
     source: https://tibia.fandom.com/wiki/Barbarian_Arena_Quest/Spoiler
-    reviewed: false
-  - from: barbarian-test
-    to: frost-dragon
-    kind: required
-    evidence: "Note: You must have completed the Barbarian Test Quest before starting this quest."
-    source: https://tibia.fandom.com/wiki/Frost_Dragon_Quest/Spoiler
-    reviewed: false
-  - from: barbarian-test
-    to: berserk-potion
-    kind: access
-    evidence: Access to Helheim (Barbarian Test Quest and The Ice Islands Quest, up to The Secret of Helheim).
-    source: https://tibia.fandom.com/wiki/Berserk_Potion_Quest/Spoiler
-    reviewed: false
-  - from: the-ice-islands
-    to: berserk-potion
-    kind: access
-    evidence: Access to Helheim (Barbarian Test Quest and The Ice Islands Quest, up to The Secret of Helheim).
-    source: https://tibia.fandom.com/wiki/Berserk_Potion_Quest/Spoiler
-    reviewed: false
-  - from: the-ice-islands
-    to: formorgar-mines-hoist
-    kind: access
-    evidence: "Access to the Formorgar Mines (Ice Islands Quest up to Formorgar Mines 1: The Mission)"
-    source: https://tibia.fandom.com/wiki/Formorgar_Mines_Hoist_Quest/Spoiler
-    reviewed: false
-  - from: aritos-task
-    to: nomads-land
-    kind: required
-    evidence: To do this quest you need to have finished Arito's Task Quest.
-    source: https://tibia.fandom.com/wiki/Nomads_Land_Quest/Spoiler
     reviewed: false
   - from: the-white-raven-monastery
     to: rest-in-hallowed-ground
@@ -2458,12 +2436,6 @@ edges:
     kind: required
     evidence: Completion of the last seal in The Queen of the Banshees Quest; see that quest page for more information (you need a kiss from her).
     source: https://tibia.fandom.com/wiki/Kissing_a_Pig_Quest/Spoiler
-    reviewed: false
-  - from: the-inquisition
-    to: vampire-hunter
-    kind: required
-    evidence: Completed missions 1-3 from The Inquisition Quest;
-    source: https://tibia.fandom.com/wiki/Vampire_Hunter_Quest/Spoiler
     reviewed: false
   - from: the-ultimate-booze
     to: the-hidden-city-of-beregar
@@ -2482,12 +2454,6 @@ edges:
     kind: required
     evidence: Completed 6 missions of The New Frontier Quest
     source: https://tibia.fandom.com/wiki/An_Uneasy_Alliance_Quest/Spoiler
-    reviewed: false
-  - from: the-new-frontier
-    to: tomes-of-knowledge
-    kind: required
-    evidence: The first 8 missions of The New Frontier Quest completed to be able to trade 6 Tomes of Knowledge with NPC Cael.
-    source: https://tibia.fandom.com/wiki/Tomes_of_Knowledge_Quest/Spoiler
     reviewed: false
   - from: wrath-of-the-emperor
     to: wayfarer-outfits
@@ -2525,64 +2491,16 @@ edges:
     evidence: "Note: it is wise to start Lugri's task of killing 4,000 Necromancers, Priestesses, Blood Hands, Blood Priests or Shadow Pupils before doing this quest. You will meet a lot of those creatures and it is smart to let those kills count for the task."
     source: https://tibia.fandom.com/wiki/The_Gravedigger_of_Drefia_Quest/Spoiler
     reviewed: false
-  - from: bigfoots-burden
-    to: opticording-sphere
-    kind: access
-    evidence: Access to Gnomebase Alpha (rank 2 of Bigfoot's Burden Quest)
-    source: https://tibia.fandom.com/wiki/Opticording_Sphere_Quest/Spoiler
-    reviewed: false
-  - from: barbarian-test
-    to: sinatuki
-    kind: access
-    evidence: "Access to Nibelor (complete the Barbarian Test Quest and The Ice Islands Quest, up to Nibelor 5: Cure the Dogs)."
-    source: https://tibia.fandom.com/wiki/Sinatuki_Quest/Spoiler
-    reviewed: false
-  - from: the-ice-islands
-    to: sinatuki
-    kind: access
-    evidence: "Access to Nibelor (complete the Barbarian Test Quest and The Ice Islands Quest, up to Nibelor 5: Cure the Dogs)."
-    source: https://tibia.fandom.com/wiki/Sinatuki_Quest/Spoiler
-    reviewed: false
   - from: dark-trails
     to: glooth-engineer-outfits
     kind: required
     evidence: "For the base outfit: complete of the Dark Trails Quest."
     source: https://tibia.fandom.com/wiki/Glooth_Engineer_Outfits_Quest/Spoiler
     reviewed: false
-  - from: rathleton
-    to: oramond
-    kind: required
-    evidence: "The following missions/tasks take place in the Underground Glooth Factory and thus cannot be completed without the Citizen rank of the Rathleton Quest:"
-    source: https://tibia.fandom.com/wiki/Oramond_Quest/Spoiler
-    reviewed: false
-  - from: dark-trails
-    to: rathleton
-    kind: required
-    evidence: For the base outfit you need to complete Dark Trails Quest.
-    source: https://tibia.fandom.com/wiki/Rathleton_Quest/Spoiler
-    reviewed: false
-  - from: the-shattered-isles
-    to: the-cursed-crystal
-    kind: access
-    evidence: Access to Nargor (completed the Eleonore Quest, finished Meriana Quest up to Ray's Mission 1)
-    source: https://tibia.fandom.com/wiki/The_Cursed_Crystal_Quest/Spoiler
-    reviewed: false
   - from: asura-palace
     to: threatened-dreams
     kind: access
     evidence: Access to The Flaming Orchid boss (requires Asura Palace Quest);
-    source: https://tibia.fandom.com/wiki/Threatened_Dreams_Quest/Spoiler
-    reviewed: false
-  - from: blood-brothers
-    to: threatened-dreams
-    kind: access
-    evidence: Access to Katex Blood Tongue boss (requires Blood Brothers Quest up to mission 3, and The Curse Spreads and An Ancient Feud missions of the Grimvale Quest);
-    source: https://tibia.fandom.com/wiki/Threatened_Dreams_Quest/Spoiler
-    reviewed: false
-  - from: grimvale
-    to: threatened-dreams
-    kind: access
-    evidence: Access to Katex Blood Tongue boss (requires Blood Brothers Quest up to mission 3, and The Curse Spreads and An Ancient Feud missions of the Grimvale Quest);
     source: https://tibia.fandom.com/wiki/Threatened_Dreams_Quest/Spoiler
     reviewed: false
   - from: threatened-dreams
@@ -2597,29 +2515,11 @@ edges:
     evidence: Completed the Asura Palace Quest.
     source: https://tibia.fandom.com/wiki/The_Secret_Library_Quest/Spoiler
     reviewed: false
-  - from: the-lost-brother
-    to: the-secret-library
-    kind: required
-    evidence: This part takes place at the Asura Palace and you must have finished The Lost Brother Quest and the Asura Palace Quest to start it.
-    source: https://tibia.fandom.com/wiki/The_Secret_Library_Quest/Spoiler
-    reviewed: false
   - from: the-shattered-isles
     to: the-dream-courts
     kind: access
     evidence: Access to Meriana (Complete The Shattered Isles Quest - Access to Meriana);
     source: https://tibia.fandom.com/wiki/The_Dream_Courts_Quest/Spoiler
-    reviewed: false
-  - from: the-explorer-society
-    to: the-dream-courts
-    kind: access
-    evidence: Relic Hunter rank in the The Explorer Society Quest to access Calassa as well as Diving Equipment;
-    source: https://tibia.fandom.com/wiki/The_Dream_Courts_Quest/Spoiler
-    reviewed: false
-  - from: kilmaresh
-    to: grave-danger
-    kind: required
-    evidence: Complete the first 4 puzzles of the Kilmaresh Quest - The Revenge of the Ogres
-    source: https://tibia.fandom.com/wiki/Grave_Danger_Quest/Spoiler
     reviewed: false
   - from: lions-rock
     to: feaster-of-souls
@@ -2651,12 +2551,6 @@ edges:
     evidence: Completed The Order of the Lion Quest (level 250 is required);
     source: https://tibia.fandom.com/wiki/Adventures_of_Galthen_Quest/Spoiler
     reviewed: false
-  - from: bigfoots-burden
-    to: too-hot-to-handle
-    kind: required
-    evidence: To start this quest, the character must have completed the Recruitment mission of the Bigfoot's Burden Quest.
-    source: https://tibia.fandom.com/wiki/Too_Hot_to_Handle_Quest/Spoiler
-    reviewed: false
   - from: the-lost-brother
     to: within-the-tides
     kind: required
@@ -2669,12 +2563,6 @@ edges:
     evidence: "Completed the Within the Tides Quest (Missions: Coastal Concerns, Mountainous Matters, Of Feathers and Flowers, Star-Crossed Lovers)"
     source: https://tibia.fandom.com/wiki/Primal_Ordeal_Quest/Spoiler
     reviewed: false
-  - from: krailos
-    to: the-cradle-of-monsters
-    kind: required
-    evidence: Completed the Hungry New World mission of the Krailos Quest (access to Krailos Depot);
-    source: https://tibia.fandom.com/wiki/The_Cradle_of_Monsters_Quest/Spoiler
-    reviewed: false
   - from: the-shattered-isles
     to: 20-years-a-cook
     kind: access
@@ -2682,34 +2570,10 @@ edges:
     source: https://tibia.fandom.com/wiki/20_Years_a_Cook_Quest/Spoiler
     reviewed: false
   - from: no-rest-for-the-wicked
-    to: fiend-slayer-outfits
-    kind: required
-    evidence: To obtain the base outfit, you need to complete the No Rest for the Wicked Quest.
-    source: https://tibia.fandom.com/wiki/Fiend_Slayer_Outfits_Quest/Spoiler
-    reviewed: false
-  - from: the-ice-islands
-    to: mystery-of-the-valley
-    kind: required
-    evidence: Completed up to Cure the Dogs mission of the The Ice Islands Quest to access Inukaya;
-    source: https://tibia.fandom.com/wiki/Mystery_of_the_Valley_Quest/Spoiler
-    reviewed: false
-  - from: the-new-frontier
-    to: mystery-of-the-valley
-    kind: required
-    evidence: Completed up to An Offer You Can't Refuse mission of the The New Frontier Quest to access Muggy Plains;
-    source: https://tibia.fandom.com/wiki/Mystery_of_the_Valley_Quest/Spoiler
-    reviewed: false
-  - from: no-rest-for-the-wicked
     to: mystery-of-the-valley
     kind: recommended
     evidence: "Optional: access to Azzilon Castle (check No Rest for the Wicked Quest)."
     source: https://tibia.fandom.com/wiki/Mystery_of_the_Valley_Quest/Spoiler
-    reviewed: false
-  - from: the-ice-islands
-    to: the-way-of-the-monk
-    kind: access
-    evidence: "Started the Nibelor 2: Ecological Terrorism mission of The Ice Islands Quest (for access to Tyrsung)."
-    source: https://tibia.fandom.com/wiki/The_Way_of_the_Monk_Quest/Spoiler
     reviewed: false
   - from: the-new-frontier
     to: the-way-of-the-monk
@@ -2723,171 +2587,380 @@ edges:
     evidence: Handed in eight Tome of Knowledges to NPC Cael (access to Corruption Hole; see Tomes of Knowledge Quest).
     source: https://tibia.fandom.com/wiki/The_Way_of_the_Monk_Quest/Spoiler
     reviewed: false
-  - from: blood-brothers
-    to: bloody-tusks
-    kind: access
-    evidence: Access to Vengoth (completed up to mission 4 of the Blood Brothers Quest);
-    source: https://tibia.fandom.com/wiki/Bloody_Tusks_Quest/Spoiler
-    reviewed: false
-  - from: between-the-lines
-    to: illuminator-outfits
-    kind: required
-    evidence: To obtain the base outfit, you need to complete the Between the Lines Quest.
-    source: https://tibia.fandom.com/wiki/Illuminator_Outfits_Quest/Spoiler
-    reviewed: false
   - from: the-order-of-the-lion
     to: the-order-of-the-stag
     kind: required
     evidence: Completed the The Order of the Lion Quest
     source: https://tibia.fandom.com/wiki/The_Order_of_the_Stag_Quest/Spoiler
     reviewed: false
-  - from: the-ice-islands
-    to: the-explorer-society
-    kind: required
-    evidence: "Note: you must have completed The Ice Islands Quest until the final mission."
-    source: https://tibia.fandom.com/wiki/The_Explorer_Society_Quest/Spoiler
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
+  - from: barbarian-test
+    to: berserk-potion
+    kind: access
+    evidence: Access to Helheim (Barbarian Test Quest and The Ice Islands Quest, up to The Secret of Helheim).
+    source: https://tibia.fandom.com/wiki/Berserk_Potion_Quest/Spoiler
     reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
+  - from: the-ice-islands
+    to: berserk-potion
+    kind: access
+    evidence: Access to Helheim (Barbarian Test Quest and The Ice Islands Quest, up to The Secret of Helheim).
+    source: https://tibia.fandom.com/wiki/Berserk_Potion_Quest/Spoiler
+    reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
   - from: the-ice-islands
     to: lion-trophy
     kind: required
     evidence: You must have reached "Formorgar Mines 1" mission of the The Ice Islands Quest;
     source: https://tibia.fandom.com/wiki/Lion_Trophy_Quest/Spoiler
     reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
+  - from: the-ice-islands
+    to: formorgar-mines-hoist
+    kind: access
+    evidence: "Access to the Formorgar Mines (Ice Islands Quest up to Formorgar Mines 1: The Mission)"
+    source: https://tibia.fandom.com/wiki/Formorgar_Mines_Hoist_Quest/Spoiler
+    reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
   - from: the-white-raven-monastery
     to: secret-service
     kind: required
     evidence: Completed first mission of The White Raven Monastery Quest
     source: https://tibia.fandom.com/wiki/Secret_Service_Quest/Spoiler
     reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
+  - from: the-inquisition
+    to: vampire-hunter
+    kind: required
+    evidence: Completing this quest up to mission 3 allows you to start the Vampire Hunter Quest with Storkus.
+    source: https://tibia.fandom.com/wiki/The_Inquisition_Quest/Spoiler
+    reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
   - from: the-inquisition
     to: blood-brothers
     kind: required
     evidence: "Mission 1, additional requirements for those who haven't completed The Inquisition Quest - Mission 3: Vampire Hunt:"
     source: https://tibia.fandom.com/wiki/Blood_Brothers_Quest/Spoiler
     reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
   - from: in-service-of-yalahar
     to: shadows-of-yalahar
     kind: required
     evidence: In Service of Yalahar Quest (At least mission 3 started)
     source: https://tibia.fandom.com/wiki/Shadows_of_Yalahar_Quest/Spoiler
     reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
   - from: children-of-the-revolution
     to: warmaster-outfits
     kind: required
     evidence: Serpent Crest (obtained through the Children of the Revolution Quest).
     source: https://tibia.fandom.com/wiki/Warmaster_Outfits_Quest/Spoiler
     reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
   - from: unnatural-selection
     to: warmaster-outfits
     kind: required
     evidence: Tribal Crest (obtained through the Unnatural Selection Quest).
     source: https://tibia.fandom.com/wiki/Warmaster_Outfits_Quest/Spoiler
     reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
+  - from: the-new-frontier
+    to: tomes-of-knowledge
+    kind: required
+    evidence: The first 8 missions of The New Frontier Quest completed to be able to trade 6 Tomes of Knowledge with NPC Cael.
+    source: https://tibia.fandom.com/wiki/Tomes_of_Knowledge_Quest/Spoiler
+    reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
   - from: a-fathers-burden
     to: wayfarer-outfits
     kind: required
     evidence: Old Cape (reward from A Father's Burden Quest).
     source: https://tibia.fandom.com/wiki/Wayfarer_Outfits_Quest/Spoiler
     reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
   - from: an-interest-in-botany
     to: wayfarer-outfits
     kind: required
     evidence: Sedge Hat (reward from An Interest In Botany Quest).
     source: https://tibia.fandom.com/wiki/Wayfarer_Outfits_Quest/Spoiler
     reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
   - from: the-new-frontier
     to: a-fathers-burden
     kind: required
     evidence: Completed first mission of The New Frontier Quest
     source: https://tibia.fandom.com/wiki/A_Father%27s_Burden_Quest/Spoiler
     reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
   - from: the-white-raven-monastery
     to: a-fathers-burden
     kind: required
     evidence: Completed first mission of The White Raven Monastery Quest
     source: https://tibia.fandom.com/wiki/A_Father%27s_Burden_Quest/Spoiler
     reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
   - from: the-ape-city
     to: wrath-of-the-emperor
     kind: required
     evidence: The Ape City Quest (full quest not needed - mission 9 started)
     source: https://tibia.fandom.com/wiki/Wrath_of_the_Emperor_Quest/Spoiler
     reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
+  - from: bigfoots-burden
+    to: opticording-sphere
+    kind: access
+    evidence: Access to Gnomebase Alpha (rank 2 of Bigfoot's Burden Quest)
+    source: https://tibia.fandom.com/wiki/Opticording_Sphere_Quest/Spoiler
+    reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
   - from: liquid-black
     to: opticording-sphere
     kind: required
     evidence: At least stage 2 of the Deeplings World Change opened on your server
     source: https://tibia.fandom.com/wiki/Opticording_Sphere_Quest/Spoiler
     reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
   - from: spike-tasks
     to: cave-explorer-outfits
     kind: required
     evidence: 100 fame points within The Spike construct. You can check your current amount of fame points by asking Gnommander about reward and then checking your questlog.
     source: https://tibia.fandom.com/wiki/Cave_Explorer_Outfits_Quest/Spoiler
     reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
+  - from: barbarian-test
+    to: sinatuki
+    kind: access
+    evidence: "Access to Nibelor (complete the Barbarian Test Quest and The Ice Islands Quest, up to Nibelor 5: Cure the Dogs)."
+    source: https://tibia.fandom.com/wiki/Sinatuki_Quest/Spoiler
+    reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
+  - from: the-ice-islands
+    to: sinatuki
+    kind: access
+    evidence: "Access to Nibelor (complete the Barbarian Test Quest and The Ice Islands Quest, up to Nibelor 5: Cure the Dogs)."
+    source: https://tibia.fandom.com/wiki/Sinatuki_Quest/Spoiler
+    reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
   - from: rathleton
     to: glooth-engineer-outfits
     kind: required
     evidence: 'For the first addon: base outfit, Inhabitant rank in the Rathleton Quest and votes cast towards each of the available "shortcuts" and "dungeon" topics at least once.'
     source: https://tibia.fandom.com/wiki/Glooth_Engineer_Outfits_Quest/Spoiler
     reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
+  - from: rathleton
+    to: dark-trails
+    kind: required
+    evidence: Furthermore, you'll need a team of 4 or 5 players to fight with the bosses and a Commoner rank to for the last two missions.
+    source: https://tibia.fandom.com/wiki/Dark_Trails_Quest/Spoiler
+    reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
+  - from: oramond
+    to: dark-trails
+    kind: required
+    evidence: "The quest involves several side-missions for various Rathleton NPCs, and you can do them ahead of time as Oramond Quest tasks:"
+    source: https://tibia.fandom.com/wiki/Dark_Trails_Quest/Spoiler
+    reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
+  - from: rathleton
+    to: oramond
+    kind: required
+    evidence: "The following missions/tasks take place in the Underground Glooth Factory and thus cannot be completed without the Citizen rank of the Rathleton Quest:"
+    source: https://tibia.fandom.com/wiki/Oramond_Quest/Spoiler
+    reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
   - from: blood-brothers
     to: yalaharian-outfits
     kind: required
     evidence: Vampiric Crest (obtained through the Blood Brothers Quest).
     source: https://tibia.fandom.com/wiki/Yalaharian_Outfits_Quest/Spoiler
     reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
+  - from: the-shattered-isles
+    to: the-cursed-crystal
+    kind: access
+    evidence: Access to Nargor (completed the Eleonore Quest, finished Meriana Quest up to Ray's Mission 1)
+    source: https://tibia.fandom.com/wiki/The_Cursed_Crystal_Quest/Spoiler
+    reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
   - from: rathleton
     to: hero-of-rathleton
     kind: required
     evidence: Rank of Squire in the Rathleton Quest
     source: https://tibia.fandom.com/wiki/Hero_of_Rathleton_Quest/Spoiler
     reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
   - from: blood-brothers
     to: grimvale
     kind: required
     evidence: "The Curse Spreads: Blood Brothers Quest complete up to mission 3 (access to Vengoth)."
     source: https://tibia.fandom.com/wiki/Grimvale_Quest/Spoiler
     reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
   - from: lions-rock
     to: grimvale
     kind: required
     evidence: Lion's Rock Quest complete until access to the temple.
     source: https://tibia.fandom.com/wiki/Grimvale_Quest/Spoiler
     reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
+  - from: blood-brothers
+    to: threatened-dreams
+    kind: access
+    evidence: Access to Katex Blood Tongue boss (requires Blood Brothers Quest up to mission 3, and The Curse Spreads and An Ancient Feud missions of the Grimvale Quest);
+    source: https://tibia.fandom.com/wiki/Threatened_Dreams_Quest/Spoiler
+    reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
+  - from: grimvale
+    to: threatened-dreams
+    kind: access
+    evidence: Access to Katex Blood Tongue boss (requires Blood Brothers Quest up to mission 3, and The Curse Spreads and An Ancient Feud missions of the Grimvale Quest);
+    source: https://tibia.fandom.com/wiki/Threatened_Dreams_Quest/Spoiler
+    reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
   - from: liquid-black
     to: the-secret-library
     kind: required
     evidence: Completed the first mission of the Liquid Black Quest.
     source: https://tibia.fandom.com/wiki/The_Secret_Library_Quest/Spoiler
     reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
+  - from: the-explorer-society
+    to: the-dream-courts
+    kind: access
+    evidence: Relic Hunter rank in the The Explorer Society Quest to access Calassa as well as Diving Equipment;
+    source: https://tibia.fandom.com/wiki/The_Dream_Courts_Quest/Spoiler
+    reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
   - from: the-cursed-crystal
     to: the-dream-courts
     kind: required
     evidence: A Flask of Medusa's Ointment from The Cursed Crystal Quest;
     source: https://tibia.fandom.com/wiki/The_Dream_Courts_Quest/Spoiler
     reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
+  - from: kilmaresh
+    to: grave-danger
+    kind: required
+    evidence: Complete the first 4 puzzles of the Kilmaresh Quest - The Revenge of the Ogres
+    source: https://tibia.fandom.com/wiki/Grave_Danger_Quest/Spoiler
+    reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
   - from: the-shattered-isles
     to: feaster-of-souls
     kind: required
     evidence: Completed The Shattered Isles Quest until access to Ramoa is obtained.
     source: https://tibia.fandom.com/wiki/Feaster_of_Souls_Quest/Spoiler
     reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
   - from: blood-brothers
     to: feaster-of-souls
     kind: required
     evidence: Completed The Blood Brothers Quest (Mission 4, access to Vengoth).
     source: https://tibia.fandom.com/wiki/Feaster_of_Souls_Quest/Spoiler
     reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
+  - from: bigfoots-burden
+    to: too-hot-to-handle
+    kind: required
+    evidence: To start this quest, the character must have completed the Recruitment mission of the Bigfoot's Burden Quest.
+    source: https://tibia.fandom.com/wiki/Too_Hot_to_Handle_Quest/Spoiler
+    reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
+  - from: krailos
+    to: the-cradle-of-monsters
+    kind: required
+    evidence: Completed the Hungry New World mission of the Krailos Quest (access to Krailos Depot);
+    source: https://tibia.fandom.com/wiki/The_Cradle_of_Monsters_Quest/Spoiler
+    reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
+  - from: the-ice-islands
+    to: mystery-of-the-valley
+    kind: required
+    evidence: Completed up to Cure the Dogs mission of the The Ice Islands Quest to access Inukaya;
+    source: https://tibia.fandom.com/wiki/Mystery_of_the_Valley_Quest/Spoiler
+    reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
+  - from: the-new-frontier
+    to: mystery-of-the-valley
+    kind: required
+    evidence: Completed up to An Offer You Can't Refuse mission of the The New Frontier Quest to access Muggy Plains;
+    source: https://tibia.fandom.com/wiki/Mystery_of_the_Valley_Quest/Spoiler
+    reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
+  - from: the-ice-islands
+    to: the-way-of-the-monk
+    kind: access
+    evidence: "Started the Nibelor 2: Ecological Terrorism mission of The Ice Islands Quest (for access to Tyrsung)."
+    source: https://tibia.fandom.com/wiki/The_Way_of_the_Monk_Quest/Spoiler
+    reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
   - from: the-pits-of-inferno
     to: the-way-of-the-monk
     kind: required
     evidence: Reached the The Levers mission of The Pits of Inferno Quest (requires all five vocations, or players with a high health pool to cross the purple flames).
     source: https://tibia.fandom.com/wiki/The_Way_of_the_Monk_Quest/Spoiler
     reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
   - from: cults-of-tibia
     to: the-way-of-the-monk
     kind: required
     evidence: Reached the The Powerful Relic stage of the Barkless mission in the Cults of Tibia Quest.
     source: https://tibia.fandom.com/wiki/The_Way_of_the_Monk_Quest/Spoiler
+    reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
+  - from: blood-brothers
+    to: bloody-tusks
+    kind: access
+    evidence: Access to Vengoth (completed up to mission 4 of the Blood Brothers Quest);
+    source: https://tibia.fandom.com/wiki/Bloody_Tusks_Quest/Spoiler
+    reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
+  - from: the-ice-islands
+    to: the-explorer-society
+    kind: required
+    evidence: "Note: you must have completed The Ice Islands Quest until the final mission."
+    source: https://tibia.fandom.com/wiki/The_Explorer_Society_Quest/Spoiler
+    reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
+  - from: the-shattered-isles
+    to: shaman-outfits
+    kind: required
+    evidence: Talk to Chondur in Sabrehaven (you need to complete the Eleonore Quest to go there)
+    source: https://tibia.fandom.com/wiki/Shaman_Outfits_Quest/Spoiler
+    reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
+  - from: barbarian-test
+    to: frost-dragon
+    kind: required
+    evidence: "Note: You must have completed the Barbarian Test Quest before starting this quest."
+    source: https://tibia.fandom.com/wiki/Frost_Dragon_Quest/Spoiler
+    reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
+  - from: aritos-task
+    to: nomads-land
+    kind: required
+    evidence: To do this quest you need to have finished Arito's Task Quest.
+    source: https://tibia.fandom.com/wiki/Nomads_Land_Quest/Spoiler
+    reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
+  - from: the-lost-brother
+    to: the-secret-library
+    kind: required
+    evidence: This part takes place at the Asura Palace and you must have finished The Lost Brother Quest and the Asura Palace Quest to start it.
+    source: https://tibia.fandom.com/wiki/The_Secret_Library_Quest/Spoiler
+    reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
+  - from: no-rest-for-the-wicked
+    to: fiend-slayer-outfits
+    kind: required
+    evidence: To obtain the base outfit, you need to complete the No Rest for the Wicked Quest.
+    source: https://tibia.fandom.com/wiki/Fiend_Slayer_Outfits_Quest/Spoiler
+    reviewed: false
+  # revisar: tipo ou direção lidos automaticamente; confira a frase
+  - from: between-the-lines
+    to: illuminator-outfits
+    kind: required
+    evidence: To obtain the base outfit, you need to complete the Between the Lines Quest.
+    source: https://tibia.fandom.com/wiki/Illuminator_Outfits_Quest/Spoiler
     reviewed: false

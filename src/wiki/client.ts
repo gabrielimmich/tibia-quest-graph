@@ -36,7 +36,11 @@ export function createWikiClient({ cacheDir, refresh = false }: WikiClientOption
     const url = `${API}?${new URLSearchParams({ ...params, format: 'json', formatversion: '2' })}`
     const response = await fetch(url, { headers: { 'User-Agent': USER_AGENT } })
     if (!response.ok) throw new Error(`${response.status} ${response.statusText}: ${url}`)
-    return response.json()
+    const body: unknown = await response.json()
+    // A API devolve erros (maxlag, ratelimited) como 200 com chave "error";
+    // sem isto o erro entraria no cache como se fosse resposta.
+    if (isRecord(body) && 'error' in body) throw new Error(`API: ${JSON.stringify(body['error'])}`)
+    return body
   }
 
   const listEmbedding = async (template: string): Promise<string[]> => {

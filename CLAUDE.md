@@ -40,6 +40,11 @@ as outras 349 quests.
 Tudo isso é fase 2, e será mais fácil de construir depois que o formato dos dados
 estiver validado pelo uso.
 
+> **Fase 2 aberta em 2026-09-12** (o MVP acima foi entregue): as outras quests e
+> o coletor `scripts/collect.ts` passaram a existir. Regras e decisões em
+> `docs/superpowers/specs/2026-09-12-phase2-context.md`. A regra de ouro continua:
+> nenhuma aresta sem frase literal da wiki; as automáticas ficam `reviewed: false`.
+
 ---
 
 ## 3. As 15 quests

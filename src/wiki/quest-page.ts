@@ -16,10 +16,12 @@ export interface QuestDraft {
 // não são quests com pré-requisitos.
 const EXCLUDED_TYPES = new Set(['mwc', 'event', 'change', 'exchange'])
 const REWARD_MAX = 300
+// A wiki grafa {{Infobox Quest}} e {{Infobox_Quest}}.
+const INFOBOX = /\{\{\s*Infobox[ _]Quest\b/i
 
 export function parseQuestPage(title: string, wikitext: string): QuestDraft | null {
+  if (!INFOBOX.test(wikitext)) return null
   const fields = infoboxFields(wikitext)
-  if (!wikitext.includes('{{Infobox Quest')) return null
   if ((fields.get('name') ?? '') === '') return null
   if (EXCLUDED_TYPES.has((fields.get('type') ?? '').trim().toLowerCase())) return null
 
@@ -59,14 +61,20 @@ function parsePremium(raw: string, warnings: string[]): boolean {
   return true
 }
 
-// Corta em vírgula/ponto para não terminar no meio de um item.
+// Corta em fim de frase (ou vírgula) e sinaliza o corte com reticências.
 function clampReward(text: string): string {
   if (text.length <= REWARD_MAX) return text
   const head = text.slice(0, REWARD_MAX)
-  const cut = Math.max(head.lastIndexOf(', '), head.lastIndexOf('. '))
-  return (cut > REWARD_MAX / 2 ? head.slice(0, cut) : head).trim()
+  const sentence = head.lastIndexOf('. ')
+  const comma = head.lastIndexOf(', ')
+  const cut = sentence > REWARD_MAX / 2 ? sentence : comma > REWARD_MAX / 2 ? comma : REWARD_MAX
+  return `${head.slice(0, cut).trim()}…`
 }
 
+// "Various, starts in Thais" → Thais; "In and around Thais" → Thais;
+// "Zao." → Zao. O primeiro lugar citado é o que vira região.
 function firstLocation(text: string): string {
-  return (text.split(/,|;|\(| and | or /)[0] ?? '').trim()
+  const starts = /\b(?:starts?|begins?) (?:in|at) (?:the )?([^,;.(]+)/i.exec(text)
+  const raw = starts?.[1] ?? text.replace(/^(?:in|around|near) (?:and around )?/i, '')
+  return (raw.split(/,|;|\(| and | or /)[0] ?? '').replace(/\.\s*$/, '').trim()
 }

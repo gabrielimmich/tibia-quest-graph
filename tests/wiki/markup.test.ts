@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { infoboxFields, listItems, sectionBody, sentences, stripMarkup } from '../../src/wiki/markup.ts'
+import { infoboxFields, sentences, stripMarkup } from '../../src/wiki/markup.ts'
 
 describe('stripMarkup', () => {
   it('reduz links, templates e ênfase ao texto renderizado', () => {
@@ -17,6 +17,13 @@ describe('stripMarkup', () => {
     expect(stripMarkup('[[File:Outfit Warmaster Male.gif]] base [[Warmaster Outfits|Warmaster Outfit]]')).toBe(
       'base Warmaster Outfit',
     )
+  })
+
+  it('não deixa espaço órfão antes de pontuação quando remove imagem ou link', () => {
+    expect(stripMarkup('Demon Hunter Outfit and addons [[Image:Addon.gif]], access to the forge')).toBe(
+      'Demon Hunter Outfit and addons, access to the forge',
+    )
+    expect(stripMarkup('It can be found [[File:x.png]].')).toBe('It can be found.')
   })
 })
 
@@ -37,43 +44,27 @@ describe('infoboxFields', () => {
     expect(fields.get('reward')).toBe('One random item')
     expect(fields.get('lvl')).toBe('250')
   })
-})
 
-describe('sectionBody', () => {
-  const wt = [
-    '{{spoiler}}',
-    '',
-    '== Requirements ==',
-    '',
-    '* Completed the [[Feaster of Souls Quest]]',
-    '',
-    '== Method ==',
-    'text',
-    '=== Sub ===',
-  ].join('\n')
-
-  it('devolve o corpo da seção até o próximo cabeçalho de qualquer nível', () => {
-    expect(sectionBody(wt, ['Requirements'])).toBe('* Completed the [[Feaster of Souls Quest]]')
-    expect(sectionBody(wt, ['Method'])).toBe('text')
-  })
-
-  it('aceita nomes alternativos e cabeçalhos com 1 a 4 sinais de igual', () => {
-    const one = ['=Method=', '* Succeed the [[Barbarian Test Quest]]', '==Befriending the Musher=='].join('\n')
-    expect(sectionBody(one, ['Requirements', 'Method'])).toBe('* Succeed the [[Barbarian Test Quest]]')
-    const three = ['=== Required Equipment ===', '* [[The New Frontier Quest]] mission 8.', '', 'To start'].join('\n')
-    expect(sectionBody(three, ['Requirements', 'Required Equipment'])).toBe(
-      '* [[The New Frontier Quest]] mission 8.\n\nTo start',
-    )
-    expect(sectionBody(wt, ['Nope'])).toBe('')
+  it('junta linhas de continuação de um campo (reward em lista)', () => {
+    const wt = [
+      '{{Infobox Quest',
+      '| reward         = Choose one:',
+      '* [[Sorcerer]]s: [[Dragon Robe]]',
+      '* [[Druid]]s: [[Dragon Robe]]',
+      '',
+      '| lvl            = 100',
+      '}}',
+      'Text after the infobox',
+    ].join('\n')
+    const fields = infoboxFields(wt)
+    expect(fields.get('reward')).toBe('Choose one: [[Sorcerer]]s: [[Dragon Robe]]; [[Druid]]s: [[Dragon Robe]]')
+    expect(fields.get('lvl')).toBe('100')
+    expect(fields.size).toBe(2)
   })
 })
 
-describe('listItems e sentences', () => {
-  it('listItems devolve cada item de lista sem os marcadores', () => {
-    expect(listItems('* a\n** b\n*: note\ntext\n# c')).toEqual(['a', 'b', 'note', 'text', 'c'])
-  })
-
-  it('sentences separa em pontos finais mantendo parênteses', () => {
+describe('sentences', () => {
+  it('separa em pontos finais mantendo parênteses', () => {
     expect(sentences('Succeed the Barbarian Test Quest, and then head to Iskan (here). Talk to him. Ok')).toEqual([
       'Succeed the Barbarian Test Quest, and then head to Iskan (here).',
       'Talk to him.',

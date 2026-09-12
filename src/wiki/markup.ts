@@ -17,46 +17,36 @@ export function stripMarkup(source: string): string {
   text = text.replace(/'{2,}/g, '')
   text = text.replace(/<[^>]+>/g, ' ')
   text = text.replace(/^[*#:;]+\s*/, '')
-  return text.replace(/\s+/g, ' ').trim()
+  // Imagem removida antes de vírgula deixava "addons , access".
+  return text
+    .replace(/\s+/g, ' ')
+    .replace(/\s+([,.;:])/g, '$1')
+    .trim()
 }
 
-// Um campo por linha. `[ \t]*` (não `\s*`) depois do `=`: `\s` engoliria a
-// quebra de linha e o campo vazio capturaria a linha seguinte.
+// Um campo começa em `| nome = valor`; linhas seguintes que não começam
+// campo nem fecham o template continuam o valor (reward costuma ser uma
+// lista de várias linhas). `[ \t]*` (não `\s*`) depois do `=`: `\s` engoliria
+// a quebra de linha e o campo vazio capturaria a linha seguinte.
 export function infoboxFields(wikitext: string): ReadonlyMap<string, string> {
   const fields = new Map<string, string>()
-  for (const match of wikitext.matchAll(/^\|[ \t]*(\w+)[ \t]*=[ \t]*(.*)$/gm)) {
-    const [, name, value] = match
-    if (name !== undefined && value !== undefined) fields.set(name, value.trim())
-  }
-  return fields
-}
-
-// Corpo da primeira seção cujo título esteja em `names`, até o próximo
-// cabeçalho de qualquer nível (a wiki mistura =, ==, === e ====).
-export function sectionBody(wikitext: string, names: readonly string[]): string {
-  const lines = wikitext.split('\n')
-  const wanted = new Set(names.map((name) => name.toLowerCase()))
-  const heading = /^(={1,4})\s*(.+?)\s*\1\s*$/
-  let inside = false
-  const body: string[] = []
-  for (const line of lines) {
-    const match = heading.exec(line)
-    if (match) {
-      if (inside) break
-      inside = wanted.has((match[2] ?? '').toLowerCase())
+  let current: string | null = null
+  for (const line of wikitext.split('\n')) {
+    const start = /^\|[ \t]*(\w+)[ \t]*=[ \t]*(.*)$/.exec(line)
+    if (start) {
+      current = start[1] ?? null
+      if (current !== null) fields.set(current, (start[2] ?? '').trim())
       continue
     }
-    if (inside) body.push(line)
+    if (current === null || line.startsWith('|') || line.startsWith('}}') || line.trim() === '') {
+      if (line.startsWith('}}')) current = null
+      continue
+    }
+    // Item de lista na continuação vira "; item": lê-se como frase, não como marcação.
+    const item = /^[*#:;]+\s*/.test(line) ? `; ${line.replace(/^[*#:;]+\s*/, '')}` : ` ${line.trim()}`
+    fields.set(current, `${fields.get(current) ?? ''}${item}`.replace(/^; /, '').replace(/:;\s*/g, ': ').trim())
   }
-  return body.join('\n').trim()
-}
-
-// Itens de lista (*, #, :) e linhas soltas, já sem marcação.
-export function listItems(body: string): string[] {
-  return body
-    .split('\n')
-    .map((line) => stripMarkup(line))
-    .filter((line) => line !== '')
+  return fields
 }
 
 export function sentences(text: string): string[] {

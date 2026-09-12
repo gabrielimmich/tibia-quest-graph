@@ -38,7 +38,7 @@ function renderEmpty(graph: QuestGraph): HTMLElement {
       undefined,
       'Clique num nó para ver os detalhes: tudo que precisa ser feito antes, tudo que libera depois, e a frase da TibiaWiki que comprova cada ligação.',
     ),
-    el('p', 'panel-stats', `${graph.quests.size} quests · ${graph.edges.length} ligações`),
+    el('p', 'panel-stats', `${graph.quests.size} quests na tela · ${graph.edges.length} ligações`),
   )
   return section
 }

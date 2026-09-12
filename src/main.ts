@@ -79,7 +79,9 @@ function applyRoute(): void {
 
 function renderPanelFor(current: Mode): void {
   const focus = focusOf(current)
-  renderPanel(panel, graph, focus, { onNavigate: onFocusRequest, ...(canShowTree(current) ? { onShowTree: goTree } : {}) })
+  // Em #todas as contagens do painel vazio falam do que está na tela.
+  const shown = current.kind === 'all' ? current.shown : graph
+  renderPanel(panel, shown, focus, { onNavigate: onFocusRequest, ...(canShowTree(current) ? { onShowTree: goTree } : {}) })
   panel.classList.toggle('open', focus !== null)
 }
 

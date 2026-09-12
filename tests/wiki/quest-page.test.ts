@@ -53,10 +53,22 @@ describe('parseQuestPage', () => {
     expect(parseQuestPage('Some Event', soulWar.replace('| type           = ', '| type           = event'))).toBeNull()
   })
 
-  it('recompensa é cortada em fronteira de vírgula até 300 caracteres', () => {
+  it('recompensa é cortada em fronteira de frase ou vírgula, com reticências', () => {
     const long = `${'A'.repeat(150)}, ${'B'.repeat(140)}, ${'C'.repeat(100)}`
     const quest = parseQuestPage('X Quest', soulWar.replace(/\| reward.*$/m, `| reward         = ${long}`))
-    expect(quest?.reward?.length).toBeLessThanOrEqual(300)
-    expect(quest?.reward?.endsWith('B'.repeat(140))).toBe(true)
+    expect(quest?.reward?.length).toBeLessThanOrEqual(301)
+    expect(quest?.reward?.endsWith(`${'B'.repeat(140)}…`)).toBe(true)
+  })
+
+  it('aceita a grafia Infobox_Quest', () => {
+    expect(parseQuestPage('Sanctuary Quest', soulWar.replace('{{Infobox Quest', '{{Infobox_Quest'))?.id).toBe('sanctuary')
+  })
+
+  it('lugar: tira ponto final, prefixos e prefere "starts in"', () => {
+    const at = (location: string) => parseQuestPage('X Quest', soulWar.replace(/\| location.*$/m, `| location       = ${location}`))?.location
+    expect(at('[[Zao]].')).toBe('Zao')
+    expect(at('In and around [[Thais]]')).toBe('Thais')
+    expect(at('Various, starts in [[Thais]]')).toBe('Thais')
+    expect(at('All over Tibia.')).toBe('All over Tibia')
   })
 })

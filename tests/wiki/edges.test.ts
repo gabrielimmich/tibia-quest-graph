@@ -119,8 +119,25 @@ describe('extractEdgeCandidates', () => {
       fromTitle: 'Barbarian Test Quest',
       kind: 'required',
       where: 'body',
+      // Fora da seção de requisitos é sempre fila de revisão.
+      ambiguous: true,
       evidence: 'Succeed the Barbarian Test Quest, and then head to Iskan (here).',
     })
+  })
+
+  it('título que é sufixo de outro não vira menção fantasma', () => {
+    const titles = new Set([...known, 'Hero of Rathleton Quest', 'Rathleton Quest'])
+    const wt = ['== Requirements ==', '* Completed the [[Hero of Rathleton Quest]].'].join('\n')
+    const found = extractEdgeCandidates('Adventures Quest', wt, titles, aliases)
+    expect(found.map((c) => c.fromTitle)).toEqual(['Hero of Rathleton Quest'])
+  })
+
+  it('exigência parcial (missões, rank, estágio) vai para a fila, também em acesso', () => {
+    expect(classifyKind('Completed missions 1-3 from The Inquisition Quest;').ambiguous).toBe(true)
+    expect(classifyKind('The first 8 missions of The New Frontier Quest completed').ambiguous).toBe(true)
+    expect(classifyKind('Rank of Squire in the Rathleton Quest').ambiguous).toBe(true)
+    expect(classifyKind('Access to Gnomebase Alpha (rank 2 of Bigfoot\'s Burden Quest)')).toEqual({ kind: 'access', ambiguous: true })
+    expect(classifyKind('Completed the Feaster of Souls Quest').ambiguous).toBe(false)
   })
 
   it('ignora auto-referência, quests desconhecidas e pares repetidos', () => {

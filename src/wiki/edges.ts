@@ -22,7 +22,10 @@ const REQUIREMENT_SECTIONS = new Set(['requirements', 'required equipment', 'pre
 const STRONG_REQUIREMENT =
   /\b(must have (completed|finished|done)|needs? to have (completed|finished|done)|required to (have )?(complete|finish)|you (need|have) to (complete|finish)|succeed(ed)? (the|in)|having (completed|finished))\b/i
 
-const PARTIAL = /\b(mission \d+|up to the|first mission|full quest not needed|until|only the first|at least (the )?\w+ mission)\b/
+// Exigência parcial (missão, rank, estágio): a aresta existe, mas "required"
+// da quest inteira é leitura minha, então vai para a fila.
+const PARTIAL =
+  /\b(missions? \d|first \d+|up to|until|full quest not needed|only the first|at least|\brank\b|\bstage\b|\bstarted\b|\w+ mission of|mission \w+:)\b/
 const SOFT =
   /\b(recommended|advisable|optional|only necessary|bring a friend|helpful but|wise to|smart to|good idea|if required|if needed|if necessary)\b/
 // "Completing this quest ... allows you to start X": a página descreve o que
@@ -36,9 +39,9 @@ export function classifyKind(sentence: string): { kind: EdgeKind; ambiguous: boo
   if (SOFT.test(text)) return { kind: 'recommended', ambiguous: false }
   // "Access to X (Complete the Y)": a exigência é o acesso; o "complete"
   // dentro do parêntese é o meio.
-  if (/^access to\b/.test(text)) return { kind: 'access', ambiguous: false }
+  if (/^access to\b/.test(text)) return { kind: 'access', ambiguous: PARTIAL.test(text) }
   if (COMPLETION.test(text)) return { kind: 'required', ambiguous: PARTIAL.test(text) }
-  if (ACCESS.test(text)) return { kind: 'access', ambiguous: false }
+  if (ACCESS.test(text)) return { kind: 'access', ambiguous: PARTIAL.test(text) }
   return { kind: 'required', ambiguous: true }
 }
 
@@ -62,8 +65,17 @@ export function extractEdgeCandidates(
     const key = `${fromTitle}→${toTitle}`
     if (found.has(key)) return
     const { kind, ambiguous } = classifyKind(evidence)
-    // Direção invertida é sempre leitura minha: vai para a fila.
-    found.set(key, { fromTitle, toTitle, kind, ambiguous: reversed || ambiguous, where, evidence, source })
+    // Direção invertida e frase fora da seção de requisitos são leitura
+    // minha: vão para a fila (decisão da fase 2: "fora da seção vai para fila").
+    found.set(key, {
+      fromTitle,
+      toTitle,
+      kind,
+      ambiguous: reversed || where === 'body' || ambiguous,
+      where,
+      evidence,
+      source,
+    })
   }
 
   for (const section of splitSections(spoilerWikitext)) {
@@ -80,7 +92,9 @@ export function extractEdgeCandidates(
       for (const sentence of parts) {
         if (!STRONG_REQUIREMENT.test(sentence)) continue
         for (const mention of mentions) {
-          const cited = parts.length === 1 || sentence.includes(mention.title) || sentence.includes(mention.display)
+          // Alias de uma palavra ("it", "this") casaria com qualquer frase.
+          const byDisplay = mention.display.includes(' ') && sentence.includes(mention.display)
+          const cited = parts.length === 1 || sentence.includes(mention.title) || byDisplay
           if (cited) consider(mention.title, sentence, 'body')
         }
       }
@@ -109,14 +123,19 @@ function findMentions(line: string, canonical: (raw: string) => string | null): 
   for (const match of line.matchAll(/\{\{Spoiler Section\|([^}|]*)/gi)) add(match[1] ?? '', match[1] ?? '')
   const plain = stripMarkup(line)
   for (const [raw] of [...plain.matchAll(/[A-Z][^.;]*?Quest\b/g)]) {
-    // O texto puro pode conter o título inteiro em qualquer posição.
-    for (const candidate of titlesWithin(plain, raw)) add(candidate, candidate)
+    // O texto puro pode conter o título inteiro em qualquer posição: do
+    // sufixo mais longo ao mais curto, e só o primeiro que casa vale, senão
+    // "Hero of Rathleton Quest" também contaria como "Rathleton Quest".
+    for (const candidate of titlesWithin(plain, raw)) {
+      if (canonical(candidate) === null) continue
+      add(candidate, candidate)
+      break
+    }
   }
   return [...mentions.values()]
 }
 
-// Gera sufixos do trecho terminado em "Quest" para casar com títulos conhecidos
-// ("... start the The Ice Islands Quest" → "The Ice Islands Quest").
+// Sufixos do trecho terminado em "Quest", do mais longo ao mais curto.
 function* titlesWithin(text: string, fragment: string): Generator<string> {
   const end = text.indexOf(fragment) + fragment.length
   const words = text.slice(0, end).split(' ')

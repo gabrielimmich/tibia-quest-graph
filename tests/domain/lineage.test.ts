@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { findLineage } from '../../src/domain/lineage.ts'
+import { findLineage, lineageSubgraph } from '../../src/domain/lineage.ts'
 import { buildQuestGraph } from '../../src/domain/quest.ts'
 import { edge, id, quest } from './fixtures.ts'
 
@@ -42,5 +42,25 @@ describe('findLineage', () => {
     const lineage = findLineage(cyclic, id('a'))
     expect([...lineage.ancestors]).toEqual(['b'])
     expect(lineage.edges).toHaveLength(2)
+  })
+})
+
+describe('lineageSubgraph', () => {
+  it('contém a quest, seus ancestrais, descendentes e as arestas entre eles', () => {
+    const sub = lineageSubgraph(graph, id('d'))
+    expect([...sub.quests.keys()].sort()).toEqual(['a', 'b', 'c', 'd', 'e'])
+    expect(sub.edges).toEqual([ab, ac, bd, cd, de])
+    expect(sub.outgoing.get(id('a'))).toEqual([ab, ac])
+  })
+
+  it('quest isolada vira grafo de um nó', () => {
+    const sub = lineageSubgraph(graph, id('x'))
+    expect([...sub.quests.keys()]).toEqual(['x'])
+    expect(sub.edges).toEqual([])
+  })
+
+  it('id inexistente devolve grafo vazio', () => {
+    const sub = lineageSubgraph(graph, id('zzz'))
+    expect(sub.quests.size).toBe(0)
   })
 })

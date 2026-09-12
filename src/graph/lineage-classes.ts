@@ -12,7 +12,9 @@ export function clearLineageClasses(cy: Core): void {
 export function applyLineageClasses(cy: Core, graph: QuestGraph, id: QuestId): void {
   const lineage = findLineage(graph, id)
   cy.batch(() => {
-    cy.elements().removeClass(LINEAGE_CLASSES).addClass('dimmed')
+    // Blocos de região ficam fora: a opacidade de um nó composto multiplica a
+    // dos filhos, e esmaecer o bloco apagaria a própria linhagem em foco.
+    cy.elements().not('.region').removeClass(LINEAGE_CLASSES).addClass('dimmed')
     cy.getElementById(id).removeClass('dimmed').addClass('focus')
     for (const ancestor of lineage.ancestors) cy.getElementById(ancestor).removeClass('dimmed').addClass('ancestor')
     for (const descendant of lineage.descendants) {

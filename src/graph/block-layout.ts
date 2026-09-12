@@ -2,11 +2,10 @@ import type { Core, NodeCollection, NodeSingular } from 'cytoscape'
 import type { DagreLayoutOptions } from 'cytoscape-dagre'
 import { packShelves, type PackItem } from './pack.ts'
 
-// cytoscape-dagre não entende nós compostos, e dentro de uma região a maioria
-// das quests não depende uma da outra (as dependências cruzam regiões).
-// Então: dagre em cada componente conexo interno ao bloco, componentes
-// empacotados em prateleiras dentro do bloco, blocos empacotados no mapa.
-// O pai composto se ajusta aos filhos sozinho.
+// Um dagre só para o mapa inteiro rankeia todos os componentes numa única
+// hierarquia e sai uma tira larguíssima. Então: dagre em cada componente
+// conexo interno ao bloco, componentes empacotados em prateleiras dentro do
+// bloco, blocos empacotados no mapa. O pai composto se ajusta aos filhos.
 const innerLayout: DagreLayoutOptions = { name: 'dagre', rankDir: 'TB', nodeSep: 20, rankSep: 50, fit: false, padding: 0 }
 const COMPONENT_GAP = 24
 const BLOCK_GAP = 60
@@ -16,8 +15,16 @@ const MAP_MIN_WIDTH = 1400
 export function layoutBlocks(cy: Core): void {
   const parents = cy.nodes('.region')
   parents.forEach((parent) => layoutInside(parent))
-  const placed = packShelves(measure(parents), mapWidth(parents), BLOCK_GAP)
-  parents.forEach((parent) => moveTo(parent.children(), placed.get(parent.id())))
+  const items = measure(parents)
+  const placed = packShelves(items, mapWidth(items), BLOCK_GAP)
+  parents.forEach((parent) => {
+    const target = placed.get(parent.id())
+    if (target === undefined) return
+    // Mede e move pela mesma caixa, com rótulo: o rótulo centrado sobra
+    // além do bloco estreito e, sem isto, colidiria com o vizinho.
+    const box = parent.boundingBox()
+    parent.children().shift({ x: target.x - box.x1, y: target.y - box.y1 })
+  })
 }
 
 function layoutInside(parent: NodeSingular): void {
@@ -42,8 +49,8 @@ function measure(parents: NodeCollection): PackItem[] {
 
 // Largura da prateleira cresce com a área total para o mapa ficar ~16:10,
 // não uma tira.
-function mapWidth(parents: NodeCollection): number {
-  const area = measure(parents).reduce((sum, item) => sum + item.w * item.h, 0)
+function mapWidth(items: readonly PackItem[]): number {
+  const area = items.reduce((sum, item) => sum + item.w * item.h, 0)
   return Math.max(MAP_MIN_WIDTH, Math.sqrt(area) * 1.6)
 }
 

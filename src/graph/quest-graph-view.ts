@@ -1,4 +1,11 @@
-import cytoscape, { type BoundingBox12, type BoundingBoxWH, type EventObject, type EventObjectNode } from 'cytoscape'
+import cytoscape, {
+  type BoundingBox12,
+  type BoundingBoxWH,
+  type CollectionReturnValue,
+  type EventObject,
+  type EventObjectNode,
+  type NodeCollection,
+} from 'cytoscape'
 import dagre, { type DagreLayoutOptions } from 'cytoscape-dagre'
 import { questId, type Overview, type QuestGraph, type QuestId } from '../domain/index.ts'
 import { layoutBlocks } from './block-layout.ts'
@@ -24,12 +31,17 @@ export interface QuestGraphView {
 const layout: DagreLayoutOptions = { name: 'dagre', rankDir: 'TB', nodeSep: 30, rankSep: 70, padding: 24 }
 // Árvore de 2 nós caberia com zoom 2.5x e viraria dois blocos gigantes.
 const MAX_FIT_ZOOM = 1.25
+const FIT_PADDING = 40
+const FIT_DURATION = 300
 
 export function createQuestGraphView(container: HTMLElement): QuestGraphView {
   const cy = cytoscape({ container, style: stylesheet, autounselectify: true, minZoom: 0.1, maxZoom: 2.5 })
 
   let shown: QuestGraph | null = null
   let root: QuestId | null = null
+  let blocks = false
+  // Bloco atualmente enquadrado: tocar nele de novo volta ao mapa inteiro.
+  let fittedRegion: string | null = null
   const listeners: TapListener[] = []
 
   const isOffscreen = (box: BoundingBox12 & BoundingBoxWH) =>
@@ -38,6 +50,7 @@ export function createQuestGraphView(container: HTMLElement): QuestGraphView {
   const render = (graph: QuestGraph, nextRoot: QuestId | null) => {
     shown = graph
     root = nextRoot
+    blocks = false
     // Uma animação de pan do modo anterior continuaria depois do fit.
     cy.stop()
     // O container pode ter mudado de tamanho enquanto o início cobria o grafo.
@@ -53,12 +66,23 @@ export function createQuestGraphView(container: HTMLElement): QuestGraphView {
   const renderBlocks = (overview: Overview) => {
     shown = overview.connected
     root = null
+    blocks = true
+    fittedRegion = null
     cy.stop()
     cy.resize()
     cy.elements().remove()
     cy.add(toBlockElements(overview))
     layoutBlocks(cy)
-    cy.fit(undefined, 40)
+    cy.fit(undefined, FIT_PADDING)
+  }
+
+  // fit() animado com teto de zoom: um bloco de uma quest só encheria a tela.
+  const animateFit = (eles: NodeCollection | CollectionReturnValue) => {
+    const box = eles.boundingBox()
+    const available = { w: cy.width() - 2 * FIT_PADDING, h: cy.height() - 2 * FIT_PADDING }
+    const zoom = Math.min(MAX_FIT_ZOOM, available.w / box.w, available.h / box.h)
+    cy.stop()
+    cy.animate({ zoom, center: { eles } }, { duration: FIT_DURATION })
   }
 
   const focus = (id: QuestId) => {
@@ -75,10 +99,16 @@ export function createQuestGraphView(container: HTMLElement): QuestGraphView {
   const clearFocus = () => unmarkFocus(cy, root)
 
   cy.on('tap', 'node', (event: EventObjectNode) => {
-    // Bloco de região: zoom nele, sem mexer no foco.
+    // Bloco de região: zoom nele, sem mexer no foco; de novo no mesmo, volta ao mapa.
     if (event.target.hasClass('region')) {
-      cy.stop()
-      cy.animate({ fit: { eles: event.target, padding: 40 } }, { duration: 300 })
+      const id = event.target.id()
+      if (fittedRegion === id) {
+        fittedRegion = null
+        animateFit(cy.elements())
+      } else {
+        fittedRegion = id
+        animateFit(event.target)
+      }
       return
     }
     for (const listener of listeners) listener(questId(event.target.id()))
@@ -86,9 +116,9 @@ export function createQuestGraphView(container: HTMLElement): QuestGraphView {
   cy.on('tap', (event: EventObject) => {
     if (event.target !== cy) return
     // Fundo na visão geral: volta a enquadrar o mapa inteiro.
-    if (root === null && cy.nodes('.region').nonempty()) {
-      cy.stop()
-      cy.animate({ fit: { eles: cy.elements(), padding: 40 } }, { duration: 300 })
+    if (blocks) {
+      fittedRegion = null
+      animateFit(cy.elements())
     }
     for (const listener of listeners) listener(null)
   })

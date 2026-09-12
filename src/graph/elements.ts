@@ -35,7 +35,7 @@ export function toBlockElements(overview: Overview): ElementDefinition[] {
   const parents = overview.blocks.map(
     (block): ElementDefinition => ({
       group: 'nodes',
-      data: { id: regionElementId(block.region), label: blockLabel(block), region: block.region },
+      data: { id: regionElementId(block.region), label: blockLabel(block) },
       classes: 'region',
     }),
   )

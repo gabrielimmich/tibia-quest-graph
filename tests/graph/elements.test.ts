@@ -4,9 +4,10 @@ import { describe, expect, it } from 'vitest'
 import { buildOverview } from '../../src/domain/overview.ts'
 import { buildQuestGraph } from '../../src/domain/quest.ts'
 import { layoutBlocks } from '../../src/graph/block-layout.ts'
+import { applyLineageClasses } from '../../src/graph/lineage-classes.ts'
 import { edgeElementId, nodeLabel, regionElementId, toBlockElements, toElements } from '../../src/graph/elements.ts'
 import { stylesheet } from '../../src/graph/style.ts'
-import { edge, quest } from '../domain/fixtures.ts'
+import { edge, id, quest } from '../domain/fixtures.ts'
 
 const graph = buildQuestGraph(
   [{ ...quest('a'), title: 'Alpha Quest' }, { ...quest('b'), title: 'Beta Quest' }, quest('c')],
@@ -79,11 +80,40 @@ describe('toBlockElements + layoutBlocks (headless)', () => {
     if (!first || !second) throw new Error('faltou bloco')
     const overlap = first.x1 < second.x2 && second.x1 < first.x2 && first.y1 < second.y2 && second.y1 < first.y2
     expect(overlap).toBe(false)
-    for (const child of cy.nodes(':child')) {
-      const parentBox = child.parent().boundingBox({ includeLabels: false })
-      const box = child.boundingBox({ includeLabels: false })
-      expect(box.x1).toBeGreaterThanOrEqual(parentBox.x1)
-      expect(box.x2).toBeLessThanOrEqual(parentBox.x2)
+    // Filhos de blocos diferentes não se sobrepõem (o pai contém os filhos por construção).
+    const children = cy.nodes(':child').map((node) => ({
+      id: node.id(),
+      parent: node.parent().first().id(),
+      box: node.boundingBox({ includeLabels: false }),
+    }))
+    for (const a of children) {
+      for (const b of children) {
+        if (a.id === b.id || a.parent === b.parent) continue
+        const overlaps = a.box.x1 < b.box.x2 && b.box.x1 < a.box.x2 && a.box.y1 < b.box.y2 && b.box.y1 < a.box.y2
+        expect(overlaps).toBe(false)
+      }
     }
+  })
+
+  it('foco dentro dos blocos não apaga a linhagem: pais não recebem dimmed', () => {
+    cytoscape.use(dagre)
+    // Transições desligadas: o teste lê a opacidade final, não um frame de animação.
+    const style = stylesheet.map((block) =>
+      'style' in block ? { ...block, style: { ...block.style, 'transition-property': 'none', 'transition-duration': 0 } } : block,
+    )
+    // Thais: a→b; Zao: c→d. Focar c deixa a e b fora da linhagem.
+    const twoPairs = buildQuestGraph(
+      [{ ...quest('a'), region: 'Thais' }, { ...quest('b'), region: 'Thais' }, { ...quest('c'), region: 'Zao' }, { ...quest('d'), region: 'Zao' }],
+      [edge('a', 'b'), edge('c', 'd')],
+    )
+    const overview = buildOverview(twoPairs)
+    const cy = cytoscape({ headless: true, styleEnabled: true, elements: toBlockElements(overview), style })
+    applyLineageClasses(cy, overview.connected, id('c'))
+    expect(cy.nodes('.region.dimmed')).toHaveLength(0)
+    // A opacidade efetiva multiplica a do pai composto: é ela que aparece na tela.
+    expect(cy.getElementById('c').effectiveOpacity()).toBe(1)
+    expect(cy.getElementById('d').effectiveOpacity()).toBe(1)
+    expect(cy.getElementById('a').effectiveOpacity()).toBeCloseTo(0.15)
+    cy.destroy()
   })
 })

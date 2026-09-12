@@ -63,13 +63,11 @@ export const stylesheet: StylesheetJson = [
       'text-valign': 'top',
       'text-halign': 'center',
       'text-margin-y': -6,
-      // Sem isto o rótulo herda o text-max-width de 140px dos nós e quebra em 3 linhas.
+      // Sem isto o rótulo herda o text-wrap dos nós e quebra em 3 linhas.
       'text-wrap': 'none',
-      'text-max-width': '1000px',
       padding: '28px',
     },
   },
-  { selector: 'node.region.dimmed', style: { opacity: 0.35 } },
   { selector: 'edge[kind = "access"]', style: { 'line-style': 'dashed', 'line-dash-pattern': [8, 4] } },
   { selector: 'edge[kind = "recommended"]', style: { 'line-style': 'dotted' } },
   {

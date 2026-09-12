@@ -25,7 +25,9 @@ export function buildOverview(graph: QuestGraph): Overview {
   for (const quest of graph.quests.values()) {
     const region = quest.region ?? UNMAPPED_REGION
     if (connected.quests.has(quest.id)) {
-      questsByRegion.set(region, [...(questsByRegion.get(region) ?? []), quest])
+      const list = questsByRegion.get(region)
+      if (list) list.push(quest)
+      else questsByRegion.set(region, [quest])
     } else {
       isolatedByRegion.set(region, (isolatedByRegion.get(region) ?? 0) + 1)
     }
@@ -42,5 +44,5 @@ export function buildOverview(graph: QuestGraph): Overview {
 function compareBlocks(a: Block, b: Block): number {
   if (a.region === UNMAPPED_REGION) return 1
   if (b.region === UNMAPPED_REGION) return -1
-  return b.quests.length - a.quests.length || a.region.localeCompare(b.region)
+  return b.quests.length - a.quests.length || a.region.localeCompare(b.region, 'pt-BR')
 }

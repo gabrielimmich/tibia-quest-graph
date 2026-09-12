@@ -1,8 +1,8 @@
-import { normalizeText } from '../domain/index.ts'
+import { normalizeText, UNMAPPED_REGION } from '../domain/index.ts'
 
 export type RegionMap = ReadonlyMap<string, readonly string[]>
 
-export const UNMAPPED_REGION = 'Outros'
+export { UNMAPPED_REGION }
 
 // Lugar exato primeiro; depois o lugar mapeado mais longo que apareça dentro
 // do texto ("Thais Ancient Temple" → Thais). Nada → Outros, para a curadoria

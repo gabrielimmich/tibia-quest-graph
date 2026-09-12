@@ -2,7 +2,7 @@ import cytoscape from 'cytoscape'
 import { describe, expect, it } from 'vitest'
 import { buildQuestGraph } from '../../src/domain/quest.ts'
 import { edgeElementId, toElements } from '../../src/graph/elements.ts'
-import { applyLineageClasses, clearLineageClasses } from '../../src/graph/lineage-classes.ts'
+import { applyLineageClasses, clearLineageClasses, setInspect } from '../../src/graph/lineage-classes.ts'
 import { stylesheet } from '../../src/graph/style.ts'
 import { edge, id, quest } from '../domain/fixtures.ts'
 
@@ -62,5 +62,27 @@ describe('stylesheet aplicado (headless)', () => {
     applyLineageClasses(cy, graph, id('x'))
     expect(cy.getElementById('a').style('opacity')).toBe('0.15')
     expect(cy.getElementById('x').style('opacity')).toBe('1')
+  })
+})
+
+describe('setInspect', () => {
+  it('move a classe inspect entre nós e null limpa', () => {
+    const cy = headless()
+    setInspect(cy, id('a'))
+    expect(cy.getElementById('a').hasClass('inspect')).toBe(true)
+    setInspect(cy, id('b'))
+    expect(cy.getElementById('a').hasClass('inspect')).toBe(false)
+    expect(cy.getElementById('b').hasClass('inspect')).toBe(true)
+    setInspect(cy, null)
+    expect(cy.nodes('.inspect')).toHaveLength(0)
+  })
+
+  it('não conflita com as classes de linhagem', () => {
+    const cy = headless()
+    applyLineageClasses(cy, graph, id('d'))
+    setInspect(cy, id('a'))
+    expect(cy.getElementById('a').classes().sort()).toEqual(['ancestor', 'inspect'])
+    applyLineageClasses(cy, graph, id('x'))
+    expect(cy.getElementById('a').hasClass('inspect')).toBe(false)
   })
 })

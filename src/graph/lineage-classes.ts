@@ -3,7 +3,7 @@ import { findLineage, type QuestGraph, type QuestId } from '../domain/index.ts'
 import { edgeElementId } from './elements.ts'
 
 // Separado da view para ser testável headless: é a interação central do MVP.
-export const LINEAGE_CLASSES = 'focus ancestor descendant path dimmed'
+export const LINEAGE_CLASSES = 'focus ancestor descendant path dimmed inspect'
 
 export function clearLineageClasses(cy: Core): void {
   cy.elements().removeClass(LINEAGE_CLASSES)
@@ -22,4 +22,11 @@ export function applyLineageClasses(cy: Core, graph: QuestGraph, id: QuestId): v
       cy.getElementById(edgeElementId(edge.from, edge.to)).removeClass('dimmed').addClass('path')
     }
   })
+}
+
+// Marca o nó cujos detalhes estão no painel, sem esmaecer nada: na árvore
+// tudo que está na tela é relevante.
+export function setInspect(cy: Core, id: QuestId | null): void {
+  cy.nodes().removeClass('inspect')
+  if (id !== null) cy.getElementById(id).addClass('inspect')
 }

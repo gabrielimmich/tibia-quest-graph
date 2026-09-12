@@ -9,6 +9,7 @@ export const colors = {
   focusText: '#1a1408',
   ancestor: '#5aa9e6',
   descendant: '#7ed37e',
+  inspect: '#fff3c4',
 } as const
 
 export const stylesheet: StylesheetJson = [
@@ -57,6 +58,7 @@ export const stylesheet: StylesheetJson = [
       'font-weight': 'bold',
     },
   },
+  { selector: 'node.inspect', style: { 'border-color': colors.inspect, 'border-width': 4 } },
   { selector: 'node.ancestor', style: { 'border-color': colors.ancestor, 'border-width': 3 } },
   { selector: 'node.descendant', style: { 'border-color': colors.descendant, 'border-width': 3 } },
   { selector: 'edge.path', style: { width: 3, 'line-color': colors.focus, 'target-arrow-color': colors.focus } },

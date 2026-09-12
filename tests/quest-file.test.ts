@@ -1,26 +1,13 @@
-import { mkdtempSync, rmSync, writeFileSync } from 'node:fs'
-import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { afterEach, beforeEach, describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { readQuestFile } from '../src/quest-file.ts'
+import { useTempDir } from './helpers/temp-dir.ts'
 
-let dir: string
-beforeEach(() => {
-  dir = mkdtempSync(join(tmpdir(), 'quest-file-'))
-})
-afterEach(() => {
-  rmSync(dir, { recursive: true, force: true })
-})
-
-function write(name: string, content: string): string {
-  const file = join(dir, name)
-  writeFileSync(file, content, 'utf8')
-  return file
-}
+const tmp = useTempDir('quest-file-')
 
 describe('readQuestFile', () => {
   it('lê YAML válido e devolve o grafo', () => {
-    const file = write(
+    const file = tmp.write(
       'ok.yaml',
       [
         'quests:',
@@ -38,8 +25,16 @@ describe('readQuestFile', () => {
     expect(result.graph.quests.size).toBe(1)
   })
 
+  it('distingue arquivo inexistente de YAML inválido', () => {
+    const result = readQuestFile(join(tmp.path(), 'nope.yaml'))
+    expect(result.ok).toBe(false)
+    if (result.ok) return
+    expect(result.errors[0]).toContain('não foi possível ler')
+    expect(result.errors[0]).not.toContain('YAML inválido')
+  })
+
   it('devolve erro legível quando o YAML nem parseia', () => {
-    const file = write('broken.yaml', 'quests: [\nedges: }')
+    const file = tmp.write('broken.yaml', 'quests: [\nedges: }')
     const result = readQuestFile(file)
     expect(result.ok).toBe(false)
     if (result.ok) return
@@ -47,7 +42,7 @@ describe('readQuestFile', () => {
   })
 
   it('repassa erros de validação', () => {
-    const file = write('invalid.yaml', 'quests: []\nedges: [{from: a, to: b}]')
+    const file = tmp.write('invalid.yaml', 'quests: []\nedges: [{from: a, to: b}]')
     const result = readQuestFile(file)
     expect(result.ok).toBe(false)
     if (result.ok) return

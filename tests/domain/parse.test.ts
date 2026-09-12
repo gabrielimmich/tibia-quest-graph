@@ -122,6 +122,19 @@ describe('parseQuestData', () => {
     ).toContain('regra de ouro')
   })
 
+  it('guarda a evidence sem espaço externo (block scalar do YAML)', () => {
+    const result = parseQuestData(data({ edges: [edge('a', 'b', { evidence: '  You need a.\n' })] }))
+    expect(result.ok).toBe(true)
+    if (!result.ok) return
+    expect(result.graph.edges[0]?.evidence).toBe('You need a.')
+  })
+
+  it('quest com campo inválido ainda conta como id conhecido para as arestas', () => {
+    const errors = errorsOf(data({ quests: [quest('a', { premium: 'yes' }), quest('b')] }))
+    expect(errors).toContain('"premium" deve ser boolean')
+    expect(errors).not.toContain('id inexistente')
+  })
+
   it('rejeita campo desconhecido', () => {
     expect(errorsOf(data({ edges: [edge('a', 'b', { evidance: 'typo' })] }))).toContain(
       'campo desconhecido "evidance"',

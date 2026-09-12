@@ -1,22 +1,9 @@
-import { mkdtempSync, rmSync, writeFileSync } from 'node:fs'
-import { tmpdir } from 'node:os'
-import { join } from 'node:path'
-import { afterEach, beforeEach, describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'vitest'
+import { build } from 'vite'
 import { questsModuleSource, questsPlugin } from '../src/vite-plugin-quests.ts'
+import { useTempDir } from './helpers/temp-dir.ts'
 
-let dir: string
-beforeEach(() => {
-  dir = mkdtempSync(join(tmpdir(), 'quests-plugin-'))
-})
-afterEach(() => {
-  rmSync(dir, { recursive: true, force: true })
-})
-
-function write(name: string, content: string): string {
-  const file = join(dir, name)
-  writeFileSync(file, content, 'utf8')
-  return file
-}
+const tmp = useTempDir('quests-plugin-')
 
 const VALID = [
   'quests:',
@@ -39,9 +26,11 @@ const VALID = [
   '    source: https://tibia.fandom.com/wiki/B_Quest',
 ].join('\n')
 
+const INVALID = 'quests: []\nedges: [{from: a, to: b}]'
+
 describe('questsModuleSource', () => {
   it('emite export default com quests e arestas validadas', () => {
-    const source = questsModuleSource(write('ok.yaml', VALID))
+    const source = questsModuleSource(tmp.write('ok.yaml', VALID))
     expect(source.startsWith('export default ')).toBe(true)
     const data: unknown = JSON.parse(source.slice('export default '.length))
     expect(data).toEqual({
@@ -62,16 +51,37 @@ describe('questsModuleSource', () => {
   })
 
   it('lança com a lista de erros quando o YAML é inválido', () => {
-    const file = write('bad.yaml', 'quests: []\nedges: [{from: a, to: b}]')
-    expect(() => questsModuleSource(file)).toThrow(/id inexistente/)
+    expect(() => questsModuleSource(tmp.write('bad.yaml', INVALID))).toThrow(/id inexistente/)
   })
 })
 
+// Build real do Vite num diretório temporário: prova que resolveId/load
+// entregam `virtual:quests` ao bundle e que YAML inválido quebra o build.
 describe('questsPlugin', () => {
-  it('tem nome e recebe o caminho do arquivo', () => {
-    const plugin = questsPlugin({ file: 'data/quests.yaml' })
-    expect(plugin.name).toBe('tibia-quest-graph:quests')
-    expect(typeof plugin.resolveId).toBe('function')
-    expect(typeof plugin.load).toBe('function')
+  async function bundle(yaml: string): Promise<string> {
+    const file = tmp.write('quests.yaml', yaml)
+    const entry = tmp.write('entry.ts', "import data from 'virtual:quests'\nexport default data\n")
+    const result = await build({
+      root: tmp.path(),
+      configFile: false,
+      logLevel: 'silent',
+      plugins: [questsPlugin({ file })],
+      build: { write: false, lib: { entry, formats: ['es'], fileName: 'out' } },
+    })
+    const outputs = Array.isArray(result) ? result : 'output' in result ? [result] : []
+    return outputs
+      .flatMap((output) => output.output)
+      .map((chunk) => ('code' in chunk ? chunk.code : ''))
+      .join('\n')
+  }
+
+  it('entrega o YAML validado como módulo virtual no bundle', async () => {
+    const code = await bundle(VALID)
+    expect(code).toContain('A Quest')
+    expect(code).toContain('You must have completed A Quest.')
+  })
+
+  it('quebra o build quando o YAML é inválido', async () => {
+    await expect(bundle(INVALID)).rejects.toThrow(/id inexistente/)
   })
 })

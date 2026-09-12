@@ -8,7 +8,7 @@ export function quest(rawId: string): Quest {
     title: rawId,
     premium: false,
     wiki: `https://tibia.fandom.com/wiki/${rawId}`,
-    unlocks: '',
+    unlocks: 'nada',
   }
 }
 

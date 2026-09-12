@@ -34,8 +34,7 @@ export function parseQuestData(raw: unknown): ParseResult {
   if (!isList(rawEdges)) errors.push('"edges" deve ser uma lista')
   if (!isList(rawQuests) || !isList(rawEdges)) return { ok: false, errors }
 
-  const quests = parseQuests(rawQuests, errors)
-  const knownIds: ReadonlySet<string> = new Set(quests.map((quest) => quest.id))
+  const { quests, knownIds } = parseQuests(rawQuests, errors)
   const edges = parseEdges(rawEdges, knownIds, errors)
   if (errors.length > 0) return { ok: false, errors }
 
@@ -46,26 +45,32 @@ export function parseQuestData(raw: unknown): ParseResult {
   return { ok: true, graph }
 }
 
-function parseQuests(items: readonly unknown[], errors: string[]): Quest[] {
+interface ParsedQuests {
+  readonly quests: readonly Quest[]
+  // Ids brutos, incluindo os de quests com outros campos inválidos: uma
+  // quest com `premium: "yes"` não pode fazer todas as suas arestas
+  // reclamarem de "id inexistente".
+  readonly knownIds: ReadonlySet<string>
+}
+
+function parseQuests(items: readonly unknown[], errors: string[]): ParsedQuests {
   const quests: Quest[] = []
-  const seen = new Set<string>()
+  const knownIds = new Set<string>()
   items.forEach((item, index) => {
     const where = `quest[${index}]`
     if (!isRecord(item)) {
       errors.push(`${where}: deve ser um objeto`)
       return
     }
-    // Duplicata é checada no id bruto para ser reportada mesmo quando a
-    // quest tem outros campos inválidos.
     const rawId = item['id']
     if (typeof rawId === 'string') {
-      if (seen.has(rawId)) errors.push(`id duplicado: "${rawId}"`)
-      seen.add(rawId)
+      if (knownIds.has(rawId)) errors.push(`id duplicado: "${rawId}"`)
+      knownIds.add(rawId)
     }
     const quest = parseQuest(item, where, errors)
     if (quest) quests.push(quest)
   })
-  return quests
+  return { quests, knownIds }
 }
 
 function parseQuest(item: Raw, where: string, errors: string[]): Quest | null {
@@ -183,8 +188,10 @@ function expectEdgeKind(item: Raw, where: string, errors: string[]): EdgeKind | 
 function expectEvidence(item: Raw, where: string, errors: string[]): string | null {
   const value = item['evidence']
   if (typeof value === 'string') {
+    // Block scalars do YAML (`>` / `|`) deixam "\n" no fim; tirar espaço
+    // externo não altera a citação, e evita que ele chegue ao painel.
     const trimmed = value.trim()
-    if (trimmed !== '' && trimmed !== EVIDENCE_PLACEHOLDER) return value
+    if (trimmed !== '' && trimmed !== EVIDENCE_PLACEHOLDER) return trimmed
   }
   errors.push(`${where}: evidence obrigatória, copiada literalmente da wiki (regra de ouro)`)
   return null

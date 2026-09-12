@@ -17,7 +17,7 @@ importa para a resposta.
 | Decisão | Escolha | Por quê |
 |---|---|---|
 | Início | Pergunta + busca grande + 4 sugestões calculadas | Sem curadoria; sugestões = quests mais conectadas |
-| Árvore | Só o `findLineage` da quest escolhida, com dagre | Sempre legível; nada esmaecido porque nada sobra |
+| Árvore | Subgrafo induzido pela linhagem da quest (todos os nós de `findLineage` e **todas** as arestas entre eles, inclusive as que passam ao largo da quest), com dagre | Sempre legível; nada esmaecido porque nada sobra; sem aresta escondida entre nós visíveis |
 | Clique num nó da árvore | Mostra detalhes no painel; a árvore não muda | Árvore só muda quando o usuário pede ("Ver árvore desta quest") |
 | Navegar para quest fora da árvore | Re-enraíza nela | Único caso em que a árvore troca sem o botão |
 | "Ver todas" | Mantém o grafo completo atual (destaque ao clicar) | A 2c substitui por blocos; não vale polir agora |

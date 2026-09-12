@@ -2,7 +2,7 @@ import cytoscape from 'cytoscape'
 import { describe, expect, it } from 'vitest'
 import { buildQuestGraph } from '../../src/domain/quest.ts'
 import { edgeElementId, toElements } from '../../src/graph/elements.ts'
-import { applyLineageClasses, clearLineageClasses, setInspect } from '../../src/graph/lineage-classes.ts'
+import { applyLineageClasses, clearLineageClasses, markFocus, replaceElements, setInspect, unmarkFocus } from '../../src/graph/lineage-classes.ts'
 import { stylesheet } from '../../src/graph/style.ts'
 import { edge, id, quest } from '../domain/fixtures.ts'
 
@@ -84,5 +84,30 @@ describe('setInspect', () => {
     expect(cy.getElementById('a').classes().sort()).toEqual(['ancestor', 'inspect'])
     applyLineageClasses(cy, graph, id('x'))
     expect(cy.getElementById('a').hasClass('inspect')).toBe(false)
+  })
+})
+
+describe('replaceElements + markFocus', () => {
+  it('troca o conteúdo, marca a raiz e o foco na árvore sem esmaecer', () => {
+    const cy = headless()
+    const sub = buildQuestGraph([quest('a'), quest('b')], [edge('a', 'b')])
+    replaceElements(cy, sub, id('b'))
+    expect(cy.nodes()).toHaveLength(2)
+    expect(cy.getElementById('b').classes()).toEqual(['focus'])
+    markFocus(cy, sub, id('b'), id('a'))
+    expect(cy.getElementById('a').classes()).toEqual(['inspect'])
+    expect(cy.elements('.dimmed')).toHaveLength(0)
+    unmarkFocus(cy, id('b'))
+    expect(cy.getElementById('a').classes()).toEqual([])
+    expect(cy.getElementById('b').classes()).toEqual(['focus'])
+  })
+
+  it('no grafo completo o foco esmaece e limpar devolve ao neutro', () => {
+    const cy = headless()
+    replaceElements(cy, graph, null)
+    markFocus(cy, graph, null, id('d'))
+    expect(cy.getElementById('x').classes()).toEqual(['dimmed'])
+    unmarkFocus(cy, null)
+    expect(cy.elements().filter((element) => element.classes().length > 0)).toHaveLength(0)
   })
 })

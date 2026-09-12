@@ -149,6 +149,9 @@ a {
   display: flex;
   flex: 1 1 auto;
   min-height: 0;
+  /* A folha inferior fechada fica transladada para fora; sem isto ela
+     estende a área rolável e o foco no painel rola a página toda. */
+  overflow: hidden;
 }
 
 /* Cytoscape mede o container; ele precisa de tamanho real, não auto. */

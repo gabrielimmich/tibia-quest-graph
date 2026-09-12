@@ -37,6 +37,16 @@ describe('findLineage', () => {
     }
   })
 
+  it('inclui aresta direta de ancestral para descendente que passa ao largo da quest', () => {
+    // a→b→c e o atalho a→c: na árvore de b os três nós aparecem, então a→c também.
+    const ab2 = edge('a', 'b')
+    const bc = edge('b', 'c')
+    const shortcut = edge('a', 'c', 'access')
+    const withShortcut = buildQuestGraph([quest('a'), quest('b'), quest('c')], [ab2, bc, shortcut])
+    expect(findLineage(withShortcut, id('b')).edges).toEqual([ab2, bc, shortcut])
+    expect(lineageSubgraph(withShortcut, id('b')).edges).toEqual([ab2, bc, shortcut])
+  })
+
   it('não trava num ciclo', () => {
     const cyclic = buildQuestGraph([quest('a'), quest('b')], [edge('a', 'b'), edge('b', 'a')])
     const lineage = findLineage(cyclic, id('a'))

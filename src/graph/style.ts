@@ -58,9 +58,10 @@ export const stylesheet: StylesheetJson = [
       'font-weight': 'bold',
     },
   },
-  { selector: 'node.inspect', style: { 'border-color': colors.inspect, 'border-width': 4 } },
   { selector: 'node.ancestor', style: { 'border-color': colors.ancestor, 'border-width': 3 } },
   { selector: 'node.descendant', style: { 'border-color': colors.descendant, 'border-width': 3 } },
+  // Depois de ancestor/descendant: se coexistirem, a borda de inspeção vence.
+  { selector: 'node.inspect', style: { 'border-color': colors.inspect, 'border-width': 4 } },
   { selector: 'edge.path', style: { width: 3, 'line-color': colors.focus, 'target-arrow-color': colors.focus } },
   { selector: '.dimmed', style: { opacity: 0.15 } },
 ]

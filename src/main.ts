@@ -1,104 +1,98 @@
 import data from 'virtual:quests'
-import { buildQuestGraph, lineageSubgraph, mostConnectedQuests, questId, type QuestId } from './domain/index.ts'
+import { buildQuestGraph, mostConnectedQuests, type QuestId } from './domain/index.ts'
 import { createQuestGraphView } from './graph/quest-graph-view.ts'
 import { renderSuggestions } from './ui/landing.ts'
+import { ALL_HASH, canShowTree, clearFocus, focusOf, focusQuest, modeFromHash, type Mode } from './ui/mode.ts'
 import { renderPanel } from './ui/panel.ts'
 import { createSearch } from './ui/search.ts'
 
-type Mode =
-  | { readonly kind: 'landing' }
-  | { readonly kind: 'all'; readonly focus: QuestId | null }
-  | { readonly kind: 'tree'; readonly root: QuestId; readonly focus: QuestId }
-
-const ALL_HASH = 'todas'
-
 const graph = buildQuestGraph(data.quests, data.edges)
-const view = createQuestGraphView(mustFind('#graph'), graph)
+const view = createQuestGraphView(mustFind('#graph'))
 const panel = mustFind('#panel')
 const landingSearch = mustFindInput('#landing-search')
 
 let mode: Mode = { kind: 'landing' }
 
-// ---- transições: as que mudam a rota passam pelo hash, para voltar/avançar funcionarem ----
+// ---- transições de rota: passam pelo hash para voltar/avançar funcionarem ----
 
 function goLanding(): void {
+  if (mode.kind === 'landing') return
   history.pushState(null, '', `${location.pathname}${location.search}`)
   applyRoute()
 }
 
 function goAll(): void {
-  location.hash = ALL_HASH
+  setHash(ALL_HASH)
 }
 
 function goTree(id: QuestId): void {
-  if (location.hash.slice(1) === id) applyRoute()
-  else location.hash = id
+  setHash(id)
 }
 
-function focusQuest(id: QuestId): void {
-  if (mode.kind === 'landing') return
-  if (!isOnScreen(id)) {
-    goTree(id)
+// hashchange é assíncrono; quando o hash já é o pedido, ele não dispara.
+function setHash(hash: string): void {
+  if (location.hash.slice(1) === hash) applyRoute()
+  else location.hash = hash
+}
+
+// ---- transições dentro do modo ----
+
+function onFocusRequest(id: QuestId): void {
+  const result = focusQuest(mode, id)
+  if (result.kind === 'reroot') {
+    goTree(result.id)
     return
   }
-  mode = mode.kind === 'all' ? { kind: 'all', focus: id } : { ...mode, focus: id }
+  mode = result.mode
   view.focus(id)
   renderPanelFor(mode)
 }
 
-function clearFocus(): void {
-  if (mode.kind !== 'all') return
-  mode = { kind: 'all', focus: null }
+function onClearFocus(): void {
+  mode = clearFocus(mode)
   view.clearFocus()
   renderPanelFor(mode)
-}
-
-function isOnScreen(id: QuestId): boolean {
-  return mode.kind === 'all' || (mode.kind === 'tree' && lineageSubgraph(graph, mode.root).quests.has(id))
 }
 
 // ---- rota → modo ----
 
 function applyRoute(): void {
-  const hash = questId(location.hash.slice(1))
-  if (hash === ALL_HASH) enter({ kind: 'all', focus: null })
-  else if (graph.quests.has(hash)) enter({ kind: 'tree', root: hash, focus: hash })
-  else enter({ kind: 'landing' })
-}
-
-function enter(next: Mode): void {
+  const next = modeFromHash(location.hash, graph)
   mode = next
   document.body.dataset['mode'] = next.kind
   if (next.kind === 'all') view.render(graph, null)
   if (next.kind === 'tree') {
-    view.render(lineageSubgraph(graph, next.root), next.root)
-    view.focus(next.focus)
+    view.render(next.shown, next.root)
+    if (next.focus !== null) view.focus(next.focus)
   }
   renderPanelFor(next)
-  // Foco automático só onde não abre teclado por cima da tela.
-  if (next.kind === 'landing' && matchMedia('(hover: hover)').matches) landingSearch.focus()
+  // Foco de teclado segue a tela: o painel ao entrar num grafo, a busca no
+  // início (só onde não abre teclado por cima da tela).
+  // preventScroll: no celular a folha ainda está deslizando quando o foco
+  // chega, e o browser rolaria a página inteira atrás dela.
+  if (next.kind === 'landing') {
+    if (matchMedia('(hover: hover)').matches) landingSearch.focus({ preventScroll: true })
+  } else {
+    panel.focus({ preventScroll: true })
+  }
 }
 
 function renderPanelFor(current: Mode): void {
-  const focus = current.kind === 'landing' ? null : current.focus
-  const canShowTree = current.kind === 'all' ? focus !== null : current.kind === 'tree' && focus !== current.root
-  renderPanel(panel, graph, focus, { onNavigate: focusQuest, ...(canShowTree ? { onShowTree: goTree } : {}) })
+  const focus = focusOf(current)
+  renderPanel(panel, graph, focus, { onNavigate: onFocusRequest, ...(canShowTree(current) ? { onShowTree: goTree } : {}) })
   panel.classList.toggle('open', focus !== null)
 }
 
 // ---- ligações ----
 
-view.onTap((id) => (id === null ? clearFocus() : focusQuest(id)))
-mustFind('#panel-close').addEventListener('click', clearFocus)
+view.onTap((id) => (id === null ? onClearFocus() : onFocusRequest(id)))
+mustFind('#panel-close').addEventListener('click', onClearFocus)
 mustFind('#home').addEventListener('click', (event) => {
   event.preventDefault()
   goLanding()
 })
 mustFind('#show-all').addEventListener('click', goAll)
-createSearch({ input: mustFindInput('#search'), results: mustFind('#search-results') }, graph, (id) => {
-  goTree(id)
-  panel.focus()
-})
+createSearch({ input: mustFindInput('#search'), results: mustFind('#search-results') }, graph, goTree)
 createSearch({ input: landingSearch, results: mustFind('#landing-results') }, graph, goTree)
 renderSuggestions(mustFind('#suggestions'), mostConnectedQuests(graph, 4), goTree)
 

@@ -1,6 +1,6 @@
 import type { Core } from 'cytoscape'
 import { findLineage, type QuestGraph, type QuestId } from '../domain/index.ts'
-import { edgeElementId } from './elements.ts'
+import { edgeElementId, toElements } from './elements.ts'
 
 // Separado da view para ser testável headless: é a interação central do MVP.
 export const LINEAGE_CLASSES = 'focus ancestor descendant path dimmed inspect'
@@ -29,4 +29,22 @@ export function applyLineageClasses(cy: Core, graph: QuestGraph, id: QuestId): v
 export function setInspect(cy: Core, id: QuestId | null): void {
   cy.nodes().removeClass('inspect')
   if (id !== null) cy.getElementById(id).addClass('inspect')
+}
+
+// Troca o conteúdo da tela. root ≠ null é a raiz de uma árvore (dourada).
+export function replaceElements(cy: Core, graph: QuestGraph, root: QuestId | null): void {
+  cy.elements().remove()
+  cy.add(toElements(graph))
+  if (root !== null) cy.getElementById(root).addClass('focus')
+}
+
+// No grafo completo o foco esmaece o que não é linhagem; na árvore só marca.
+export function markFocus(cy: Core, graph: QuestGraph, root: QuestId | null, id: QuestId): void {
+  if (root === null) applyLineageClasses(cy, graph, id)
+  else setInspect(cy, id)
+}
+
+export function unmarkFocus(cy: Core, root: QuestId | null): void {
+  if (root === null) clearLineageClasses(cy)
+  else setInspect(cy, null)
 }

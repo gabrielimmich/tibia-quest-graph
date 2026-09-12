@@ -25,11 +25,11 @@ O MVP é **a versão final funcionando, com 15 quests**. Não é protótipo desc
 
 Pronto quando:
 
-- [ ] as 15 quests da seção 3 estão no grafo com suas dependências;
-- [ ] clicar em um nó destaca ancestrais e descendentes, com o resto esmaecido;
-- [ ] busca por nome funciona;
-- [ ] cada aresta mostra a evidência e linka para a página da wiki;
-- [ ] o site está publicado e abre em celular.
+- [x] as 15 quests da seção 3 estão no grafo com suas dependências;
+- [x] clicar em um nó destaca ancestrais e descendentes, com o resto esmaecido;
+- [x] busca por nome funciona;
+- [x] cada aresta mostra a evidência e linka para a página da wiki;
+- [x] o site está publicado e abre em celular.
 
 ### Fora do escopo (não implemente, não sugira)
 

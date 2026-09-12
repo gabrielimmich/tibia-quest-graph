@@ -31,7 +31,7 @@
 - Consumes: `QuestGraph`, `QuestId`, `Edge`, `Quest`, `findAllPrerequisites`, `findAllUnlocked`
 - Produces: `findLineage(graph, id): Lineage { ancestors, descendants, edges }`, `searchQuests(graph, query, limit = 8): readonly Quest[]`, `normalizeText(text): string`
 
-- [ ] **Step 1: Teste que falha — `tests/domain/lineage.test.ts`**
+- [x] **Step 1: Teste que falha — `tests/domain/lineage.test.ts`**
 
 ```ts
 import { describe, expect, it } from 'vitest'
@@ -82,7 +82,7 @@ describe('findLineage', () => {
 })
 ```
 
-- [ ] **Step 2: Teste que falha — `tests/domain/search.test.ts`**
+- [x] **Step 2: Teste que falha — `tests/domain/search.test.ts`**
 
 ```ts
 import { describe, expect, it } from 'vitest'
@@ -129,12 +129,12 @@ describe('searchQuests', () => {
 })
 ```
 
-- [ ] **Step 3: Rodar e ver falhar**
+- [x] **Step 3: Rodar e ver falhar**
 
 Run: `npx vitest run tests/domain/lineage.test.ts tests/domain/search.test.ts`
 Expected: FAIL — `Cannot find module '../../src/domain/lineage.ts'` e idem para `search.ts`.
 
-- [ ] **Step 4: Implementar `src/domain/lineage.ts`**
+- [x] **Step 4: Implementar `src/domain/lineage.ts`**
 
 ```ts
 import type { Edge, QuestGraph, QuestId } from './quest.ts'
@@ -163,7 +163,7 @@ export function findLineage(graph: QuestGraph, id: QuestId): Lineage {
 }
 ```
 
-- [ ] **Step 5: Implementar `src/domain/search.ts`**
+- [x] **Step 5: Implementar `src/domain/search.ts`**
 
 ```ts
 import type { Quest, QuestGraph } from './quest.ts'
@@ -189,19 +189,19 @@ export function searchQuests(graph: QuestGraph, query: string, limit = 8): reado
 }
 ```
 
-- [ ] **Step 6: Exportar em `src/domain/index.ts`** (acrescentar ao fim)
+- [x] **Step 6: Exportar em `src/domain/index.ts`** (acrescentar ao fim)
 
 ```ts
 export { findLineage, type Lineage } from './lineage.ts'
 export { normalizeText, searchQuests } from './search.ts'
 ```
 
-- [ ] **Step 7: Rodar e ver passar**
+- [x] **Step 7: Rodar e ver passar**
 
 Run: `npx vitest run && npx tsc --noEmit`
 Expected: `Tests 58 passed` (49 + 4 + 5), tsc sem saída.
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add src/domain/lineage.ts src/domain/search.ts src/domain/index.ts tests/domain/lineage.test.ts tests/domain/search.test.ts
@@ -219,12 +219,12 @@ git commit -m "feat(domain): findLineage e searchQuests"
 **Interfaces:**
 - Produces: `toElements(graph): ElementDefinition[]`, `nodeLabel(quest): string`, `edgeElementId(from, to): string`, `stylesheet: StylesheetJson`, `colors`
 
-- [ ] **Step 1: Instalar**
+- [x] **Step 1: Instalar**
 
 Run: `npm install cytoscape@3.34.3 cytoscape-dagre@4.0.1`
 Expected: `dependencies` com os dois; nenhum `@types/*`.
 
-- [ ] **Step 2: Teste que falha — `tests/graph/elements.test.ts`**
+- [x] **Step 2: Teste que falha — `tests/graph/elements.test.ts`**
 
 ```ts
 import cytoscape from 'cytoscape'
@@ -275,12 +275,12 @@ describe('stylesheet + dagre (headless)', () => {
 })
 ```
 
-- [ ] **Step 3: Rodar e ver falhar**
+- [x] **Step 3: Rodar e ver falhar**
 
 Run: `npx vitest run tests/graph/elements.test.ts`
 Expected: FAIL — `Cannot find module '../../src/graph/elements.ts'`.
 
-- [ ] **Step 4: Implementar `src/graph/elements.ts`**
+- [x] **Step 4: Implementar `src/graph/elements.ts`**
 
 ```ts
 import type { ElementDefinition } from 'cytoscape'
@@ -311,7 +311,7 @@ export function toElements(graph: QuestGraph): ElementDefinition[] {
 }
 ```
 
-- [ ] **Step 5: Implementar `src/graph/style.ts`**
+- [x] **Step 5: Implementar `src/graph/style.ts`**
 
 ```ts
 import type { StylesheetJson } from 'cytoscape'
@@ -380,12 +380,12 @@ export const stylesheet: StylesheetJson = [
 ]
 ```
 
-- [ ] **Step 6: Rodar e ver passar**
+- [x] **Step 6: Rodar e ver passar**
 
 Run: `npx vitest run && npx tsc --noEmit`
 Expected: `Tests 62 passed`, tsc sem saída.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add package.json package-lock.json src/graph/elements.ts src/graph/style.ts tests/graph/elements.test.ts
@@ -404,7 +404,7 @@ git commit -m "feat(graph): elementos e stylesheet do Cytoscape"
 - Consumes: Task 1 e 2; `buildQuestGraph`, `questId`, `QuestGraph`, `QuestId`, `Edge`, `Quest`
 - Produces: `createQuestGraphView(container, graph): QuestGraphView { select, clear, onSelect }`, `renderPanel(root, graph, selected, onNavigate)`, `createSearch({ input, results }, graph, onPick)`
 
-- [ ] **Step 1: `src/graph/quest-graph-view.ts`**
+- [x] **Step 1: `src/graph/quest-graph-view.ts`**
 
 ```ts
 import cytoscape, { type EventObject, type EventObjectNode } from 'cytoscape'
@@ -477,7 +477,7 @@ export function createQuestGraphView(container: HTMLElement, graph: QuestGraph):
 }
 ```
 
-- [ ] **Step 2: `src/ui/panel.ts`**
+- [x] **Step 2: `src/ui/panel.ts`**
 
 ```ts
 import { findLineage, type Edge, type EdgeKind, type Quest, type QuestGraph, type QuestId } from '../domain/index.ts'
@@ -602,7 +602,7 @@ function el<K extends keyof HTMLElementTagNameMap>(tag: K, className?: string, t
 }
 ```
 
-- [ ] **Step 3: `src/ui/search.ts`**
+- [x] **Step 3: `src/ui/search.ts`**
 
 ```ts
 import { searchQuests, type QuestGraph, type QuestId } from '../domain/index.ts'
@@ -662,7 +662,7 @@ export function createSearch({ input, results }: SearchElements, graph: QuestGra
 }
 ```
 
-- [ ] **Step 4: `src/main.ts`** (substituir o conteúdo)
+- [x] **Step 4: `src/main.ts`** (substituir o conteúdo)
 
 ```ts
 import data from 'virtual:quests'
@@ -708,7 +708,7 @@ function mustFindInput(selector: string): HTMLInputElement {
 }
 ```
 
-- [ ] **Step 5: `index.html`** (substituir)
+- [x] **Step 5: `index.html`** (substituir)
 
 ```html
 <!doctype html>
@@ -760,7 +760,7 @@ function mustFindInput(selector: string): HTMLInputElement {
 </html>
 ```
 
-- [ ] **Step 6: `src/styles.css`**
+- [x] **Step 6: `src/styles.css`**
 
 ```css
 :root {
@@ -1109,14 +1109,14 @@ a {
 }
 ```
 
-- [ ] **Step 7: Build, typecheck, dev server**
+- [x] **Step 7: Build, typecheck, dev server**
 
 Run: `npm run typecheck && npm run build`
 Expected: tsc silencioso; `dist/assets/*.js` inclui cytoscape (≈ 400 kB antes de gzip é normal) e `dist/assets/*.css`.
 
 Run: `npx vite --port 5173 --strictPort` em background; `curl -s http://localhost:5173/tibia-quest-graph/` deve conter `id="graph"` e `id="panel"`; `curl -s http://localhost:5173/tibia-quest-graph/src/main.ts` deve conter `createQuestGraphView`. Encerrar.
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add src/graph/quest-graph-view.ts src/ui/panel.ts src/ui/search.ts src/main.ts src/styles.css index.html
@@ -1133,7 +1133,7 @@ git commit -m "feat(ui): grafo interativo, painel com evidências, busca e layou
 - Create: `.github/workflows/deploy.yml`, `README.md`
 - Modify: `vite.config.ts`
 
-- [ ] **Step 1: `vite.config.ts`** (substituir)
+- [x] **Step 1: `vite.config.ts`** (substituir)
 
 ```ts
 import { fileURLToPath } from 'node:url'
@@ -1147,12 +1147,12 @@ export default defineConfig({
 })
 ```
 
-- [ ] **Step 2: Descobrir os majors atuais das actions**
+- [x] **Step 2: Descobrir os majors atuais das actions**
 
 Run: `for a in actions/checkout actions/setup-node actions/configure-pages actions/upload-pages-artifact actions/deploy-pages; do echo "$a $(gh api repos/$a/releases/latest --jq .tag_name)"; done`
 Expected: uma tag por action. Usar o major de cada (`@v4`, `@v5`…) no workflow abaixo, substituindo os que estiverem diferentes.
 
-- [ ] **Step 3: `.github/workflows/deploy.yml`**
+- [x] **Step 3: `.github/workflows/deploy.yml`**
 
 ```yaml
 name: Deploy to GitHub Pages
@@ -1199,7 +1199,7 @@ jobs:
         uses: actions/deploy-pages@v4
 ```
 
-- [ ] **Step 4: `README.md`**
+- [x] **Step 4: `README.md`**
 
 ```markdown
 # Tibia Quest Graph
@@ -1232,7 +1232,7 @@ da [TibiaWiki](https://tibia.fandom.com/), sob
 [CC-BY-SA](https://creativecommons.org/licenses/by-sa/3.0/).
 ```
 
-- [ ] **Step 5: Build e commit**
+- [x] **Step 5: Build e commit**
 
 Run: `npm run build && ls dist/assets`
 Expected: verde; `dist/index.html` referencia `/tibia-quest-graph/assets/...`.
@@ -1242,7 +1242,7 @@ git add vite.config.ts .github/workflows/deploy.yml README.md
 git commit -m "chore: base do GitHub Pages, workflow de deploy e README"
 ```
 
-- [ ] **Step 6: Fast-forward em `main` e criar o repositório**
+- [x] **Step 6: Fast-forward em `main` e criar o repositório**
 
 ```bash
 git checkout main && git merge --ff-only feat/interface && git branch -d feat/interface
@@ -1251,7 +1251,7 @@ gh api -X POST repos/gabrielimmich/tibia-quest-graph/pages -f build_type=workflo
 ```
 Expected: repo criado, `main` no remoto, Pages habilitado com fonte "GitHub Actions". Se o POST de Pages responder 409 (já existe), usar `-X PUT`.
 
-- [ ] **Step 7: Acompanhar o deploy e conferir**
+- [x] **Step 7: Acompanhar o deploy e conferir**
 
 Run: `gh run list --limit 1` e depois `gh run watch <id> --exit-status`
 Expected: run verde. Depois: `curl -s -o /dev/null -w "%{http_code}\n" https://gabrielimmich.github.io/tibia-quest-graph/` → `200`, e `curl -s https://gabrielimmich.github.io/tibia-quest-graph/ | grep -c 'id="graph"'` → `1`.
@@ -1260,12 +1260,12 @@ Expected: run verde. Depois: `curl -s -o /dev/null -w "%{http_code}\n" https://g
 
 ### Task 5: Verificação final e revisão
 
-- [ ] **Step 1: Sequência dos critérios de pronto**
+- [x] **Step 1: Sequência dos critérios de pronto**
 
 Run: `rm -rf node_modules dist && npm ci && npm test && npm run typecheck && npm run validate && npm run build`
 Expected: tudo verde, `Tests 62 passed`.
 
-- [ ] **Step 2: Auditoria**
+- [x] **Step 2: Auditoria**
 
 Run:
 ```bash
@@ -1274,6 +1274,37 @@ grep -rn "wheelSensitivity" src ; echo "---"
 ```
 Expected: nenhuma ocorrência real (só o comentário em `parse.ts`).
 
-- [ ] **Step 3: Code review** com `superpowers:requesting-code-review` sobre `git diff 3a18632..HEAD`; corrigir Critical/Important; commitar `refactor: ajustes da revisão de código`; push.
+- [x] **Step 3: Code review** com `superpowers:requesting-code-review` sobre `git diff 3a18632..HEAD`; corrigir Critical/Important; commitar `refactor: ajustes da revisão de código`; push.
 
-- [ ] **Step 4: Marcar o plano como executado** com seção "Resultado" e commitar.
+- [x] **Step 4: Marcar o plano como executado** com seção "Resultado" e commitar.
+
+---
+
+## Resultado (2026-09-12)
+
+Executado na branch `feat/interface`, revisado, fundido em `main` e publicado:
+**https://gabrielimmich.github.io/tibia-quest-graph/** (repo
+`gabrielimmich/tibia-quest-graph`, Pages via Actions, primeiro deploy verde).
+70 testes, `typecheck`, `validate` e `build` verdes. Render conferido com Edge
+headless em 1280px, 1100px e 400px (via iframe) e na URL publicada.
+
+Desvios em relação ao plano, vindos da revisão de código:
+
+- Revisão feita **antes** do merge/push, para o primeiro deploy público já sair revisado.
+- Classes de linhagem extraídas para `src/graph/lineage-classes.ts`, com teste
+  headless que também confere o stylesheet aplicado (Cytoscape só avisa em
+  propriedade inválida, não lança).
+- Hash lido sem `decodeURIComponent` (ids são `[a-z0-9-]`; `#%` lançava).
+- `cy.stop()` antes do pan; `li role=none` na lista da busca; foco vai ao
+  painel ao escolher pela busca; painel é região rotulada (sem `aria-live`);
+  folha inferior fica `visibility: hidden` fechada; `:focus-visible`; `100dvh`;
+  `prefers-reduced-motion`; `cancel-in-progress: false` no workflow.
+- Bug pego por screenshot: legenda tracejada/pontilhada perdia para
+  `.legend li::before` em especificidade.
+
+### Fase 2 (fora do MVP, ideias registradas)
+
+- `hashchange` para trocar a seleção colando outro `#id` na mesma aba.
+- Navegação por setas na busca (`aria-activedescendant`).
+- Zoom mínimo legível ao selecionar em telas pequenas.
+- As outras quests (comentários `# fase 2:` no YAML já apontam as primeiras).

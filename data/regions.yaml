@@ -1,0 +1,141 @@
+# Região → lugares. O coletor compara o campo `location` da quest (primeiro
+# lugar citado no infobox) com esta lista, sem caixa nem acento, aceitando o
+# lugar como substring ("Thais Ancient Temple" → Thais). Lugar sem região
+# vira "Outros"; a lista dos não mapeados sai em docs/superpowers/review/.
+#
+# Rascunho inicial veio do campo `city` das páginas de lugar da wiki
+# (`npm run draft-regions`); o resto é curadoria e pode estar errado. Corrija
+# à vontade: o próximo `npm run collect` não muda quests já existentes, então
+# para reaplicar uma região edite o `region` da quest ou apague-o antes.
+
+regions:
+  Rookgaard:
+    - Rookgaard
+    - Tutorial Island
+  Dawnport:
+    - Dawnport
+  Thais:
+    - Thais
+    - Fibula
+    - Greenshore
+    - Mintwallin
+    - Mount Sternum
+    - Mt. Sternum
+    - Bounac
+    - Elane
+    - Hanna
+    - King Tibianus
+    - Lugri
+    - Muriel
+    - Triangle Tower
+  Carlin:
+    - Carlin
+    - Isle of the Kings
+    - Bron
+    - Demona
+    - Femor Hills
+    - Fields of Glory
+    - Percybald
+    - Senja
+    - Folda
+    - Vega
+  Ab'Dendriel:
+    - Ab'Dendriel
+    - Orc Fortress
+    - Ceiron
+    - Draconia
+    - Hellgate
+    - Elvenbane
+  Kazordoon:
+    - Kazordoon
+    - Dusalk's Troll Clan Cave
+    - Dwarf Mines
+    - Jakundaf Desert
+    - Outlaw Camp
+    - Beregar
+    - The Spike
+  Venore:
+    - Venore
+    - Brain Grounds
+    - Dark Cathedral
+    - Green Claw Swamp
+    - Greenclaw Swamp
+    - Plains of Havoc
+    - Hugo
+    - Irmana
+  Edron:
+    - Edron
+    - Cormaya
+    - Grimvale
+  Darashia:
+    - Darashia
+    - Drefia
+    - Ghostship
+    - Razan
+    - Samir
+    - Lion's Rock
+    - Minotaur Pyramid
+  Ankrahmun:
+    - Ankrahmun
+    - Ashta'daramai
+    - Mal'ouquah
+  Port Hope:
+    - Port Hope
+    - Tiquanda
+    - Asura Palace
+    - Hairycles
+    - Myra
+    - Forbidden Lands
+  Liberty Bay:
+    - Liberty Bay
+    - Meriana
+    - Treasure Island
+    - Vandura Mountain
+    - Nargor
+  Svargrond:
+    - Svargrond
+    - Formorgar Mines
+    - Helheim
+    - Hjaern
+    - Inukaya
+    - Krimhorn
+    - Nibelor
+    - Okolnir
+    - Sea Serpent Area
+    - Tyrsung
+    - Chyllfroest
+    - Hrodmir
+  Yalahar:
+    - Yalahar
+    - Vengoth
+  Zao:
+    - Zao
+    - Farmine
+    - Razachai
+    - Muggy Plains
+    - Dragonblaze Peaks
+    - Souleater Mountains
+  Roshamuul e Feyrist:
+    - Roshamuul
+    - Feyrist
+    - Nightmare Isles
+  Oramond:
+    - Oramond
+    - Rathleton
+    - Seacrest Grounds
+    - Podzilla
+  Gnomos:
+    - Gnomegate
+    - Gnome Deep Hub
+    - Gnomprona
+  Kilmaresh:
+    - Kilmaresh
+    - Issavi
+  Zarganash:
+    - Zarganash
+    - Netherworld
+  Krailos:
+    - Krailos
+  Marapur:
+    - Marapur
+excluded: []

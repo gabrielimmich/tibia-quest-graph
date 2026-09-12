@@ -1,0 +1,6 @@
+# Pares (from → to) que o coletor NÃO deve trazer de volta, com o motivo.
+# Use quando apagar uma aresta de data/quests.yaml que a wiki cita.
+rejected:
+  - from: the-secret-library
+    to: the-dream-courts
+    reason: "A Broken Compass pode ser comprada de Andrew Lyze; a quest não é exigida."

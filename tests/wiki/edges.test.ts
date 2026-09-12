@@ -59,6 +59,8 @@ describe('classifyKind', () => {
       ambiguous: true,
     })
     expect(classifyKind('A Ghostsilver Lantern from the Forgotten Knowledge Quest;')).toEqual({ kind: 'required', ambiguous: true })
+    expect(classifyKind('Note: it is wise to start the task before doing this quest.')).toEqual({ kind: 'recommended', ambiguous: false })
+    expect(classifyKind('The Thieves Guild Quest to trade with Black Bert, if required.')).toEqual({ kind: 'recommended', ambiguous: false })
   })
 })
 
@@ -131,6 +133,23 @@ describe('extractEdgeCandidates', () => {
     ].join('\n')
     const found = extract('Soul War Quest', wt)
     expect(found.map((c) => c.fromTitle)).toEqual(['Feaster of Souls Quest'])
+  })
+
+  it('frase que descreve o que a página libera inverte a direção e vai para a fila', () => {
+    const wt = [
+      '== Required Equipment ==',
+      '* Completing this quest up to mission 3 allows you to start the [[Vampire Hunter Quest]] with Storkus.',
+    ].join('\n')
+    const found = extractEdgeCandidates('The Inquisition Quest', wt, new Set([...known, 'Vampire Hunter Quest']), aliases)
+    expect(found[0]).toMatchObject({ fromTitle: 'The Inquisition Quest', toTitle: 'Vampire Hunter Quest', ambiguous: true })
+  })
+
+  it('link externo antigo vira só o texto na evidência', () => {
+    const wt = [
+      '== Requirements ==',
+      '* Completed 6 missions of [http://tibia.wikia.com/wiki/The_New_Frontier_Quest The New Frontier Quest]',
+    ].join('\n')
+    expect(extract('Wrath of the Emperor Quest', wt)[0]?.evidence).toBe('Completed 6 missions of The New Frontier Quest')
   })
 
   it('template Spoiler Section conta como menção', () => {

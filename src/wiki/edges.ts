@@ -23,7 +23,11 @@ const STRONG_REQUIREMENT =
   /\b(must have (completed|finished|done)|needs? to have (completed|finished|done)|required to (have )?(complete|finish)|you (need|have) to (complete|finish)|succeed(ed)? (the|in)|having (completed|finished))\b/i
 
 const PARTIAL = /\b(mission \d+|up to the|first mission|full quest not needed|until|only the first|at least (the )?\w+ mission)\b/
-const SOFT = /\b(recommended|advisable|optional|only necessary|bring a friend|helpful but)\b/
+const SOFT =
+  /\b(recommended|advisable|optional|only necessary|bring a friend|helpful but|wise to|smart to|good idea|if required|if needed|if necessary)\b/
+// "Completing this quest ... allows you to start X": a página descreve o que
+// ELA libera, então a aresta é da página para X, não o contrário.
+const UNLOCKS = /\b(allows? you to (start|do|begin)|unlocks?|you can (now |then )?start|lets you (start|do)|gives (you )?access to)\b/i
 const COMPLETION = /\b(complet(e|ed|ing|ion)|finish(ed)?|succeed(ed)?|done)\b/
 const ACCESS = /\b(access|permission to|to enter|to reach|shortcut)\b/
 
@@ -51,9 +55,15 @@ export function extractEdgeCandidates(
     return aliases.get(name) ?? null
   }
   const found = new Map<string, EdgeCandidate>()
-  const consider = (fromTitle: string, evidence: string, where: EdgeCandidate['where']) => {
-    if (fromTitle === title || found.has(fromTitle)) return
-    found.set(fromTitle, { fromTitle, toTitle: title, ...classifyKind(evidence), where, evidence, source })
+  const consider = (mentioned: string, evidence: string, where: EdgeCandidate['where']) => {
+    if (mentioned === title) return
+    const reversed = UNLOCKS.test(evidence)
+    const [fromTitle, toTitle] = reversed ? [title, mentioned] : [mentioned, title]
+    const key = `${fromTitle}→${toTitle}`
+    if (found.has(key)) return
+    const { kind, ambiguous } = classifyKind(evidence)
+    // Direção invertida é sempre leitura minha: vai para a fila.
+    found.set(key, { fromTitle, toTitle, kind, ambiguous: reversed || ambiguous, where, evidence, source })
   }
 
   for (const section of splitSections(spoilerWikitext)) {

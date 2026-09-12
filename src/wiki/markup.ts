@@ -9,6 +9,8 @@ export function stripMarkup(source: string): string {
   text = text.replace(/\{\{Spoiler Section\|([^}|]*)\|([^}|]*)\}\}/gi, '$1 - $2')
   text = text.replace(/\{\{[^{}]*\|text=([^}|]*)[^{}]*\}\}/gi, '$1')
   text = text.replace(/\{\{[^{}]*\}\}/g, '')
+  // Link externo [url texto] → texto (páginas antigas linkam a wikia assim).
+  text = text.replace(/\[(?:https?:)?\/\/[^\s\]]+\s+([^\]]*)\]/g, '$1')
   // Arquivos/imagens não têm texto; [[a|b]] → b; [[a]] → a.
   text = text.replace(/\[\[(?:File|Image):[^\]]*\]\]/gi, '')
   text = text.replace(/\[\[(?:[^\]|]*\|)?([^\]]*)\]\]/g, '$1')

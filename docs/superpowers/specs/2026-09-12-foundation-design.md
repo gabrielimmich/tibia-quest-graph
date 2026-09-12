@@ -131,13 +131,15 @@ Todos passam por `parseQuestData`. `fs` aparece só em dois lugares:
 - **`scripts/validate.ts`**: `readFileSync('data/quests.yaml')` → `yaml.parse`
   → `parseQuestData`. Sucesso: imprime contagem de quests e arestas. Falha:
   imprime cada erro em uma linha, `process.exit(1)`.
-- **`src/vite-plugin-quests.ts`**: resolve `virtual:quests`, faz a mesma
-  leitura e emite `export default <JSON>` com os dados brutos validados
-  (`{ quests, edges }`). Falha de validação lança, quebrando o build. Adiciona
-  o YAML ao watch (`this.addWatchFile`) para o dev server recarregar. O
-  `main.ts` da sessão de interface chama `buildQuestGraph` sobre esse JSON,
-  porque `Map` não serializa.
-- Tipo do módulo virtual declarado em `src/virtual-quests.d.ts`.
+- **`src/vite-plugin-quests.ts`**: `questsPlugin({ file })` resolve
+  `virtual:quests`, faz a mesma leitura e emite
+  `export default <JSON>` com `{ quests: [...graph.quests.values()], edges: graph.edges }`,
+  ou seja, os dados já validados em forma serializável (`Map` não serializa).
+  Falha de validação lança, quebrando o build. Adiciona o YAML ao watch
+  (`this.addWatchFile`) para o dev server recarregar. O `main.ts` da sessão de
+  interface chama `buildQuestGraph` sobre esse JSON.
+- Tipo do módulo virtual declarado em `src/virtual-quests.d.ts` como
+  `{ quests: readonly Quest[]; edges: readonly Edge[] }`.
 
 Scripts do `package.json`:
 
@@ -158,8 +160,9 @@ build      npm run validate && npm run typecheck && vite build
   grafo com ciclo (devolve caminho fechado) e sem ciclo (`null`).
 - `tests/domain/parse.test.ts`: caso feliz; um teste por regra da tabela;
   teste de que múltiplos erros são acumulados.
-- `tests/vite-plugin-quests.test.ts`: YAML inválido lança; válido devolve
-  módulo com `export default`.
+- `tests/vite-plugin-quests.test.ts`: escreve YAML num diretório temporário
+  e passa o caminho em `questsPlugin({ file })`. YAML inválido lança; válido
+  devolve módulo com `export default` cujo JSON tem as quests e arestas.
 - Nenhum teste lê `data/quests.yaml`. Fixtures são literais no teste.
 
 ## Dados desta sessão

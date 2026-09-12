@@ -54,7 +54,7 @@ Wrath of the Emperor Quest          The Secret Library Quest
 In Service of Yalahar Quest         Forgotten Knowledge Quest
 The Inquisition Quest               Feaster of Souls Quest
 The Pits of Inferno Quest           Soul War Quest
-Ferumbras' Ascendant Quest          Barbarian Test Quest
+Ferumbras' Ascension Quest          Barbarian Test Quest
 The Ice Islands Quest
 ```
 

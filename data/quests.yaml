@@ -1,22 +1,217 @@
 # Fonte única da verdade do grafo. Ver CLAUDE.md, seção 4.
 #
 # Regra de ouro: nenhuma aresta entra sem `evidence` copiada literalmente da
-# página da TibiaWiki, e `source` é a URL de onde o trecho foi copiado.
-# `npm run validate` recusa placeholder, id inexistente, ciclo e campo desconhecido.
+# página da TibiaWiki (texto como aparece renderizado), e `source` é a URL de
+# onde o trecho foi copiado. `npm run validate` recusa placeholder, id
+# inexistente, ciclo e campo desconhecido.
+#
+# Direção: `from` é a quest exigida, `to` é a quest que exige.
+# Comentários "fase 2" registram pré-requisitos citados pela wiki que apontam
+# para quests fora das 15 do MVP; viram arestas quando essas quests entrarem.
+#
+# Coletado em 2026-09-12 da API MediaWiki (tibia.fandom.com), aprovado por Gabriel.
 
 quests:
   - id: the-new-frontier
     title: The New Frontier Quest
-    level: 50
+    level: 77 # wiki: "77*(for the last mission only)"
     premium: true
     wiki: https://tibia.fandom.com/wiki/The_New_Frontier_Quest
-    unlocks: "Acesso ao continente de Zao"
+    unlocks: "Acesso ao sul e centro de Zao e Warmaster Outfit"
 
   - id: children-of-the-revolution
     title: Children of the Revolution Quest
-    level: 60
     premium: true
     wiki: https://tibia.fandom.com/wiki/Children_of_the_Revolution_Quest
-    unlocks: "Continuação da linha de Zao"
+    unlocks: "Serpent Crest (addon Warmaster) e tasks diárias e semanais em Zao"
 
-edges: []
+  - id: wrath-of-the-emperor
+    title: Wrath of the Emperor Quest
+    level: 80 # wiki: "80 (Expertise door during mission 8)"
+    premium: true
+    wiki: https://tibia.fandom.com/wiki/Wrath_of_the_Emperor_Quest
+    unlocks: "Acesso e teleportes para Razachai, Rebel Camp e Inner Sanctum; Wayfarer Outfit"
+    # fase 2: "The Ape City Quest (full quest not needed - mission 9 started)"
+
+  - id: in-service-of-yalahar
+    title: In Service of Yalahar Quest
+    level: 80
+    premium: true
+    wiki: https://tibia.fandom.com/wiki/In_Service_of_Yalahar_Quest
+    unlocks: "Passagem para a área interna e os bairros de Yalahar; Yalaharian Outfit"
+    # fase 2: "Novice Rank or higher of the Tibian Explorer Society"
+
+  - id: the-inquisition
+    title: The Inquisition Quest
+    level: 100
+    premium: true
+    wiki: https://tibia.fandom.com/wiki/The_Inquisition_Quest
+    unlocks: "Demon Hunter Outfit, áreas profundas da Demon Forge e Blessing of the Inquisition"
+
+  - id: the-pits-of-inferno
+    title: The Pits of Inferno Quest
+    level: 80
+    premium: true
+    wiki: https://tibia.fandom.com/wiki/The_Pits_of_Inferno_Quest
+    unlocks: "Atalho do Hub, Soft Boots e a possibilidade de terminar The Inquisition Quest"
+
+  # CLAUDE.md §3 lista "Ferumbras' Ascendant Quest"; na wiki esse título é
+  # redirect para "Ferumbras' Ascension Quest" (o infobox lista "Ascendant" como
+  # apelido). A wiki não cita nenhuma das outras 14 como pré-requisito dela,
+  # nem ela como pré-requisito das outras: fica isolada no grafo.
+  - id: ferumbras-ascension
+    title: Ferumbras' Ascension Quest
+    level: 150
+    premium: true
+    wiki: https://tibia.fandom.com/wiki/Ferumbras%27_Ascension_Quest
+    unlocks: "Rift Warrior Outfit e chance de obter Ferumbras' Hat"
+
+  - id: the-ice-islands
+    title: The Ice Islands Quest
+    premium: true
+    wiki: https://tibia.fandom.com/wiki/The_Ice_Islands_Quest
+    unlocks: "Norseman Outfit e acesso a Formorgar Mines, Helheim e Tyrsung"
+
+  - id: threatened-dreams
+    title: Threatened Dreams Quest
+    level: 30
+    premium: true
+    wiki: https://tibia.fandom.com/wiki/Threatened_Dreams_Quest
+    unlocks: "Acesso a Feyrist"
+    # fase 2 (missão Sweet Dreams): Asura Palace Quest, Blood Brothers Quest, Grimvale Quest
+
+  - id: the-dream-courts
+    title: The Dream Courts Quest
+    level: 250
+    premium: true
+    wiki: https://tibia.fandom.com/wiki/The_Dream_Courts_Quest
+    unlocks: "Acesso às Cortes de Verão e Inverno e ao Dream Labyrinth; Dream Warrior Outfit"
+    # fase 2: The Shattered Isles Quest (Meriana), The Explorer Society Quest (Relic Hunter),
+    # The Cursed Crystal Quest. The Secret Library Quest é citada só como fonte da
+    # Broken Compass, que também pode ser comprada: não entrou como aresta.
+
+  - id: the-secret-library
+    title: The Secret Library Quest
+    level: 250
+    premium: true
+    wiki: https://tibia.fandom.com/wiki/The_Secret_Library_Quest
+    unlocks: "Acesso a Falcon Bastion, The Extension Site, Asura Palace subterrâneo e Secret Library"
+    # fase 2: Liquid Black Quest (missão 1), Asura Palace Quest
+
+  - id: forgotten-knowledge
+    title: Forgotten Knowledge Quest
+    premium: true
+    wiki: https://tibia.fandom.com/wiki/Forgotten_Knowledge_Quest
+    unlocks: "Imbuing e acesso aos imbuements poderosos"
+
+  - id: feaster-of-souls
+    title: Feaster of Souls Quest
+    level: 250
+    premium: true
+    wiki: https://tibia.fandom.com/wiki/Feaster_of_Souls_Quest
+    unlocks: "Poltergeist Outfit e as conquistas Prospectre e Beyonder"
+    # fase 2: Lion's Rock Quest, Sea of Light Quest, The Shattered Isles Quest (Ramoa),
+    # Blood Brothers Quest (missão 4, Vengoth)
+
+  - id: soul-war
+    title: Soul War Quest
+    level: 250
+    premium: true
+    wiki: https://tibia.fandom.com/wiki/Soul_War_Quest
+    unlocks: "Item aleatório do Soul Set e Revenant Outfit"
+
+  - id: barbarian-test
+    title: Barbarian Test Quest
+    premium: true
+    wiki: https://tibia.fandom.com/wiki/Barbarian_Test_Quest
+    unlocks: "Cidadania de Svargrond, Arena, viagem com Buddel e início da The Ice Islands Quest"
+
+edges:
+  # --- Zao ---
+  - from: the-new-frontier
+    to: children-of-the-revolution
+    kind: required
+    evidence: "The New Frontier Quest mission 8."
+    source: https://tibia.fandom.com/wiki/Children_of_the_Revolution_Quest/Spoiler
+
+  - from: the-new-frontier
+    to: wrath-of-the-emperor
+    kind: required
+    evidence: "The New Frontier Quest (full quest not needed - received Mortal Kombat mission)"
+    source: https://tibia.fandom.com/wiki/Wrath_of_the_Emperor_Quest/Spoiler
+
+  - from: children-of-the-revolution
+    to: wrath-of-the-emperor
+    kind: required
+    evidence: "Completed Children of the Revolution Quest (plus the Daily Task: Zzuppliezz)"
+    source: https://tibia.fandom.com/wiki/Wrath_of_the_Emperor_Quest/Spoiler
+
+  - from: the-new-frontier
+    to: forgotten-knowledge
+    kind: required
+    evidence: "The New Frontier Quest completed including mission 9, Mortal Combat (for permission to use the Fire Portal);"
+    source: https://tibia.fandom.com/wiki/Forgotten_Knowledge_Quest/Spoiler
+
+  - from: the-new-frontier
+    to: the-secret-library
+    kind: recommended
+    evidence: "Completed The New Frontier Quest (only necessary to be able to use the shortcut between Zao and the Falcon Bastion)."
+    source: https://tibia.fandom.com/wiki/The_Secret_Library_Quest/Spoiler
+
+  # --- Svargrond ---
+  - from: barbarian-test
+    to: the-ice-islands
+    kind: required
+    evidence: "Succeed the Barbarian Test Quest, and then head to Iskan to the north-east of Svargrond (here)."
+    source: https://tibia.fandom.com/wiki/The_Ice_Islands_Quest/Spoiler
+
+  - from: barbarian-test
+    to: in-service-of-yalahar
+    kind: required
+    evidence: "Completed all 3 Barbarian Tests"
+    source: https://tibia.fandom.com/wiki/In_Service_of_Yalahar_Quest/Spoiler
+
+  - from: the-ice-islands
+    to: in-service-of-yalahar
+    kind: recommended
+    evidence: "For missiong 5: Completed (or bring a friend who has completed) the first mission of Ice Islands Quest (Nibelor: Breaking the Ice)"
+    source: https://tibia.fandom.com/wiki/In_Service_of_Yalahar_Quest/Spoiler
+
+  - from: the-ice-islands
+    to: forgotten-knowledge
+    kind: required
+    evidence: "The Ice Islands Quest completed up to the The Contactman mission (for access to the Formorgar Mines);"
+    source: https://tibia.fandom.com/wiki/Forgotten_Knowledge_Quest/Spoiler
+
+  # --- Dream Courts ---
+  - from: the-ice-islands
+    to: the-dream-courts
+    kind: access
+    evidence: "Access to Tyrsung and Okolnir (take the Nibelor 2: Ecological Terrorism from The Ice Islands Quest);"
+    source: https://tibia.fandom.com/wiki/The_Dream_Courts_Quest/Spoiler
+
+  - from: threatened-dreams
+    to: the-dream-courts
+    kind: access
+    evidence: "Access to Feyrist (Complete the Threatened Dreams Quest - Troubled Animals);"
+    source: https://tibia.fandom.com/wiki/The_Dream_Courts_Quest/Spoiler
+
+  - from: forgotten-knowledge
+    to: the-dream-courts
+    kind: required
+    evidence: "A Ghostsilver Lantern from the Forgotten Knowledge Quest;"
+    source: https://tibia.fandom.com/wiki/The_Dream_Courts_Quest/Spoiler
+
+  # --- Inquisition ---
+  - from: the-pits-of-inferno
+    to: the-inquisition
+    kind: access
+    evidence: "Finally, note that in order to access the Demon Forge and start Mission 7 you must have absorbed the spirit of at least one of The Ruthless Seven in The Pits of Inferno Quest."
+    source: https://tibia.fandom.com/wiki/The_Inquisition_Quest/Spoiler
+
+  # --- Zarganash ---
+  - from: feaster-of-souls
+    to: soul-war
+    kind: required
+    evidence: "Completed the Feaster of Souls Quest"
+    source: https://tibia.fandom.com/wiki/Soul_War_Quest/Spoiler

@@ -27,7 +27,7 @@
 **Interfaces:**
 - Produces: `lineageSubgraph(graph, id): QuestGraph`, `mostConnectedQuests(graph, limit): readonly Quest[]`
 
-- [ ] **Step 1: Testes que falham** — acrescentar ao fim de `tests/domain/lineage.test.ts`:
+- [x] **Step 1: Testes que falham** — acrescentar ao fim de `tests/domain/lineage.test.ts`:
 
 ```ts
 describe('lineageSubgraph', () => {
@@ -83,12 +83,12 @@ describe('mostConnectedQuests', () => {
 })
 ```
 
-- [ ] **Step 2: Rodar e ver falhar**
+- [x] **Step 2: Rodar e ver falhar**
 
 Run: `npx vitest run tests/domain/lineage.test.ts tests/domain/suggestions.test.ts`
 Expected: FAIL (`lineageSubgraph` não exportado; módulo `suggestions.ts` inexistente).
 
-- [ ] **Step 3: Implementar** — acrescentar ao fim de `src/domain/lineage.ts`:
+- [x] **Step 3: Implementar** — acrescentar ao fim de `src/domain/lineage.ts`:
 
 ```ts
 // Grafo só com a quest e sua linhagem: é o que a árvore mostra. Reusa
@@ -129,12 +129,12 @@ Em `src/domain/index.ts`: trocar a linha do lineage por
 `export { findLineage, lineageSubgraph, type Lineage } from './lineage.ts'` e acrescentar
 `export { mostConnectedQuests } from './suggestions.ts'`.
 
-- [ ] **Step 4: Rodar e ver passar**
+- [x] **Step 4: Rodar e ver passar**
 
 Run: `npx vitest run && npx tsc --noEmit`
 Expected: verde (+3 lineage, +3 suggestions, +1 purity).
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/domain tests/domain
@@ -151,7 +151,7 @@ git commit -m "feat(domain): lineageSubgraph e mostConnectedQuests"
 **Interfaces:**
 - Produces: `setInspect(cy, id | null)`, `QuestGraphView { render(graph, root), focus(id), clearFocus(), onTap(listener) }`
 
-- [ ] **Step 1: Teste que falha** — acrescentar a `tests/graph/lineage-classes.test.ts` (import `setInspect` junto dos outros):
+- [x] **Step 1: Teste que falha** — acrescentar a `tests/graph/lineage-classes.test.ts` (import `setInspect` junto dos outros):
 
 ```ts
 describe('setInspect', () => {
@@ -177,9 +177,9 @@ describe('setInspect', () => {
 })
 ```
 
-- [ ] **Step 2: Rodar e ver falhar**: `npx vitest run tests/graph` → FAIL (`setInspect` não existe).
+- [x] **Step 2: Rodar e ver falhar**: `npx vitest run tests/graph` → FAIL (`setInspect` não existe).
 
-- [ ] **Step 3: Implementar**
+- [x] **Step 3: Implementar**
 
 `src/graph/lineage-classes.ts`: `LINEAGE_CLASSES = 'focus ancestor descendant path dimmed inspect'` e acrescentar
 
@@ -280,9 +280,9 @@ export function createQuestGraphView(container: HTMLElement, initial: QuestGraph
 }
 ```
 
-- [ ] **Step 4: Rodar e ver passar**: `npx vitest run && npx tsc --noEmit` (o `main.ts` antigo quebra o tsc por usar `select`/`onSelect`; isso se resolve na Task 3, então nesta task só `npx vitest run` precisa passar).
+- [x] **Step 4: Rodar e ver passar**: `npx vitest run && npx tsc --noEmit` (o `main.ts` antigo quebra o tsc por usar `select`/`onSelect`; isso se resolve na Task 3, então nesta task só `npx vitest run` precisa passar).
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/graph tests/graph
@@ -297,7 +297,7 @@ git commit -m "feat(graph): view com render/focus e classe inspect"
 - Modify: `src/ui/panel.ts`, `src/main.ts`, `index.html`, `src/styles.css`
 - Create: `src/ui/landing.ts`
 
-- [ ] **Step 1: `src/ui/panel.ts`** — trocar a assinatura e o header:
+- [x] **Step 1: `src/ui/panel.ts`** — trocar a assinatura e o header:
 
 ```ts
 export interface PanelActions {
@@ -335,7 +335,7 @@ export function renderPanel(root: HTMLElement, graph: QuestGraph, selected: Ques
 
 `renderEmpty`: trocar o texto por `'Clique num nó para ver os detalhes: tudo que precisa ser feito antes, tudo que libera depois, e a frase da TibiaWiki que comprova cada ligação.'`.
 
-- [ ] **Step 2: `src/ui/landing.ts`**
+- [x] **Step 2: `src/ui/landing.ts`**
 
 ```ts
 import type { Quest, QuestId } from '../domain/index.ts'
@@ -355,7 +355,7 @@ export function renderSuggestions(list: HTMLElement, quests: readonly Quest[], o
 }
 ```
 
-- [ ] **Step 3: `src/main.ts`** (substituir)
+- [x] **Step 3: `src/main.ts`** (substituir)
 
 ```ts
 import data from 'virtual:quests'
@@ -476,7 +476,7 @@ function mustFindInput(selector: string): HTMLInputElement {
 }
 ```
 
-- [ ] **Step 4: `index.html`** — trocar `<h1>Tibia Quest Graph</h1>` por `<h1><a id="home" href="#">Tibia Quest Graph</a></h1>` e inserir, dentro de `<main class="workspace">`, antes de `#graph`:
+- [x] **Step 4: `index.html`** — trocar `<h1>Tibia Quest Graph</h1>` por `<h1><a id="home" href="#">Tibia Quest Graph</a></h1>` e inserir, dentro de `<main class="workspace">`, antes de `#graph`:
 
 ```html
       <section id="landing" class="landing" aria-label="Início">
@@ -503,7 +503,7 @@ function mustFindInput(selector: string): HTMLInputElement {
       </section>
 ```
 
-- [ ] **Step 5: `src/styles.css`** — acrescentar:
+- [x] **Step 5: `src/styles.css`** — acrescentar:
 
 ```css
 /* ---- início ---- */
@@ -623,11 +623,11 @@ body[data-mode='landing'] .panel-close {
 }
 ```
 
-- [ ] **Step 6: Build, screenshots e verificação**
+- [x] **Step 6: Build, screenshots e verificação**
 
 Run: `npm run typecheck && npm test && npm run build`. Depois dev server e Edge headless em `/tibia-quest-graph/` (landing), `#the-dream-courts` (árvore de 6), `#todas` (grafo inteiro), e 400px via iframe. Conferir: sugestões aparecem; árvore mostra só 6 nós com Dream Courts dourada; grafo completo igual ao de antes.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add src/ui src/main.ts index.html src/styles.css
@@ -638,9 +638,35 @@ git commit -m "feat(ui): tela inicial, árvore da quest escolhida e rotas por ha
 
 ### Task 4: Verificação, revisão, publicação
 
-- [ ] `rm -rf node_modules dist && npm ci && npm test && npm run typecheck && npm run validate && npm run build`
-- [ ] Auditoria: `grep -rnE "\bany\b|@ts-ignore|as unknown as|innerHTML" src tests --include=*.ts | grep -v "// "`
-- [ ] `superpowers:requesting-code-review` sobre `git diff 0c9f740..HEAD`; corrigir Critical/Important.
-- [ ] `git checkout main && git merge --ff-only feat/start-and-tree && git branch -d feat/start-and-tree && git push`
-- [ ] `gh run watch` verde; `curl` da URL publicada; screenshot da URL publicada com `#the-dream-courts`.
-- [ ] Marcar o plano como executado com "Resultado"; commit; push.
+- [x] `rm -rf node_modules dist && npm ci && npm test && npm run typecheck && npm run validate && npm run build`
+- [x] Auditoria: `grep -rnE "\bany\b|@ts-ignore|as unknown as|innerHTML" src tests --include=*.ts | grep -v "// "`
+- [x] `superpowers:requesting-code-review` sobre `git diff 0c9f740..HEAD`; corrigir Critical/Important.
+- [x] `git checkout main && git merge --ff-only feat/start-and-tree && git branch -d feat/start-and-tree && git push`
+- [x] `gh run watch` verde; `curl` da URL publicada; screenshot da URL publicada com `#the-dream-courts`.
+- [x] Marcar o plano como executado com "Resultado"; commit; push.
+
+---
+
+## Resultado (2026-09-12)
+
+Executado, revisado e publicado. 93 testes; render conferido com Edge headless
+(início, árvore, `#todas`, 400px e 500px).
+
+Desvios vindos da revisão de código:
+
+- **Bug real pego pela revisão**: `lineageSubgraph` reusava `findLineage.edges`,
+  que só tinha arestas ancestral↔ancestral e descendente↔descendente; a aresta
+  direta ancestral → descendente que passa ao largo da quest sumia da árvore
+  (Barbarian Test → Yalahar na árvore de Ice Islands). Linhagem agora é o
+  subgrafo induzido; spec atualizado.
+- Máquina de modos extraída para `src/ui/mode.ts` (pura, 11 testes). Foco na
+  árvore é anulável: a folha inferior fecha no celular.
+- View: sem layout no construtor; `cy.stop()` + `cy.resize()` antes de
+  renderizar; zoom máximo 1.25 no fit; pan na árvore só se o nó sair da tela;
+  `replaceElements`/`markFocus`/`unmarkFocus` em `lineage-classes.ts` com testes.
+- Foco de teclado vai ao painel ao entrar num grafo, com `preventScroll`;
+  `.workspace { overflow: hidden }` (a folha fechada estendia a rolagem e o
+  `focus()` rolava a página inteira — visto em screenshot de 400px).
+
+Fase 2b (dados completos) é a próxima etapa; spec de contexto em
+`docs/superpowers/specs/2026-09-12-phase2-context.md`.

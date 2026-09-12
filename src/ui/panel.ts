@@ -2,13 +2,19 @@ import { findLineage, type Edge, type EdgeKind, type Quest, type QuestGraph, typ
 
 export type NavigateHandler = (id: QuestId) => void
 
+export interface PanelActions {
+  readonly onNavigate: NavigateHandler
+  // Presente quando faz sentido re-enraizar a árvore na quest mostrada.
+  readonly onShowTree?: NavigateHandler
+}
+
 const KIND_LABEL: Record<EdgeKind, string> = {
   required: 'obrigatória',
   access: 'acesso',
   recommended: 'recomendada',
 }
 
-export function renderPanel(root: HTMLElement, graph: QuestGraph, selected: QuestId | null, onNavigate: NavigateHandler): void {
+export function renderPanel(root: HTMLElement, graph: QuestGraph, selected: QuestId | null, actions: PanelActions): void {
   root.replaceChildren()
   const quest = selected === null ? undefined : graph.quests.get(selected)
   if (!quest) {
@@ -17,9 +23,9 @@ export function renderPanel(root: HTMLElement, graph: QuestGraph, selected: Ques
   }
   const lineage = findLineage(graph, quest.id)
   root.append(
-    renderHeader(quest),
-    renderRelations('Precisa antes', graph.incoming.get(quest.id) ?? [], (edge) => edge.from, lineage.ancestors, graph, onNavigate),
-    renderRelations('Libera depois', graph.outgoing.get(quest.id) ?? [], (edge) => edge.to, lineage.descendants, graph, onNavigate),
+    renderHeader(quest, actions.onShowTree),
+    renderRelations('Precisa antes', graph.incoming.get(quest.id) ?? [], (edge) => edge.from, lineage.ancestors, graph, actions.onNavigate),
+    renderRelations('Libera depois', graph.outgoing.get(quest.id) ?? [], (edge) => edge.to, lineage.descendants, graph, actions.onNavigate),
   )
 }
 
@@ -30,14 +36,14 @@ function renderEmpty(graph: QuestGraph): HTMLElement {
     el(
       'p',
       undefined,
-      'Clique num nó do grafo ou use a busca. Você verá tudo que precisa ser feito antes, tudo que ela libera depois, e a frase da TibiaWiki que comprova cada ligação.',
+      'Clique num nó para ver os detalhes: tudo que precisa ser feito antes, tudo que libera depois, e a frase da TibiaWiki que comprova cada ligação.',
     ),
     el('p', 'panel-stats', `${graph.quests.size} quests · ${graph.edges.length} ligações`),
   )
   return section
 }
 
-function renderHeader(quest: Quest): HTMLElement {
+function renderHeader(quest: Quest, onShowTree?: NavigateHandler): HTMLElement {
   const header = el('header', 'panel-header')
   const meta: string[] = []
   if (quest.level !== undefined) meta.push(`Level ${quest.level}`)
@@ -50,6 +56,12 @@ function renderHeader(quest: Quest): HTMLElement {
     externalLink(quest.wiki, 'Ver na TibiaWiki ↗'),
     unlocks,
   )
+  if (onShowTree) {
+    const button = el('button', 'panel-action', 'Ver árvore desta quest')
+    button.type = 'button'
+    button.addEventListener('click', () => onShowTree(quest.id))
+    header.append(button)
+  }
   return header
 }
 

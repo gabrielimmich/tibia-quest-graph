@@ -47,8 +47,12 @@ export function createQuestGraphView(container: HTMLElement, initial: QuestGraph
   const focus = (id: QuestId) => {
     const node = cy.getElementById(id)
     if (node.empty()) return
-    if (root === null) applyLineageClasses(cy, shown, id)
-    else setInspect(cy, id)
+    if (root !== null) {
+      // A árvore já está toda na tela depois do fit; centrar no nó só a tiraria do lugar.
+      setInspect(cy, id)
+      return
+    }
+    applyLineageClasses(cy, shown, id)
     cy.stop()
     cy.animate({ center: { eles: node } }, { duration: 250 })
   }

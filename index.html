@@ -12,7 +12,7 @@
   </head>
   <body>
     <header class="topbar">
-      <h1>Tibia Quest Graph</h1>
+      <h1><a id="home" href="#">Tibia Quest Graph</a></h1>
       <form class="search" role="search" autocomplete="off">
         <label class="visually-hidden" for="search">Buscar quest</label>
         <input
@@ -33,6 +33,33 @@
       </ul>
     </header>
     <main class="workspace">
+      <section id="landing" class="landing" aria-label="Início">
+        <div class="landing-card">
+          <h2>Qual quest você quer fazer?</h2>
+          <p>
+            Escolha uma e veja tudo que precisa ser feito antes, tudo que ela libera depois, e a frase da
+            TibiaWiki que comprova cada ligação.
+          </p>
+          <form class="search search-big" role="search" autocomplete="off">
+            <label class="visually-hidden" for="landing-search">Buscar quest</label>
+            <input
+              id="landing-search"
+              type="search"
+              placeholder="Buscar quest…"
+              role="combobox"
+              aria-autocomplete="list"
+              aria-expanded="false"
+              aria-controls="landing-results"
+            />
+            <ul id="landing-results" class="search-results" role="listbox" hidden></ul>
+          </form>
+          <p class="landing-hint">Sugestões</p>
+          <ul id="suggestions" class="suggestions" aria-label="Sugestões de quests"></ul>
+          <p class="landing-all">
+            <button id="show-all" type="button" class="quest-link">ver todas as quests no grafo</button>
+          </p>
+        </div>
+      </section>
       <div id="graph" class="graph" role="application" aria-label="Grafo de quests"></div>
       <aside id="panel" class="panel" tabindex="-1" aria-label="Detalhes da quest"></aside>
       <!-- precisa ser o irmão seguinte de #panel: o CSS usa `.panel.open + .panel-close` -->

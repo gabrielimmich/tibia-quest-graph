@@ -1,5 +1,5 @@
 import data from 'virtual:quests'
-import { buildQuestGraph, mostConnectedQuests, type QuestId } from './domain/index.ts'
+import { buildQuestGraph, mostConnectedQuests, type Overview, type QuestId } from './domain/index.ts'
 import { createQuestGraphView } from './graph/quest-graph-view.ts'
 import { renderSuggestions } from './ui/landing.ts'
 import { ALL_HASH, canShowTree, clearFocus, focusOf, focusQuest, modeFromHash, type Mode } from './ui/mode.ts'
@@ -60,7 +60,7 @@ function applyRoute(): void {
   const next = modeFromHash(location.hash, graph)
   mode = next
   document.body.dataset['mode'] = next.kind
-  if (next.kind === 'all') view.render(next.shown, null)
+  if (next.kind === 'all') view.renderBlocks(next.overview)
   if (next.kind === 'tree') {
     view.render(next.shown, next.root)
     if (next.focus !== null) view.focus(next.focus)
@@ -79,9 +79,11 @@ function applyRoute(): void {
 
 function renderPanelFor(current: Mode): void {
   const focus = focusOf(current)
-  // Em #todas as contagens do painel vazio falam do que está na tela.
-  const shown = current.kind === 'all' ? current.shown : graph
-  renderPanel(panel, shown, focus, { onNavigate: onFocusRequest, ...(canShowTree(current) ? { onShowTree: goTree } : {}) })
+  renderPanel(panel, graph, focus, {
+    onNavigate: onFocusRequest,
+    ...(canShowTree(current) ? { onShowTree: goTree } : {}),
+    ...(current.kind === 'all' ? { summary: overviewSummary(current.overview) } : {}),
+  })
   panel.classList.toggle('open', focus !== null)
 }
 
@@ -100,6 +102,11 @@ renderSuggestions(mustFind('#suggestions'), mostConnectedQuests(graph, 4), goTre
 
 window.addEventListener('hashchange', applyRoute)
 applyRoute()
+
+function overviewSummary(overview: Overview): string {
+  const { connected, blocks, isolatedTotal } = overview
+  return `${connected.quests.size} quests conectadas em ${blocks.length} regiões · ${connected.edges.length} ligações · ${isolatedTotal} sem dependências ficam na busca`
+}
 
 function mustFind(selector: string): HTMLElement {
   const element = document.querySelector(selector)

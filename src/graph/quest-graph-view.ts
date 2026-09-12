@@ -1,6 +1,8 @@
 import cytoscape, { type BoundingBox12, type BoundingBoxWH, type EventObject, type EventObjectNode } from 'cytoscape'
 import dagre, { type DagreLayoutOptions } from 'cytoscape-dagre'
-import { questId, type QuestGraph, type QuestId } from '../domain/index.ts'
+import { questId, type Overview, type QuestGraph, type QuestId } from '../domain/index.ts'
+import { layoutBlocks } from './block-layout.ts'
+import { toBlockElements } from './elements.ts'
 import { markFocus, replaceElements, unmarkFocus } from './lineage-classes.ts'
 import { stylesheet } from './style.ts'
 
@@ -12,6 +14,8 @@ export interface QuestGraphView {
   // Substitui o que está na tela. root ≠ null é a raiz de uma árvore: fica
   // dourada e o foco não esmaece nada; root = null é o grafo completo.
   readonly render: (graph: QuestGraph, root: QuestId | null) => void
+  // Visão geral: um bloco por região, dagre dentro de cada um.
+  readonly renderBlocks: (overview: Overview) => void
   readonly focus: (id: QuestId) => void
   readonly clearFocus: () => void
   readonly onTap: (listener: TapListener) => void
@@ -46,6 +50,17 @@ export function createQuestGraphView(container: HTMLElement): QuestGraphView {
     }
   }
 
+  const renderBlocks = (overview: Overview) => {
+    shown = overview.connected
+    root = null
+    cy.stop()
+    cy.resize()
+    cy.elements().remove()
+    cy.add(toBlockElements(overview))
+    layoutBlocks(cy)
+    cy.fit(undefined, 40)
+  }
+
   const focus = (id: QuestId) => {
     const node = cy.getElementById(id)
     if (shown === null || node.empty()) return
@@ -60,15 +75,27 @@ export function createQuestGraphView(container: HTMLElement): QuestGraphView {
   const clearFocus = () => unmarkFocus(cy, root)
 
   cy.on('tap', 'node', (event: EventObjectNode) => {
+    // Bloco de região: zoom nele, sem mexer no foco.
+    if (event.target.hasClass('region')) {
+      cy.stop()
+      cy.animate({ fit: { eles: event.target, padding: 40 } }, { duration: 300 })
+      return
+    }
     for (const listener of listeners) listener(questId(event.target.id()))
   })
   cy.on('tap', (event: EventObject) => {
     if (event.target !== cy) return
+    // Fundo na visão geral: volta a enquadrar o mapa inteiro.
+    if (root === null && cy.nodes('.region').nonempty()) {
+      cy.stop()
+      cy.animate({ fit: { eles: cy.elements(), padding: 40 } }, { duration: 300 })
+    }
     for (const listener of listeners) listener(null)
   })
 
   return {
     render,
+    renderBlocks,
     focus,
     clearFocus,
     onTap: (listener) => {

@@ -1,8 +1,10 @@
 import cytoscape from 'cytoscape'
 import dagre, { type DagreLayoutOptions } from 'cytoscape-dagre'
 import { describe, expect, it } from 'vitest'
+import { buildOverview } from '../../src/domain/overview.ts'
 import { buildQuestGraph } from '../../src/domain/quest.ts'
-import { edgeElementId, nodeLabel, toElements } from '../../src/graph/elements.ts'
+import { layoutBlocks } from '../../src/graph/block-layout.ts'
+import { edgeElementId, nodeLabel, regionElementId, toBlockElements, toElements } from '../../src/graph/elements.ts'
 import { stylesheet } from '../../src/graph/style.ts'
 import { edge, quest } from '../domain/fixtures.ts'
 
@@ -42,5 +44,46 @@ describe('stylesheet + dagre (headless)', () => {
     const y = (id: string) => cy.getElementById(id).position('y')
     expect(y('b')).toBeGreaterThan(y('a'))
     expect(y('c')).toBeGreaterThan(y('a'))
+  })
+})
+
+describe('toBlockElements + layoutBlocks (headless)', () => {
+  const regioned = buildQuestGraph(
+    [
+      { ...quest('a'), region: 'Thais' },
+      { ...quest('b'), region: 'Thais' },
+      { ...quest('c'), region: 'Zao' },
+      { ...quest('d'), region: 'Zao' },
+      { ...quest('e'), region: 'Zao' },
+      { ...quest('x'), region: 'Zao' },
+    ],
+    [edge('a', 'b'), edge('c', 'd'), edge('d', 'e'), edge('b', 'c', 'access')],
+  )
+
+  it('gera um pai por bloco e filhos com parent', () => {
+    const elements = toBlockElements(buildOverview(regioned))
+    const parents = elements.filter((element) => element.classes === 'region')
+    expect(parents.map((element) => element.data.id)).toEqual([regionElementId('Zao'), regionElementId('Thais')])
+    expect(parents[0]?.data['label']).toBe('Zao · 3 (+1 sem dependências)')
+    const child = elements.find((element) => element.data.id === 'a')
+    expect(child?.data['parent']).toBe(regionElementId('Thais'))
+  })
+
+  it('layoutBlocks deixa os blocos sem sobreposição e os filhos dentro do pai', () => {
+    cytoscape.use(dagre)
+    const cy = cytoscape({ headless: true, styleEnabled: true, elements: toBlockElements(buildOverview(regioned)), style: stylesheet })
+    layoutBlocks(cy)
+    const boxes = cy.nodes('.region').map((parent) => parent.boundingBox({ includeLabels: false }))
+    expect(boxes).toHaveLength(2)
+    const [first, second] = boxes
+    if (!first || !second) throw new Error('faltou bloco')
+    const overlap = first.x1 < second.x2 && second.x1 < first.x2 && first.y1 < second.y2 && second.y1 < first.y2
+    expect(overlap).toBe(false)
+    for (const child of cy.nodes(':child')) {
+      const parentBox = child.parent().boundingBox({ includeLabels: false })
+      const box = child.boundingBox({ includeLabels: false })
+      expect(box.x1).toBeGreaterThanOrEqual(parentBox.x1)
+      expect(box.x2).toBeLessThanOrEqual(parentBox.x2)
+    }
   })
 })

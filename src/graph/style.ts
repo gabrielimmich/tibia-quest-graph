@@ -47,6 +47,29 @@ export const stylesheet: StylesheetJson = [
       'transition-duration': 150,
     },
   },
+  {
+    // Bloco de região: caixa translúcida com o nome no topo; filhos por cima.
+    selector: 'node.region',
+    style: {
+      shape: 'round-rectangle',
+      'background-color': colors.nodeText,
+      'background-opacity': 0.06,
+      'border-width': 1,
+      'border-color': colors.edge,
+      label: 'data(label)',
+      color: colors.nodeText,
+      'font-size': 16,
+      'font-weight': 'bold',
+      'text-valign': 'top',
+      'text-halign': 'center',
+      'text-margin-y': -6,
+      // Sem isto o rótulo herda o text-max-width de 140px dos nós e quebra em 3 linhas.
+      'text-wrap': 'none',
+      'text-max-width': '1000px',
+      padding: '28px',
+    },
+  },
+  { selector: 'node.region.dimmed', style: { opacity: 0.35 } },
   { selector: 'edge[kind = "access"]', style: { 'line-style': 'dashed', 'line-dash-pattern': [8, 4] } },
   { selector: 'edge[kind = "recommended"]', style: { 'line-style': 'dotted' } },
   {

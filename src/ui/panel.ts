@@ -6,6 +6,8 @@ export interface PanelActions {
   readonly onNavigate: NavigateHandler
   // Presente quando faz sentido re-enraizar a árvore na quest mostrada.
   readonly onShowTree?: NavigateHandler
+  // Linha de contagens do estado vazio; sem ela, usa o grafo inteiro.
+  readonly summary?: string
 }
 
 const KIND_LABEL: Record<EdgeKind, string> = {
@@ -18,7 +20,7 @@ export function renderPanel(root: HTMLElement, graph: QuestGraph, selected: Ques
   root.replaceChildren()
   const quest = selected === null ? undefined : graph.quests.get(selected)
   if (!quest) {
-    root.append(renderEmpty(graph))
+    root.append(renderEmpty(actions.summary ?? `${graph.quests.size} quests · ${graph.edges.length} ligações`))
     return
   }
   const lineage = findLineage(graph, quest.id)
@@ -29,7 +31,7 @@ export function renderPanel(root: HTMLElement, graph: QuestGraph, selected: Ques
   )
 }
 
-function renderEmpty(graph: QuestGraph): HTMLElement {
+function renderEmpty(summary: string): HTMLElement {
   const section = el('section', 'panel-empty')
   section.append(
     el('h2', undefined, 'Escolha uma quest'),
@@ -38,7 +40,7 @@ function renderEmpty(graph: QuestGraph): HTMLElement {
       undefined,
       'Clique num nó para ver os detalhes: tudo que precisa ser feito antes, tudo que libera depois, e a frase da TibiaWiki que comprova cada ligação.',
     ),
-    el('p', 'panel-stats', `${graph.quests.size} quests na tela · ${graph.edges.length} ligações`),
+    el('p', 'panel-stats', summary),
   )
   return section
 }

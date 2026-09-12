@@ -21,7 +21,7 @@ describe('modeFromHash', () => {
     if (all.kind !== 'all') return
     expect(all.focus).toBeNull()
     // x é isolada: fica fora da visão geral
-    expect([...all.shown.quests.keys()].sort()).toEqual(['a', 'b', 'c', 'd'])
+    expect([...all.overview.connected.quests.keys()].sort()).toEqual(['a', 'b', 'c', 'd'])
   })
 
   it('#id válido é a árvore daquela quest, com foco nela', () => {

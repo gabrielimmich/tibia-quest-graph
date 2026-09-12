@@ -3,10 +3,45 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Mapa navegável de dependências entre quests do Tibia, com a frase da TibiaWiki que comprova cada ligação."
+    />
     <title>Tibia Quest Graph</title>
+    <link rel="stylesheet" href="/src/styles.css" />
   </head>
   <body>
-    <main id="app"></main>
+    <header class="topbar">
+      <h1>Tibia Quest Graph</h1>
+      <form class="search" role="search" autocomplete="off">
+        <label class="visually-hidden" for="search">Buscar quest</label>
+        <input
+          id="search"
+          type="search"
+          placeholder="Buscar quest…"
+          role="combobox"
+          aria-autocomplete="list"
+          aria-expanded="false"
+          aria-controls="search-results"
+        />
+        <ul id="search-results" class="search-results" role="listbox" hidden></ul>
+      </form>
+      <ul class="legend" aria-label="Tipos de ligação">
+        <li class="legend-required">obrigatória</li>
+        <li class="legend-access">acesso</li>
+        <li class="legend-recommended">recomendada</li>
+      </ul>
+    </header>
+    <main class="workspace">
+      <div id="graph" class="graph" role="application" aria-label="Grafo de quests"></div>
+      <aside id="panel" class="panel" aria-live="polite"></aside>
+      <button id="panel-close" class="panel-close" type="button" aria-label="Fechar painel">×</button>
+    </main>
+    <footer class="footer">
+      Fansite não oficial. Tibia é marca registrada da CipSoft GmbH. Dados e citações da
+      <a href="https://tibia.fandom.com/" target="_blank" rel="noopener noreferrer">TibiaWiki</a>, sob
+      <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener noreferrer">CC-BY-SA</a>.
+    </footer>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

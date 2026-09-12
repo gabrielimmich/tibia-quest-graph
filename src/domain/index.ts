@@ -13,3 +13,4 @@ export { EVIDENCE_PLACEHOLDER, WIKI_PREFIX, parseQuestData, type ParseResult } f
 export { connectedSubgraph, findLineage, lineageSubgraph, type Lineage } from './lineage.ts'
 export { normalizeText, searchQuests } from './search.ts'
 export { mostConnectedQuests } from './suggestions.ts'
+export { buildOverview, UNMAPPED_REGION, type Block, type Overview } from './overview.ts'

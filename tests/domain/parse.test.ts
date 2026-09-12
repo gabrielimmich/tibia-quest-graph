@@ -52,6 +52,29 @@ describe('parseQuestData', () => {
     expect([...result.graph.quests.values()][0]).not.toHaveProperty('level')
   })
 
+  it('schema v2: unlocks é opcional; reward, location e region são texto não vazio', () => {
+    const ok = parseQuestData(
+      data({ quests: [quest('a', { unlocks: undefined, reward: 'A sword', location: 'Thais', region: 'Thais' }), quest('b')] }),
+    )
+    expect(ok.ok).toBe(true)
+    if (!ok.ok) return
+    const a = ok.graph.quests.get(questId('a'))
+    expect(a).not.toHaveProperty('unlocks')
+    expect(a).toMatchObject({ reward: 'A sword', location: 'Thais', region: 'Thais' })
+    expect(errorsOf(data({ quests: [quest('a', { reward: '' }), quest('b')] }))).toContain('"reward" deve ser texto não vazio')
+    expect(errorsOf(data({ quests: [quest('a', { region: 7 }), quest('b')] }))).toContain('"region" deve ser texto não vazio')
+  })
+
+  it('schema v2: reviewed é boolean opcional na aresta', () => {
+    const ok = parseQuestData(data({ edges: [edge('a', 'b', { reviewed: false })] }))
+    expect(ok.ok).toBe(true)
+    if (!ok.ok) return
+    expect(ok.graph.edges[0]?.reviewed).toBe(false)
+    const plain = parseQuestData(data())
+    if (plain.ok) expect(plain.graph.edges[0]).not.toHaveProperty('reviewed')
+    expect(errorsOf(data({ edges: [edge('a', 'b', { reviewed: 'no' })] }))).toContain('"reviewed" deve ser boolean')
+  })
+
   it('rejeita raiz que não é objeto', () => {
     expect(errorsOf('nope')).toContain('raiz deve ser um objeto')
     expect(errorsOf(null)).toContain('raiz deve ser um objeto')

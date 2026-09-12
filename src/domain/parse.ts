@@ -17,8 +17,8 @@ export const WIKI_PREFIX = 'https://tibia.fandom.com/wiki/'
 export const EVIDENCE_PLACEHOLDER = '<trecho literal copiado da página da wiki>'
 
 const ID_PATTERN = /^[a-z0-9]+(-[a-z0-9]+)*$/
-const QUEST_FIELDS: ReadonlySet<string> = new Set(['id', 'title', 'level', 'premium', 'wiki', 'unlocks'])
-const EDGE_FIELDS: ReadonlySet<string> = new Set(['from', 'to', 'kind', 'evidence', 'source'])
+const QUEST_FIELDS: ReadonlySet<string> = new Set(['id', 'title', 'level', 'premium', 'wiki', 'unlocks', 'reward', 'location', 'region'])
+const EDGE_FIELDS: ReadonlySet<string> = new Set(['from', 'to', 'kind', 'evidence', 'source', 'reviewed'])
 
 type Raw = Record<string, unknown>
 
@@ -80,15 +80,29 @@ function parseQuest(item: Raw, where: string, errors: string[]): Quest | null {
   const title = expectString(item, 'title', where, errors)
   const premium = expectBoolean(item, 'premium', where, errors)
   const wiki = expectWikiUrl(item, 'wiki', where, errors)
-  const unlocks = expectString(item, 'unlocks', where, errors)
   const level = expectOptionalLevel(item, where, errors)
+  const unlocks = expectOptionalString(item, 'unlocks', where, errors)
+  const reward = expectOptionalString(item, 'reward', where, errors)
+  const location = expectOptionalString(item, 'location', where, errors)
+  const region = expectOptionalString(item, 'region', where, errors)
   if (id !== null && !ID_PATTERN.test(id)) errors.push(`${where}: id "${id}" deve ser kebab-case`)
 
   if (errors.length > before) return null
-  if (id === null || title === null || premium === null || wiki === null || unlocks === null) return null
+  if (id === null || title === null || premium === null || wiki === null) return null
 
-  const quest: Quest = { id: questId(id), title, premium, wiki, unlocks }
-  return level === undefined ? quest : { ...quest, level }
+  // Opcionais ausentes não viram chaves com undefined: o plugin serializa em
+  // JSON e os testes comparam com toEqual.
+  return {
+    id: questId(id),
+    title,
+    ...(level !== undefined ? { level } : {}),
+    premium,
+    wiki,
+    ...(unlocks !== undefined ? { unlocks } : {}),
+    ...(reward !== undefined ? { reward } : {}),
+    ...(location !== undefined ? { location } : {}),
+    ...(region !== undefined ? { region } : {}),
+  }
 }
 
 function parseEdges(items: readonly unknown[], knownIds: ReadonlySet<string>, errors: string[]): Edge[] {
@@ -122,6 +136,7 @@ function parseEdge(item: Raw, index: number, knownIds: ReadonlySet<string>, erro
   const kind = expectEdgeKind(item, where, errors)
   const evidence = expectEvidence(item, where, errors)
   const source = expectWikiUrl(item, 'source', where, errors)
+  const reviewed = expectOptionalBoolean(item, 'reviewed', where, errors)
   if (from !== null && !knownIds.has(from)) errors.push(`${where}: "from" aponta para id inexistente "${from}"`)
   if (to !== null && !knownIds.has(to)) errors.push(`${where}: "to" aponta para id inexistente "${to}"`)
   if (from !== null && to !== null && from === to) errors.push(`${where}: uma quest não pode depender de si mesma`)
@@ -129,7 +144,7 @@ function parseEdge(item: Raw, index: number, knownIds: ReadonlySet<string>, erro
   if (errors.length > before) return null
   if (from === null || to === null || kind === null || evidence === null || source === null) return null
 
-  return { from: questId(from), to: questId(to), kind, evidence, source }
+  return { from: questId(from), to: questId(to), kind, evidence, source, ...(reviewed !== undefined ? { reviewed } : {}) }
 }
 
 function isRecord(value: unknown): value is Raw {
@@ -152,6 +167,16 @@ function expectString(item: Raw, field: string, where: string, errors: string[])
   if (typeof value === 'string' && value.trim() !== '') return value
   errors.push(`${where}: "${field}" deve ser texto não vazio`)
   return null
+}
+
+function expectOptionalString(item: Raw, field: string, where: string, errors: string[]): string | undefined {
+  if (item[field] === undefined) return undefined
+  return expectString(item, field, where, errors) ?? undefined
+}
+
+function expectOptionalBoolean(item: Raw, field: string, where: string, errors: string[]): boolean | undefined {
+  if (item[field] === undefined) return undefined
+  return expectBoolean(item, field, where, errors) ?? undefined
 }
 
 function expectBoolean(item: Raw, field: string, where: string, errors: string[]): boolean | null {

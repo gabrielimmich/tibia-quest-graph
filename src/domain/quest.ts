@@ -9,7 +9,12 @@ export interface Quest {
   readonly level?: number
   readonly premium: boolean
   readonly wiki: string
-  readonly unlocks: string
+  // unlocks é texto em português escrito à mão; reward é o texto literal da
+  // wiki. Quests coletadas automaticamente só têm reward.
+  readonly unlocks?: string
+  readonly reward?: string
+  readonly location?: string
+  readonly region?: string
 }
 
 export interface Edge {
@@ -18,6 +23,8 @@ export interface Edge {
   readonly kind: EdgeKind
   readonly evidence: string
   readonly source: string
+  // Ausente = aprovada por Gabriel. false = entrou pelo coletor e ainda não foi revisada.
+  readonly reviewed?: boolean
 }
 
 export interface QuestGraph {

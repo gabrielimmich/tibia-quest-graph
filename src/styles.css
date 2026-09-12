@@ -231,6 +231,23 @@ a {
   gap: 8px;
 }
 
+.panel-place {
+  margin: 0 0 6px;
+  color: var(--muted);
+}
+
+.panel-badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 4px;
+}
+
+.badge-unreviewed {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
 .kind-badge {
   padding: 1px 8px;
   border: 1px solid var(--border);

@@ -1,0 +1,22 @@
+# Fonte única da verdade do grafo. Ver CLAUDE.md, seção 4.
+#
+# Regra de ouro: nenhuma aresta entra sem `evidence` copiada literalmente da
+# página da TibiaWiki, e `source` é a URL de onde o trecho foi copiado.
+# `npm run validate` recusa placeholder, id inexistente, ciclo e campo desconhecido.
+
+quests:
+  - id: the-new-frontier
+    title: The New Frontier Quest
+    level: 50
+    premium: true
+    wiki: https://tibia.fandom.com/wiki/The_New_Frontier_Quest
+    unlocks: "Acesso ao continente de Zao"
+
+  - id: children-of-the-revolution
+    title: Children of the Revolution Quest
+    level: 60
+    premium: true
+    wiki: https://tibia.fandom.com/wiki/Children_of_the_Revolution_Quest
+    unlocks: "Continuação da linha de Zao"
+
+edges: []

@@ -30,3 +30,15 @@ export function lineageSubgraph(graph: QuestGraph, id: QuestId): QuestGraph {
   })
   return buildQuestGraph(quests, lineage.edges)
 }
+
+// Quests que participam de alguma aresta. Uma quest sem dependência não tem
+// topologia para mostrar: na visão geral só polui.
+export function connectedSubgraph(graph: QuestGraph): QuestGraph {
+  const connected = new Set<QuestId>()
+  for (const edge of graph.edges) {
+    connected.add(edge.from)
+    connected.add(edge.to)
+  }
+  const quests = [...graph.quests.values()].filter((quest) => connected.has(quest.id))
+  return buildQuestGraph(quests, graph.edges)
+}

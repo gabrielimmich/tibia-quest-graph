@@ -60,7 +60,7 @@ function applyRoute(): void {
   const next = modeFromHash(location.hash, graph)
   mode = next
   document.body.dataset['mode'] = next.kind
-  if (next.kind === 'all') view.render(graph, null)
+  if (next.kind === 'all') view.render(next.shown, null)
   if (next.kind === 'tree') {
     view.render(next.shown, next.root)
     if (next.focus !== null) view.focus(next.focus)

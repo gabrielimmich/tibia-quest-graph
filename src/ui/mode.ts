@@ -1,4 +1,4 @@
-import { lineageSubgraph, questId, type QuestGraph, type QuestId } from '../domain/index.ts'
+import { connectedSubgraph, lineageSubgraph, questId, type QuestGraph, type QuestId } from '../domain/index.ts'
 
 // Máquina de modos da tela, sem DOM: o main.ts só traduz eventos em chamadas
 // daqui e o resultado em render. Assim as transições são testáveis.
@@ -7,14 +7,15 @@ export const ALL_HASH = 'todas'
 
 export type Mode =
   | { readonly kind: 'landing' }
-  | { readonly kind: 'all'; readonly focus: QuestId | null }
+  // all mostra só as quests conectadas: sem aresta não há topologia para ver.
+  | { readonly kind: 'all'; readonly shown: QuestGraph; readonly focus: QuestId | null }
   | { readonly kind: 'tree'; readonly root: QuestId; readonly shown: QuestGraph; readonly focus: QuestId | null }
 
 // Ids são [a-z0-9-], então o hash não precisa (nem pode) ser decodificado:
 // decodeURIComponent lançaria em '#%'.
 export function modeFromHash(hash: string, graph: QuestGraph): Mode {
   const value = hash.startsWith('#') ? hash.slice(1) : hash
-  if (value === ALL_HASH) return { kind: 'all', focus: null }
+  if (value === ALL_HASH) return { kind: 'all', shown: connectedSubgraph(graph), focus: null }
   const id = questId(value)
   if (graph.quests.has(id)) return { kind: 'tree', root: id, shown: lineageSubgraph(graph, id), focus: id }
   return { kind: 'landing' }
@@ -42,7 +43,7 @@ export function focusQuest(mode: Mode, id: QuestId): FocusResult {
     case 'landing':
       return { kind: 'stay', mode }
     case 'all':
-      return { kind: 'stay', mode: { kind: 'all', focus: id } }
+      return { kind: 'stay', mode: { ...mode, focus: id } }
     case 'tree':
       return mode.shown.quests.has(id) ? { kind: 'stay', mode: { ...mode, focus: id } } : { kind: 'reroot', id }
   }

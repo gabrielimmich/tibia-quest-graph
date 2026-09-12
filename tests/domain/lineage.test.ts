@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { findLineage, lineageSubgraph } from '../../src/domain/lineage.ts'
+import { connectedSubgraph, findLineage, lineageSubgraph } from '../../src/domain/lineage.ts'
 import { buildQuestGraph } from '../../src/domain/quest.ts'
 import { edge, id, quest } from './fixtures.ts'
 
@@ -72,5 +72,17 @@ describe('lineageSubgraph', () => {
   it('id inexistente devolve grafo vazio', () => {
     const sub = lineageSubgraph(graph, id('zzz'))
     expect(sub.quests.size).toBe(0)
+  })
+})
+
+describe('connectedSubgraph', () => {
+  it('mantém só as quests com alguma aresta, e todas as arestas', () => {
+    const sub = connectedSubgraph(graph)
+    expect([...sub.quests.keys()].sort()).toEqual(['a', 'b', 'c', 'd', 'e'])
+    expect(sub.edges).toHaveLength(5)
+  })
+
+  it('grafo sem arestas fica vazio', () => {
+    expect(connectedSubgraph(buildQuestGraph([quest('x')], [])).quests.size).toBe(0)
   })
 })

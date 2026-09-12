@@ -16,7 +16,12 @@ describe('modeFromHash', () => {
   })
 
   it('#todas é o grafo completo sem foco', () => {
-    expect(modeFromHash('#todas', graph)).toEqual({ kind: 'all', focus: null })
+    const all = modeFromHash('#todas', graph)
+    expect(all.kind).toBe('all')
+    if (all.kind !== 'all') return
+    expect(all.focus).toBeNull()
+    // x é isolada: fica fora da visão geral
+    expect([...all.shown.quests.keys()].sort()).toEqual(['a', 'b', 'c', 'd'])
   })
 
   it('#id válido é a árvore daquela quest, com foco nela', () => {
@@ -46,7 +51,10 @@ describe('focusQuest', () => {
   })
 
   it('no grafo completo só troca o foco', () => {
-    expect(focusQuest({ kind: 'all', focus: null }, id('a'))).toEqual({ kind: 'stay', mode: { kind: 'all', focus: 'a' } })
+    const all = modeFromHash('#todas', graph)
+    const result = focusQuest(all, id('a'))
+    expect(result.kind).toBe('stay')
+    if (result.kind === 'stay') expect(focusOf(result.mode)).toBe('a')
   })
 
   it('na árvore, quest na tela vira foco e a raiz fica', () => {
@@ -65,7 +73,9 @@ describe('focusQuest', () => {
 
 describe('clearFocus, focusOf, canShowTree', () => {
   it('limpar o foco funciona no grafo completo e na árvore', () => {
-    expect(focusOf(clearFocus({ kind: 'all', focus: id('a') }))).toBeNull()
+    const all = modeFromHash('#todas', graph)
+    const focused = focusQuest(all, id('a'))
+    if (focused.kind === 'stay') expect(focusOf(clearFocus(focused.mode))).toBeNull()
     const tree = clearFocus(modeFromHash('#b', graph))
     expect(tree.kind).toBe('tree')
     expect(focusOf(tree)).toBeNull()
@@ -73,8 +83,10 @@ describe('clearFocus, focusOf, canShowTree', () => {
 
   it('"ver árvore" aparece com foco no grafo completo e, na árvore, só fora da raiz', () => {
     expect(canShowTree({ kind: 'landing' })).toBe(false)
-    expect(canShowTree({ kind: 'all', focus: null })).toBe(false)
-    expect(canShowTree({ kind: 'all', focus: id('a') })).toBe(true)
+    const all = modeFromHash('#todas', graph)
+    expect(canShowTree(all)).toBe(false)
+    const allFocused = focusQuest(all, id('a'))
+    if (allFocused.kind === 'stay') expect(canShowTree(allFocused.mode)).toBe(true)
     const tree = modeFromHash('#b', graph)
     expect(canShowTree(tree)).toBe(false)
     const focused = focusQuest(tree, id('d'))

@@ -22,7 +22,7 @@ const layout: DagreLayoutOptions = { name: 'dagre', rankDir: 'TB', nodeSep: 30, 
 const MAX_FIT_ZOOM = 1.25
 
 export function createQuestGraphView(container: HTMLElement): QuestGraphView {
-  const cy = cytoscape({ container, style: stylesheet, autounselectify: true, minZoom: 0.3, maxZoom: 2.5 })
+  const cy = cytoscape({ container, style: stylesheet, autounselectify: true, minZoom: 0.1, maxZoom: 2.5 })
 
   let shown: QuestGraph | null = null
   let root: QuestId | null = null

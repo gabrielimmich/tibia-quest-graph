@@ -60,7 +60,7 @@ pontilhada; seta na ponta `to`. Legenda no cabeçalho.
 **Painel.** Sem seleção: instruções curtas e contagem de quests/arestas. Com
 seleção:
 
-1. título completo, linha "Level N · Premium" (omitindo o que não houver),
+1. título completo, linha "Level N · Premium" (ou "Free account"; level omitido se não houver),
    link "Ver na TibiaWiki ↗" (`wiki`);
 2. "Libera:" + `unlocks`;
 3. "Precisa antes (N)": para cada aresta de entrada, título da quest `from`

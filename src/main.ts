@@ -21,11 +21,17 @@ view.onSelect((id) => {
   history.replaceState(null, '', id === null ? `${location.pathname}${location.search}` : `#${id}`)
 })
 
-createSearch({ input: searchInput, results: searchResults }, graph, view.select)
+createSearch({ input: searchInput, results: searchResults }, graph, (id) => {
+  view.select(id)
+  // Quem escolheu pelo teclado continua no fluxo: o próximo Tab já cai no painel.
+  panel.focus()
+})
 panelClose.addEventListener('click', view.clear)
 
 renderPanel(panel, graph, null, view.select)
-const initial = questId(decodeURIComponent(location.hash.slice(1)))
+// Ids são [a-z0-9-], então o hash não precisa (nem pode) ser decodificado:
+// decodeURIComponent lançaria em '#%'.
+const initial = questId(location.hash.slice(1))
 if (graph.quests.has(initial)) view.select(initial)
 
 function mustFind(selector: string): HTMLElement {

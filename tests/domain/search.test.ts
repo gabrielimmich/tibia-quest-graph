@@ -35,6 +35,11 @@ describe('searchQuests', () => {
     expect(titles('   ')).toEqual([])
   })
 
+  it('empate de posição desempata por título', () => {
+    const tie = buildQuestGraph([titled('soul-war', 'Soul War Quest'), titled('soul-song', 'Soul Song Quest')], [])
+    expect(searchQuests(tie, 'soul').map((quest) => quest.title)).toEqual(['Soul Song Quest', 'Soul War Quest'])
+  })
+
   it('respeita o limite', () => {
     expect(titles('quest', 2)).toHaveLength(2)
     expect(titles('quest')).toHaveLength(4)

@@ -34,7 +34,8 @@
     </header>
     <main class="workspace">
       <div id="graph" class="graph" role="application" aria-label="Grafo de quests"></div>
-      <aside id="panel" class="panel" aria-live="polite"></aside>
+      <aside id="panel" class="panel" tabindex="-1" aria-label="Detalhes da quest"></aside>
+      <!-- precisa ser o irmão seguinte de #panel: o CSS usa `.panel.open + .panel-close` -->
       <button id="panel-close" class="panel-close" type="button" aria-label="Fechar painel">×</button>
     </main>
     <footer class="footer">

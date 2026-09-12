@@ -12,7 +12,8 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: true
+  # Um deploy em andamento termina; cancelar no meio pode deixar o Pages preso.
+  cancel-in-progress: false
 
 jobs:
   build:

@@ -72,7 +72,10 @@ function renderRelations(
   for (const edge of direct) list.append(renderEdge(edge, otherEnd(edge), graph, onNavigate))
   section.append(list)
 
-  const indirect = [...all].filter((id) => !direct.some((edge) => otherEnd(edge) === id))
+  const titleOf = (id: QuestId) => graph.quests.get(id)?.title ?? id
+  const indirect = [...all]
+    .filter((id) => !direct.some((edge) => otherEnd(edge) === id))
+    .sort((a, b) => titleOf(a).localeCompare(titleOf(b)))
   if (indirect.length > 0) {
     const paragraph = el('p', 'panel-indirect')
     paragraph.append(el('span', undefined, 'Indiretas: '))

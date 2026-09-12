@@ -29,6 +29,8 @@ export function createSearch({ input, results }: SearchElements, graph: QuestGra
       button.textContent = quest.title
       button.addEventListener('click', () => pick(quest.id))
       const item = document.createElement('li')
+      // listbox precisa possuir os options diretamente; o li é só layout.
+      item.setAttribute('role', 'none')
       item.append(button)
       results.append(item)
     }

@@ -1,7 +1,8 @@
 import cytoscape, { type EventObject, type EventObjectNode } from 'cytoscape'
 import dagre, { type DagreLayoutOptions } from 'cytoscape-dagre'
-import { findLineage, questId, type QuestGraph, type QuestId } from '../domain/index.ts'
-import { edgeElementId, toElements } from './elements.ts'
+import { questId, type QuestGraph, type QuestId } from '../domain/index.ts'
+import { toElements } from './elements.ts'
+import { applyLineageClasses, clearLineageClasses } from './lineage-classes.ts'
 import { stylesheet } from './style.ts'
 
 cytoscape.use(dagre)
@@ -13,8 +14,6 @@ export interface QuestGraphView {
   readonly clear: () => void
   readonly onSelect: (listener: SelectionListener) => void
 }
-
-const LINEAGE_CLASSES = 'focus ancestor descendant path dimmed'
 
 const layout: DagreLayoutOptions = { name: 'dagre', rankDir: 'TB', nodeSep: 30, rankSep: 70, padding: 24 }
 
@@ -36,25 +35,16 @@ export function createQuestGraphView(container: HTMLElement, graph: QuestGraph):
   }
 
   const clear = () => {
-    cy.elements().removeClass(LINEAGE_CLASSES)
+    clearLineageClasses(cy)
     notify(null)
   }
 
   const select = (id: QuestId) => {
     const node = cy.getElementById(id)
     if (node.empty()) return
-    const lineage = findLineage(graph, id)
-    cy.batch(() => {
-      cy.elements().removeClass(LINEAGE_CLASSES).addClass('dimmed')
-      node.removeClass('dimmed').addClass('focus')
-      for (const ancestor of lineage.ancestors) cy.getElementById(ancestor).removeClass('dimmed').addClass('ancestor')
-      for (const descendant of lineage.descendants) {
-        cy.getElementById(descendant).removeClass('dimmed').addClass('descendant')
-      }
-      for (const edge of lineage.edges) {
-        cy.getElementById(edgeElementId(edge.from, edge.to)).removeClass('dimmed').addClass('path')
-      }
-    })
+    applyLineageClasses(cy, graph, id)
+    // stop() evita fila de pans quando o usuário clica em várias quests seguidas.
+    cy.stop()
     cy.animate({ center: { eles: node } }, { duration: 250 })
     notify(id)
   }
@@ -64,5 +54,11 @@ export function createQuestGraphView(container: HTMLElement, graph: QuestGraph):
     if (event.target === cy) clear()
   })
 
-  return { select, clear, onSelect: (listener) => listeners.push(listener) }
+  return {
+    select,
+    clear,
+    onSelect: (listener) => {
+      listeners.push(listener)
+    },
+  }
 }

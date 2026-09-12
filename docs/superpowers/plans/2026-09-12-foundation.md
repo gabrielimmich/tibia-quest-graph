@@ -57,7 +57,7 @@
 **Interfaces:**
 - Produces: `QuestId`, `EdgeKind`, `EDGE_KINDS`, `Quest`, `Edge`, `QuestGraph`, `questId(raw: string): QuestId`, `buildQuestGraph(quests: readonly Quest[], edges: readonly Edge[]): QuestGraph`
 
-- [ ] **Step 1: Criar `package.json`**
+- [x] **Step 1: Criar `package.json`**
 
 ```json
 {
@@ -76,12 +76,12 @@
 }
 ```
 
-- [ ] **Step 2: Instalar dependências**
+- [x] **Step 2: Instalar dependências**
 
 Run: `npm install -D vite@8.3.0 vitest@5.0.0 typescript@7.0.2 yaml@2.9.1 @types/node@^24`
 Expected: `package-lock.json` criado, `devDependencies` com as 5 entradas. Se `@types/node@^24` não existir no registry, usar `@types/node@^22`.
 
-- [ ] **Step 3: Criar `tsconfig.json`**
+- [x] **Step 3: Criar `tsconfig.json`**
 
 ```json
 {
@@ -103,7 +103,7 @@ Expected: `package-lock.json` criado, `devDependencies` com as 5 entradas. Se `@
 }
 ```
 
-- [ ] **Step 4: Criar `.gitignore` e `vitest.config.ts`**
+- [x] **Step 4: Criar `.gitignore` e `vitest.config.ts`**
 
 `.gitignore`:
 ```
@@ -120,7 +120,7 @@ export default defineConfig({
 })
 ```
 
-- [ ] **Step 5: Criar `tests/domain/fixtures.ts`**
+- [x] **Step 5: Criar `tests/domain/fixtures.ts`**
 
 ```ts
 import { questId, type Edge, type EdgeKind, type Quest } from '../../src/domain/quest.ts'
@@ -148,7 +148,7 @@ export function edge(from: string, to: string, kind: EdgeKind = 'required'): Edg
 }
 ```
 
-- [ ] **Step 6: Escrever o teste que falha — `tests/domain/quest.test.ts`**
+- [x] **Step 6: Escrever o teste que falha — `tests/domain/quest.test.ts`**
 
 ```ts
 import { describe, expect, it } from 'vitest'
@@ -186,12 +186,12 @@ describe('buildQuestGraph', () => {
 })
 ```
 
-- [ ] **Step 7: Rodar e ver falhar**
+- [x] **Step 7: Rodar e ver falhar**
 
 Run: `npx vitest run tests/domain/quest.test.ts`
 Expected: FAIL — `Failed to resolve import "../../src/domain/quest.ts"`.
 
-- [ ] **Step 8: Implementar `src/domain/quest.ts`**
+- [x] **Step 8: Implementar `src/domain/quest.ts`**
 
 ```ts
 export type QuestId = string & { readonly __brand: 'QuestId' }
@@ -249,12 +249,12 @@ export function buildQuestGraph(quests: readonly Quest[], edges: readonly Edge[]
 }
 ```
 
-- [ ] **Step 9: Rodar e ver passar**
+- [x] **Step 9: Rodar e ver passar**
 
 Run: `npx vitest run tests/domain/quest.test.ts && npx tsc --noEmit`
 Expected: `Tests 5 passed`, tsc sem saída.
 
-- [ ] **Step 10: Commit**
+- [x] **Step 10: Commit**
 
 ```bash
 git add package.json package-lock.json tsconfig.json .gitignore vitest.config.ts src/domain/quest.ts tests/domain/fixtures.ts tests/domain/quest.test.ts
@@ -272,7 +272,7 @@ git commit -m "feat: scaffold Vite/TS/Vitest e buildQuestGraph"
 - Consumes: `QuestGraph`, `QuestId`, `Edge`, `buildQuestGraph` de `src/domain/quest.ts`
 - Produces: `findAllPrerequisites(graph, id): ReadonlySet<QuestId>`, `findAllUnlocked(graph, id): ReadonlySet<QuestId>`, `findCycle(graph): readonly QuestId[] | null`
 
-- [ ] **Step 1: Escrever o teste que falha — `tests/domain/traversal.test.ts`**
+- [x] **Step 1: Escrever o teste que falha — `tests/domain/traversal.test.ts`**
 
 ```ts
 import { describe, expect, it } from 'vitest'
@@ -355,12 +355,12 @@ describe('findCycle', () => {
 })
 ```
 
-- [ ] **Step 2: Rodar e ver falhar**
+- [x] **Step 2: Rodar e ver falhar**
 
 Run: `npx vitest run tests/domain/traversal.test.ts`
 Expected: FAIL — `Failed to resolve import "../../src/domain/traversal.ts"`.
 
-- [ ] **Step 3: Implementar `src/domain/traversal.ts`**
+- [x] **Step 3: Implementar `src/domain/traversal.ts`**
 
 ```ts
 import type { Edge, QuestGraph, QuestId } from './quest.ts'
@@ -425,12 +425,12 @@ export function findCycle(graph: QuestGraph): readonly QuestId[] | null {
 }
 ```
 
-- [ ] **Step 4: Rodar e ver passar**
+- [x] **Step 4: Rodar e ver passar**
 
 Run: `npx vitest run tests/domain/traversal.test.ts && npx tsc --noEmit`
 Expected: `Tests 12 passed`, tsc sem saída.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/domain/traversal.ts tests/domain/traversal.test.ts
@@ -448,7 +448,7 @@ git commit -m "feat: travessia do grafo (ancestrais, descendentes, ciclo)"
 - Consumes: `EDGE_KINDS`, `buildQuestGraph`, `questId`, tipos de `quest.ts`; `findCycle` de `traversal.ts`
 - Produces: `ParseResult`, `parseQuestData(raw: unknown): ParseResult`, `EVIDENCE_PLACEHOLDER`, `WIKI_PREFIX`
 
-- [ ] **Step 1: Escrever o teste que falha — `tests/domain/parse.test.ts`**
+- [x] **Step 1: Escrever o teste que falha — `tests/domain/parse.test.ts`**
 
 ```ts
 import { describe, expect, it } from 'vitest'
@@ -598,12 +598,12 @@ describe('parseQuestData', () => {
 })
 ```
 
-- [ ] **Step 2: Rodar e ver falhar**
+- [x] **Step 2: Rodar e ver falhar**
 
 Run: `npx vitest run tests/domain/parse.test.ts`
 Expected: FAIL — `Failed to resolve import "../../src/domain/parse.ts"`.
 
-- [ ] **Step 3: Implementar `src/domain/parse.ts`**
+- [x] **Step 3: Implementar `src/domain/parse.ts`**
 
 ```ts
 import {
@@ -795,7 +795,7 @@ function expectEvidence(item: Raw, where: string, errors: string[]): string | nu
 }
 ```
 
-- [ ] **Step 4: Criar `src/domain/index.ts`**
+- [x] **Step 4: Criar `src/domain/index.ts`**
 
 ```ts
 export {
@@ -812,12 +812,12 @@ export { findAllPrerequisites, findAllUnlocked, findCycle } from './traversal.ts
 export { EVIDENCE_PLACEHOLDER, WIKI_PREFIX, parseQuestData, type ParseResult } from './parse.ts'
 ```
 
-- [ ] **Step 5: Rodar e ver passar**
+- [x] **Step 5: Rodar e ver passar**
 
 Run: `npx vitest run && npx tsc --noEmit`
 Expected: todos os testes passam (5 + 12 + 17 = 34), tsc sem saída.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/domain/parse.ts src/domain/index.ts tests/domain/parse.test.ts
@@ -835,7 +835,7 @@ git commit -m "feat: parseQuestData valida schema, evidence e ausência de ciclo
 - Consumes: `parseQuestData`, `ParseResult` de `src/domain/parse.ts`
 - Produces: `readQuestFile(file: string): ParseResult`
 
-- [ ] **Step 1: Escrever o teste que falha — `tests/quest-file.test.ts`**
+- [x] **Step 1: Escrever o teste que falha — `tests/quest-file.test.ts`**
 
 ```ts
 import { mkdtempSync, rmSync, writeFileSync } from 'node:fs'
@@ -896,12 +896,12 @@ describe('readQuestFile', () => {
 })
 ```
 
-- [ ] **Step 2: Rodar e ver falhar**
+- [x] **Step 2: Rodar e ver falhar**
 
 Run: `npx vitest run tests/quest-file.test.ts`
 Expected: FAIL — `Failed to resolve import "../src/quest-file.ts"`.
 
-- [ ] **Step 3: Implementar `src/quest-file.ts`**
+- [x] **Step 3: Implementar `src/quest-file.ts`**
 
 ```ts
 import { readFileSync } from 'node:fs'
@@ -922,12 +922,12 @@ export function readQuestFile(file: string): ParseResult {
 }
 ```
 
-- [ ] **Step 4: Rodar e ver passar**
+- [x] **Step 4: Rodar e ver passar**
 
 Run: `npx vitest run tests/quest-file.test.ts && npx tsc --noEmit`
 Expected: `Tests 3 passed`, tsc sem saída.
 
-- [ ] **Step 5: Criar `data/quests.yaml`**
+- [x] **Step 5: Criar `data/quests.yaml`**
 
 ```yaml
 # Fonte única da verdade do grafo. Ver CLAUDE.md, seção 4.
@@ -954,7 +954,7 @@ quests:
 edges: []
 ```
 
-- [ ] **Step 6: Criar `scripts/validate.ts`**
+- [x] **Step 6: Criar `scripts/validate.ts`**
 
 ```ts
 import { readQuestFile } from '../src/quest-file.ts'
@@ -971,7 +971,7 @@ if (result.ok) {
 }
 ```
 
-- [ ] **Step 7: Rodar o validate nos dois cenários**
+- [x] **Step 7: Rodar o validate nos dois cenários**
 
 Run: `npm run validate`
 Expected: `data/quests.yaml: 2 quests, 0 arestas. OK.`, exit 0.
@@ -988,7 +988,7 @@ edges:
 e rodar `npm run validate`.
 Expected: `1 erro(s)` + `evidence obrigatória ... (regra de ouro)`, exit 1. Depois restaurar `edges: []`.
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add src/quest-file.ts scripts/validate.ts data/quests.yaml tests/quest-file.test.ts
@@ -1006,7 +1006,7 @@ git commit -m "feat: readQuestFile, npm run validate e fixture do quests.yaml"
 - Consumes: `readQuestFile` de `src/quest-file.ts`; `buildQuestGraph`, `Quest`, `Edge` de `src/domain/`
 - Produces: `questsPlugin({ file }): Plugin`, `questsModuleSource(file): string`, módulo `virtual:quests` com `default: { quests: readonly Quest[]; edges: readonly Edge[] }`
 
-- [ ] **Step 1: Escrever o teste que falha — `tests/vite-plugin-quests.test.ts`**
+- [x] **Step 1: Escrever o teste que falha — `tests/vite-plugin-quests.test.ts`**
 
 ```ts
 import { mkdtempSync, rmSync, writeFileSync } from 'node:fs'
@@ -1088,12 +1088,12 @@ describe('questsPlugin', () => {
 })
 ```
 
-- [ ] **Step 2: Rodar e ver falhar**
+- [x] **Step 2: Rodar e ver falhar**
 
 Run: `npx vitest run tests/vite-plugin-quests.test.ts`
 Expected: FAIL — `Failed to resolve import "../src/vite-plugin-quests.ts"`.
 
-- [ ] **Step 3: Implementar `src/vite-plugin-quests.ts`**
+- [x] **Step 3: Implementar `src/vite-plugin-quests.ts`**
 
 ```ts
 import type { Plugin } from 'vite'
@@ -1134,12 +1134,12 @@ export function questsModuleSource(file: string): string {
 }
 ```
 
-- [ ] **Step 4: Rodar e ver passar**
+- [x] **Step 4: Rodar e ver passar**
 
 Run: `npx vitest run tests/vite-plugin-quests.test.ts && npx tsc --noEmit`
 Expected: `Tests 3 passed`, tsc sem saída. Se `tsc` reclamar da assinatura de `resolveId`/`load` (Vite 8 usa Rolldown), ajustar os parâmetros para o tipo que a mensagem indicar, mantendo o comportamento.
 
-- [ ] **Step 5: Criar `src/virtual-quests.d.ts`**
+- [x] **Step 5: Criar `src/virtual-quests.d.ts`**
 
 ```ts
 declare module 'virtual:quests' {
@@ -1153,7 +1153,7 @@ declare module 'virtual:quests' {
 }
 ```
 
-- [ ] **Step 6: Criar `vite.config.ts`**
+- [x] **Step 6: Criar `vite.config.ts`**
 
 ```ts
 import { fileURLToPath } from 'node:url'
@@ -1165,7 +1165,7 @@ export default defineConfig({
 })
 ```
 
-- [ ] **Step 7: Criar `index.html` e `src/main.ts`**
+- [x] **Step 7: Criar `index.html` e `src/main.ts`**
 
 `index.html`:
 ```html
@@ -1198,16 +1198,16 @@ if (app) {
 }
 ```
 
-- [ ] **Step 8: Build completo**
+- [x] **Step 8: Build completo**
 
 Run: `npm run build`
 Expected: `validate` imprime OK, `tsc` silencioso, Vite gera `dist/` com `index.html` e um JS contendo `"the-new-frontier"`. Conferir: `grep -c "the-new-frontier" dist/assets/*.js` → `1`.
 
-- [ ] **Step 9: Verificar dev server e recarga**
+- [x] **Step 9: Verificar dev server e recarga**
 
 Run: `npx vite --port 5173` em background; `curl -s http://localhost:5173/` deve conter `/src/main.ts`; `curl -s "http://localhost:5173/@id/__x00__virtual:quests"` deve conter `the-new-frontier`. Encerrar o servidor.
 
-- [ ] **Step 10: Commit**
+- [x] **Step 10: Commit**
 
 ```bash
 git add src/vite-plugin-quests.ts src/virtual-quests.d.ts vite.config.ts index.html src/main.ts tests/vite-plugin-quests.test.ts
@@ -1218,12 +1218,12 @@ git commit -m "feat: plugin Vite virtual:quests e entrada mínima"
 
 ### Task 6: Verificação final e revisão
 
-- [ ] **Step 1: Rodar a sequência dos critérios de pronto**
+- [x] **Step 1: Rodar a sequência dos critérios de pronto**
 
 Run: `rm -rf node_modules dist && npm ci && npm test && npm run typecheck && npm run validate && npm run build`
 Expected: tudo verde. Contar: `Test Files 5 passed`, `Tests 40 passed`.
 
-- [ ] **Step 2: Auditar as restrições globais**
+- [x] **Step 2: Auditar as restrições globais**
 
 Run:
 ```bash
@@ -1232,13 +1232,42 @@ grep -rln "node:\|from 'vite'\|from 'yaml'\|fetch(\|Date.now" src/domain ; echo 
 ```
 Expected: só ocorrências de `any` dentro de palavras (`company`) ou nenhuma; segunda lista vazia.
 
-- [ ] **Step 3: Marcar `git status` limpo e pedir code review**
+- [x] **Step 3: Marcar `git status` limpo e pedir code review**
 
 Run: `git status --short` → vazio. Depois invocar `superpowers:requesting-code-review` sobre `git diff 076bf26..HEAD`.
 
-- [ ] **Step 4: Aplicar correções da revisão (se houver) e commitar**
+- [x] **Step 4: Aplicar correções da revisão (se houver) e commitar**
 
 ```bash
 git add -A
 git commit -m "refactor: ajustes da revisão de código"
 ```
+
+---
+
+## Resultado (2026-09-12)
+
+Executado integralmente na branch `feat/foundation`, revisado e fundido em `main`
+(fast-forward). 49 testes, `typecheck`, `validate` e `build` verdes a partir de
+`npm ci`. Desvios em relação ao plano, todos vindos da revisão de código:
+
+- `parseQuests` devolve também o conjunto de ids brutos, para que uma quest com
+  campo inválido não faça todas as suas arestas reclamarem de "id inexistente".
+- `readQuestFile` distingue arquivo ilegível de YAML inválido.
+- `scripts/validate.ts` resolve o caminho a partir do próprio arquivo, não do cwd.
+- `evidence` é guardada com `trim()` (block scalars do YAML deixam `\n` no fim).
+- `engines.node >= 24` e `.node-version`, porque o build depende de Node
+  executar `.ts` nativamente.
+- Teste de integração do plugin usa `build()` real do Vite num diretório
+  temporário; teste-guarda de pureza de `src/domain/`.
+
+### Pendências para as próximas sessões
+
+- **Dados**: `unlocks` é obrigatório e não vazio. Quests-folha (Soul War,
+  Feaster of Souls, Dream Courts, Wrath of the Emperor) não liberam outra quest
+  do conjunto; decidir se `unlocks` vira opcional ou se descreve a recompensa.
+- **Interface**: `vitest.config.ts` não registra `questsPlugin`, então
+  `virtual:quests` não resolve dentro de testes. Manter o import só em
+  `src/main.ts` e fazer os módulos de UI receberem `QuestGraph` por parâmetro.
+- **Deploy**: `base` do Vite depende de GitHub Pages (`/<repo>/`) vs Cloudflare
+  Pages (`/`). Não configurado.
